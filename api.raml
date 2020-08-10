@@ -24,6 +24,40 @@ securedBy: basic
         type: string
         required: false
   post:
+    body:
+      type: object
+      properties:
+        organismName:
+        geneTemplate:
+        startingGeneInt:
+          type: integer
+          format: int64
+          minimum: 1
+          maximum: 9223372036854775807
+        startingTranscriptInt:
+          type: integer
+          format: int64
+          minimum: 1
+          maximum: 9223372036854775807
+    responses:
+      200:
+        body:
+          type: string
+      400:
+        body:
+          type: error.BadRequestError
+      401:
+        body:
+          type: error.UnauthorizedError
+      403:
+        body:
+          type: error.ForbiddenError
+      422:
+        body:
+          type: error.UnprocessableEntityError
+      500:
+        body:
+          type: error.ServerError
   /{organism-id}:
     uriParameters:
       organism-id:
@@ -40,9 +74,13 @@ securedBy: basic
       startTimeStamp:
         type: integer
         format: int64
+        minimum: 0
+        maximum: 9223372036854775807
       endTimeStamp:
         type: integer
         format: int64
+        minimum: 0
+        maximum: 9223372036854775807
   post:
   /{gene-set-id}:
     uriParameters:
