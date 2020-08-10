@@ -10,7 +10,6 @@ uses:
   error: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.1/libraries/errors.raml
   lib: schema/library.raml
 
-# TODO: THIS SHOULD BE HEADER
 securitySchemes:
   basic:
     description: HTTP Basic Authentication
@@ -26,6 +25,10 @@ securedBy: basic
         required: false
   post:
   /{organism-id}:
+    uriParameters:
+      organism-id:
+        type: string
+        required: true
     get:
     put:
 
@@ -42,4 +45,8 @@ securedBy: basic
         format: int64
   post:
   /{gene-set-id}:
+    uriParameters:
+      gene-set-id:
+        type: string
+        required: true
     get:
