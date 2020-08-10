@@ -85,31 +85,33 @@ securedBy: basic
       endTimeStamp: ZeroBasedULong
     responses:
       200:
+        body: IdentifiedGeneSet[]
       401:
+        body: error.UnauthorizedError
       403:
+        body: error.ForbiddenError
       500:
+        body: error.ServerError
   post:
+    body: GeneSet
     responses:
       200:
+        body: string
       401:
+        body: error.UnauthorizedError
       403:
+        body: error.ForbiddenError
       422:
+        body: error.UnprocessableEntityError
       500:
+        body: error.ServerError
   /{gene-set-id}:
     uriParameters:
       gene-set-id:
     get:
       responses:
         200:
-          body:
-            type: object
-            properties:
-              organsim: IdentifiedOrganism
-              template:
-              startingGeneInt: OneBasedULong
-              geneIds: ZeroBasedULong
-              transcriptIds: string[]
-              created: ZeroBasedULong
+          body: IdentifiedGeneSet
         401:
           body: error.UnauthorizedError
         403:
@@ -141,3 +143,16 @@ types:
     type: Organism
     properties:
       organismId: OneBasedULong
+  GeneSet:
+    type: object
+    properties:
+      organsim: IdentifiedOrganism
+      template:
+      startingGeneInt: OneBasedULong
+      geneIds: ZeroBasedULong
+      transcriptIds: string[]
+      created: ZeroBasedULong
+  IdentifiedGeneSet:
+    type: GeneSet
+    properties:
+      geneSetId: OneBasedULong
