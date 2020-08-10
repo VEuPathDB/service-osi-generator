@@ -2,7 +2,7 @@
 
 extends: https://raw.githubusercontent.com/VEuPathDB/docs-api-schema/v2.0.1/libraries/base-service.raml
 
-title: Example JaxRS Container Service
+title: Organism Specific ID Service
 version: v1.0.0
 mediaType: application/json
 
@@ -12,44 +12,27 @@ uses:
 
 # TODO: THIS SHOULD BE HEADER
 securitySchemes:
-  header-auth:
-    description: Authentication based on a WDK auth cookie.
-    type:
-      x-custom
-    describedBy:
-      headers:
-        Auth_Key:
-          description: Authorization header.
-          type: string
+  basic:
+    description: HTTP Basic Authentication
+    type: Basic Authentication
 
+securedBy: basic
 
-#
-# Example Endpoints
-#
-
-/hello:
-  displayName: Hello World
+/organisms:
   get:
-    responses:
-      200:
-        body:
-          application/json:
-            type: lib.HelloResponse
+    queryParameters:
+      organismName:
   post:
-    securedBy: header-auth
-    body:
-      application/json:
-        type: lib.HelloPostRequest
-    responses:
-      200:
-        body:
-          application/json:
-            type: lib.HelloPostResponse
-      401:
-        body:
-          application/json:
-            type: error.UnauthorizedError
-      500:
-        body:
-          application/json:
-            type: error.ServerError
+  /{organism-id}:
+    get:
+    put:
+
+/geneSets:
+  get:
+    queryParameters:
+      appName:
+      startTimeStamp:
+      endTimeStamp:
+  post:
+  /{gene-set-id}:
+    get:
