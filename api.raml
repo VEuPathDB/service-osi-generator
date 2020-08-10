@@ -20,67 +20,69 @@ securedBy: basic
 /organisms:
   get:
     queryParameters:
-      organismName:
-        type: string
-        required: false
+      organismName?:
+    responses:
+      200:
+        body: IdentifiedOrganism[]
+      401:
+        body: error.UnauthorizedError
+      403:
+        body: error.ForbiddenError
+      422:
+        body: error.UnprocessableEntityError
+      500:
+        body: error.ServerError
   post:
-    body:
-      type: object
-      properties:
-        organismName:
-        geneTemplate:
-        startingGeneInt:
-          type: integer
-          format: int64
-          minimum: 1
-          maximum: 9223372036854775807
-        startingTranscriptInt:
-          type: integer
-          format: int64
-          minimum: 1
-          maximum: 9223372036854775807
+    body: Organism
     responses:
       200:
         body:
           type: string
       400:
-        body:
-          type: error.BadRequestError
+        body: error.BadRequestError
       401:
-        body:
-          type: error.UnauthorizedError
+        body: error.UnauthorizedError
       403:
-        body:
-          type: error.ForbiddenError
+        body: error.ForbiddenError
       422:
-        body:
-          type: error.UnprocessableEntityError
+        body: error.UnprocessableEntityError
       500:
-        body:
-          type: error.ServerError
+        body: error.ServerError
   /{organism-id}:
     uriParameters:
       organism-id:
         type: string
-        required: true
     get:
+      responses:
+        200:
+          body: IdentifiedOrganism
+        401:
+          body: error.UnauthorizedError
+        404:
+          body: error.NotFoundError
+        500:
+          body: error.ServerError
     put:
+      body: Organism
+      responses:
+        204:
+        401:
+          body: error.UnauthorizedError
+        403:
+          body: error.ForbiddenError
+        404:
+          body: error.NotFoundError
+        422:
+          body: error.UnprocessableEntityError
+        500:
+          body: error.ServerError
 
 /geneSets:
   get:
     queryParameters:
       appName:
-        type: string
-      startTimeStamp:
-        type: integer
-        format: int64
-        minimum: 0
-        maximum: 9223372036854775807
-      endTimeStamp:
-        type: integer
-        format: int64
-        minimum: 0
-        maximum: 9223372036854775807
+      startTimeStamp: ZeroBasedULong
+      endTimeStamp: ZeroBasedULong
   post:
   /{gene-set-id}:
     uriParameters:
@@ -88,3 +90,26 @@ securedBy: basic
         type: string
         required: true
     get:
+
+types:
+  ZeroBasedULong:
+    type: integer
+    format: int64
+    minimum: 0
+    maximum: 9223372036854775807
+  OneBasedULong:
+    type: integer
+    format: int64
+    minimum: 0
+    maximum: 9223372036854775807
+  Organism:
+    type: object
+    properties:
+      organismName:
+      geneTemplate:
+      startingGeneInt: OneBasedULong
+      startingTranscriptInt: OneBasedULong
+  IdentifiedOrganism:
+    type: Organism
+    properties:
+      organismId: OneBasedULong
