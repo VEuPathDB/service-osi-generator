@@ -83,7 +83,18 @@ securedBy: basic
       appName:
       startTimeStamp: ZeroBasedULong
       endTimeStamp: ZeroBasedULong
+    responses:
+      200:
+      401:
+      403:
+      500:
   post:
+    responses:
+      200:
+      401:
+      403:
+      422:
+      500:
   /{gene-set-id}:
     uriParameters:
       gene-set-id:
