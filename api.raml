@@ -87,9 +87,26 @@ securedBy: basic
   /{gene-set-id}:
     uriParameters:
       gene-set-id:
-        type: string
-        required: true
     get:
+      responses:
+        200:
+          body:
+            type: object
+            properties:
+              organsim: IdentifiedOrganism
+              template:
+              startingGeneInt: OneBasedULong
+              geneIds: ZeroBasedULong
+              transcriptIds: string[]
+              created: ZeroBasedULong
+        401:
+          body: error.UnauthorizedError
+        403:
+          body: error.ForbiddenError
+        404:
+          body: error.NotFoundError
+        500:
+          body: error.ServerError
 
 types:
   ZeroBasedULong:
