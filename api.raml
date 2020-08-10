@@ -22,6 +22,8 @@ securedBy: basic
   get:
     queryParameters:
       organismName:
+        type: string
+        required: false
   post:
   /{organism-id}:
     get:
@@ -31,8 +33,13 @@ securedBy: basic
   get:
     queryParameters:
       appName:
+        type: string
       startTimeStamp:
+        type: integer
+        format: int64
       endTimeStamp:
+        type: integer
+        format: int64
   post:
   /{gene-set-id}:
     get:
