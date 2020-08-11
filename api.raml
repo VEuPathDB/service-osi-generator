@@ -121,6 +121,27 @@ securedBy: basic
         500:
           body: error.ServerError
 
+/auth:
+  post:
+    body:
+      type: object
+      properties:
+        username:
+    responses:
+      200:
+        body:
+          type: object
+          properties:
+            apiKey:
+              type: string
+              minLength: 32
+              maxLength: 32
+      400:
+      401:
+      403:
+      422:
+      500:
+
 types:
   ZeroBasedULong:
     type: integer
