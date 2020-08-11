@@ -15,11 +15,11 @@ RUN jlink --compress=2 --module-path /opt/jdk/jmods \
     && git config --global advice.detachedHead false
 
 ENV DOCKER=build
-COPY makefile .
+COPY ../makefile .
 
 RUN make install-dev-env
 
-COPY . .
+COPY .. .
 
 RUN mkdir -p vendor \
     && cp -n /jdbc/* vendor \

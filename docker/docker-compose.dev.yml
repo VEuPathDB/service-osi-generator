@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  osi-db:
+    build:
+      context: .
+      dockerfile: docker/DB.Dockerfile
+    ports:
+      - 5432:5432
+    networks:
+      - internal
+  osi-service:
+    build:
+      context: .
+      dockerfile: docker/SVC.Dockerfile
+    ports:
+      - 8080:80
+    networks:
+      - internal
+
+networks:
+  internal:
+    internal: true
