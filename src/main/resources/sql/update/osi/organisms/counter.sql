@@ -1,3 +1,4 @@
+-- Atomic counter update returning the pre-update counter value.
 UPDATE
   osi.organisms AS cur
 SET
