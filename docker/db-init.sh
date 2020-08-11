@@ -5,6 +5,5 @@ if [ -z "${DB_PASSWORD}" ]; then
   exit 1
 fi
 
-psql -v ON_ERROR_STOP=1 --username "${POSTGRES_USER}" --dbname "${POSTGRES_DB}" <<-EOF
-$(eval "echo $(cat /postgres.sql)")
-EOF
+eval 'echo "'"$(cat /postgres.sql)"'"' \
+  | psql -v ON_ERROR_STOP=1 --username "${POSTGRES_USER}" --dbname "${POSTGRES_DB}"
