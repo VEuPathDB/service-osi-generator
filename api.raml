@@ -220,10 +220,24 @@ types:
     type: object
     properties:
       organism: IdentifiedOrganism
-      startingGeneInt: OneBasedULong
-      geneIds: ZeroBasedULong
-      transcriptIds: string[]
+      issuedIds: TranscriptSet[]
       created: ZeroBasedULong
+    example:
+      organism:
+        organismId: 23
+        organismName: Plasmodium falciparum 3D7
+        template: "PF3D7_%07d"
+        startingInt: 1500000
+        currentInt: 1500302
+      issuedIds:
+        - geneId: PF3D7_1302521
+          transcriptIds:
+            - PF3D7_1302521.R1
+            - PF3D7_1302521.R2
+            - PF3D7_1302521.R12
+            - PF3D7_1302521.R13
+            - PF3D7_1302521.R14
+      created: 1597244587
   IdentifiedGeneSet:
     displayName: OSID IdSet Record
     type: IdSet
@@ -233,3 +247,8 @@ types:
         type: string
         minLength: 5
         pattern: "^.+%[0-9,+ $.]+d.*$"
+  TranscriptSet:
+    type: object
+    properties:
+      geneId:
+      transcriptIds: string[]
