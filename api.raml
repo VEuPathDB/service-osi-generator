@@ -110,7 +110,35 @@ securedBy: basic
       endTimeStamp: ZeroBasedLong
     responses:
       200:
-        body: IdSetResponse[]
+        body:
+          type: IdSetResponse[]
+          example:
+            - idSetId: 48
+              template: PF3D7_%07d
+              geneIntStart: 150000
+              generatedGeneCount: 2
+              generatedIds:
+                - geneId: PF3D7_0145842
+                  transcripts:
+                    - PF3D7_0145842.R57
+                    - PF3D7_0145842.R58
+                    - PF3D7_0145842.R59
+                    - PF3D7_0145842.R78
+                  proteins:
+                    - PF3D7_0145842.P57
+                    - PF3D7_0145842.P58
+                    - PF3D7_0145842.P59
+                    - PF3D7_0145842.P78
+                - geneId: PF3D7_150001
+                  transcripts: []
+                  proteins: []
+                - geneId: PF3D7_150002
+                  transcripts:
+                    - PF3D7_150002.R79
+                  proteins:
+                    - PF3D7_150002.P79
+              created: 1597244587
+
       401:
         body: error.UnauthorizedError
       403:
