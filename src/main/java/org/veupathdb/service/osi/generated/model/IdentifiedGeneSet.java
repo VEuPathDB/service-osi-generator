@@ -10,7 +10,7 @@ import java.util.Map;
 @JsonDeserialize(
     as = IdentifiedGeneSetImpl.class
 )
-public interface IdentifiedGeneSet extends GeneSet {
+public interface IdentifiedGeneSet extends IdSet {
   @JsonAnyGetter
   Map<String, Object> getAdditionalProperties();
 

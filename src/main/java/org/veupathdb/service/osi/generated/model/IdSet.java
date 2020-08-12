@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 @JsonDeserialize(
-    as = GeneSetImpl.class
+    as = IdSetImpl.class
 )
-public interface GeneSet {
+public interface IdSet {
   @JsonAnyGetter
   Map<String, Object> getAdditionalProperties();
 

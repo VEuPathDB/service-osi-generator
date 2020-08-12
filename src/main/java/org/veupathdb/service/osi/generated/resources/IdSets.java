@@ -12,7 +12,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import org.veupathdb.service.osi.generated.model.BadRequestError;
 import org.veupathdb.service.osi.generated.model.ForbiddenError;
-import org.veupathdb.service.osi.generated.model.GeneSet;
+import org.veupathdb.service.osi.generated.model.IdSet;
 import org.veupathdb.service.osi.generated.model.IdentifiedGeneSet;
 import org.veupathdb.service.osi.generated.model.NotFoundError;
 import org.veupathdb.service.osi.generated.model.ServerError;
@@ -30,7 +30,7 @@ public interface IdSets {
   @POST
   @Produces("application/json")
   @Consumes("application/json")
-  PostIdSetsResponse postIdSets(GeneSet entity);
+  PostIdSetsResponse postIdSets(IdSet entity);
 
   @GET
   @Path("/{gene-set-id}")

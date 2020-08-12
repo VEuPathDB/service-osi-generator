@@ -18,7 +18,7 @@ import java.util.Map;
     "transcriptIds",
     "created"
 })
-public class GeneSetImpl implements GeneSet {
+public class IdSetImpl implements IdSet {
   @JsonProperty("organism")
   private IdentifiedOrganism organism;
 
