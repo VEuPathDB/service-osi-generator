@@ -19,6 +19,12 @@ securedBy: basic
 
 /organisms:
   get:
+    description: |
+      Returns an array of the organisms currently registered with the OSID
+      service.
+
+      The results may be optionally filtered to a single result by use of the
+      `organismName` query parameter.
     queryParameters:
       organismName?:
     responses:
@@ -33,6 +39,9 @@ securedBy: basic
       500:
         body: error.ServerError
   post:
+    description: |
+      Registers a new organism with the OSID service, returning the ID of the
+      newly registered organism record on success.
     body: Organism
     responses:
       200:
@@ -53,6 +62,9 @@ securedBy: basic
       organism-id:
         type: string
     get:
+      description: |
+        Looks up and returns the details of a single organism record by record
+        id.
       responses:
         200:
           body: IdentifiedOrganism
@@ -63,9 +75,23 @@ securedBy: basic
         500:
           body: error.ServerError
     put:
+      description: |
+        Updates a specific organism record by replacing specific fields with the
+        new values in the request body.
+
+        Put requests will be rejected if they violate the following rules:
+
+        1. The new `startingInt` value must not be lower than the organism
+           record's `currentInt` value.
+        2. The `template` value must not be null or empty.
+        3. The `template` value must contain a single printf integer
+           placeholder.  (See [the Java string formatting cheatsheet](https://dzone.com/articles/how-to-format-a-string-clarified))
+        4. The `organismName` value must not be null or empty.
       body: Organism
       responses:
         204:
+        400:
+          body: error.BadRequestError
         401:
           body: error.UnauthorizedError
         403:
@@ -77,10 +103,9 @@ securedBy: basic
         500:
           body: error.ServerError
 
-/geneSets:
+/idSets:
   get:
     queryParameters:
-      appName:
       startTimeStamp: ZeroBasedULong
       endTimeStamp: ZeroBasedULong
     responses:
@@ -97,6 +122,8 @@ securedBy: basic
     responses:
       200:
         body: string
+      400:
+        body: error.BadRequestError
       401:
         body: error.UnauthorizedError
       403:
@@ -127,6 +154,8 @@ securedBy: basic
       type: object
       properties:
         username:
+          type: string
+          minLength: 3
     responses:
       200:
         body:
@@ -137,10 +166,15 @@ securedBy: basic
               minLength: 32
               maxLength: 32
       400:
+        body: error.BadRequestError
       401:
+        body: error.UnauthorizedError
       403:
+        body: error.ForbiddenError
       422:
+        body: error.UnprocessableEntityError
       500:
+        body: error.ServerError
 
 types:
   ZeroBasedULong:
@@ -157,13 +191,13 @@ types:
     type: object
     properties:
       organismName:
-      geneTemplate:
-      startingGeneInt: OneBasedULong
-      startingTranscriptInt: OneBasedULong
+      template:
+      startingInt: OneBasedULong
   IdentifiedOrganism:
     type: Organism
     properties:
       organismId: OneBasedULong
+      currentInt: OneBasedULong
   GeneSet:
     type: object
     properties:
