@@ -11,7 +11,7 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "organsim",
+    "organism",
     "template",
     "startingGeneInt",
     "geneIds",
@@ -19,8 +19,8 @@ import java.util.Map;
     "created"
 })
 public class GeneSetImpl implements GeneSet {
-  @JsonProperty("organsim")
-  private IdentifiedOrganism organsim;
+  @JsonProperty("organism")
+  private IdentifiedOrganism organism;
 
   @JsonProperty("template")
   private String template;
@@ -40,14 +40,14 @@ public class GeneSetImpl implements GeneSet {
   @JsonIgnore
   private Map<String, Object> additionalProperties = new ExcludingMap();
 
-  @JsonProperty("organsim")
-  public IdentifiedOrganism getOrgansim() {
-    return this.organsim;
+  @JsonProperty("organism")
+  public IdentifiedOrganism getOrganism() {
+    return this.organism;
   }
 
-  @JsonProperty("organsim")
-  public void setOrgansim(IdentifiedOrganism organsim) {
-    this.organsim = organsim;
+  @JsonProperty("organism")
+  public void setOrganism(IdentifiedOrganism organism) {
+    this.organism = organism;
   }
 
   @JsonProperty("template")

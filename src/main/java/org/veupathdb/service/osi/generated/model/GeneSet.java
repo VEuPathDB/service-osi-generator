@@ -17,11 +17,11 @@ public interface GeneSet {
   @JsonAnySetter
   void setAdditionalProperties(String key, Object value);
 
-  @JsonProperty("organsim")
-  IdentifiedOrganism getOrgansim();
+  @JsonProperty("organism")
+  IdentifiedOrganism getOrganism();
 
-  @JsonProperty("organsim")
-  void setOrgansim(IdentifiedOrganism organsim);
+  @JsonProperty("organism")
+  void setOrganism(IdentifiedOrganism organism);
 
   @JsonProperty("template")
   String getTemplate();
