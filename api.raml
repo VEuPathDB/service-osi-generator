@@ -148,7 +148,13 @@ securedBy: basic
         500:
           body: error.ServerError
     patch:
-      body: IdSetPatchEntry[]
+      body:
+        type: IdSetPatchEntry[]
+        example:
+          - geneId: PF3D7_0145842
+            transcripts: 4
+          - geneId: PF3D7_0120354
+            transcripts: 18
       responses:
         200:
           body: IdSetResponse
@@ -262,6 +268,9 @@ types:
         type: string
         minLength: 3
       transcripts: OneBasedInt
+    example:
+      geneId: PF3D7_0145842
+      transcripts: 4
   OrganismRequest:
     displayName: Organism Record Create/Update Request Body
     type: object
