@@ -195,7 +195,14 @@ types:
     properties:
       organismName:
       template:
+        type: string
+        minLength: 5
+        pattern: "^.+%[0-9,+ $.]+d.*$"
       startingInt: OneBasedULong
+    example:
+      organismName: Plasmodium falciparum 3D7
+      template: "PF3D7_%07d"
+      startingInt: 1500000
   IdentifiedOrganism:
     displayName: OSID Organism Record
     type: Organism
@@ -207,10 +214,6 @@ types:
     type: object
     properties:
       organism: IdentifiedOrganism
-      template:
-        type: string
-        minLength: 5
-        pattern: "^.+%[0-9,+ $.]+d.+$"
       startingGeneInt: OneBasedULong
       geneIds: ZeroBasedULong
       transcriptIds: string[]
@@ -220,3 +223,7 @@ types:
     type: IdSet
     properties:
       geneSetId: OneBasedULong
+      template:
+        type: string
+        minLength: 5
+        pattern: "^.+%[0-9,+ $.]+d.*$"
