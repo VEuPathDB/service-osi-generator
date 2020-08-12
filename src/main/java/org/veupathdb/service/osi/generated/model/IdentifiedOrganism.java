@@ -22,27 +22,27 @@ public interface IdentifiedOrganism extends Organism {
   @JsonProperty("organismName")
   void setOrganismName(String organismName);
 
-  @JsonProperty("geneTemplate")
-  String getGeneTemplate();
+  @JsonProperty("template")
+  String getTemplate();
 
-  @JsonProperty("geneTemplate")
-  void setGeneTemplate(String geneTemplate);
+  @JsonProperty("template")
+  void setTemplate(String template);
 
-  @JsonProperty("startingGeneInt")
-  long getStartingGeneInt();
+  @JsonProperty("startingInt")
+  long getStartingInt();
 
-  @JsonProperty("startingGeneInt")
-  void setStartingGeneInt(long startingGeneInt);
-
-  @JsonProperty("startingTranscriptInt")
-  long getStartingTranscriptInt();
-
-  @JsonProperty("startingTranscriptInt")
-  void setStartingTranscriptInt(long startingTranscriptInt);
+  @JsonProperty("startingInt")
+  void setStartingInt(long startingInt);
 
   @JsonProperty("organismId")
   long getOrganismId();
 
   @JsonProperty("organismId")
   void setOrganismId(long organismId);
+
+  @JsonProperty("currentInt")
+  long getCurrentInt();
+
+  @JsonProperty("currentInt")
+  void setCurrentInt(long currentInt);
 }

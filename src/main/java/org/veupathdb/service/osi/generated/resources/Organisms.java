@@ -149,6 +149,13 @@ public interface Organisms {
       return new PutOrganismsByOrganismIdResponse(responseBuilder.build());
     }
 
+    public static PutOrganismsByOrganismIdResponse respond400WithApplicationJson(
+        BadRequestError entity) {
+      Response.ResponseBuilder responseBuilder = Response.status(400).header("Content-Type", "application/json");
+      responseBuilder.entity(entity);
+      return new PutOrganismsByOrganismIdResponse(responseBuilder.build(), entity);
+    }
+
     public static PutOrganismsByOrganismIdResponse respond401WithApplicationJson(
         UnauthorizedError entity) {
       Response.ResponseBuilder responseBuilder = Response.status(401).header("Content-Type", "application/json");

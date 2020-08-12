@@ -11,26 +11,26 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "organismName",
-    "geneTemplate",
-    "startingGeneInt",
-    "startingTranscriptInt",
-    "organismId"
+    "template",
+    "startingInt",
+    "organismId",
+    "currentInt"
 })
 public class IdentifiedOrganismImpl implements IdentifiedOrganism {
   @JsonProperty("organismName")
   private String organismName;
 
-  @JsonProperty("geneTemplate")
-  private String geneTemplate;
+  @JsonProperty("template")
+  private String template;
 
-  @JsonProperty("startingGeneInt")
-  private long startingGeneInt;
-
-  @JsonProperty("startingTranscriptInt")
-  private long startingTranscriptInt;
+  @JsonProperty("startingInt")
+  private long startingInt;
 
   @JsonProperty("organismId")
   private long organismId;
+
+  @JsonProperty("currentInt")
+  private long currentInt;
 
   @JsonIgnore
   private Map<String, Object> additionalProperties = new ExcludingMap();
@@ -45,34 +45,24 @@ public class IdentifiedOrganismImpl implements IdentifiedOrganism {
     this.organismName = organismName;
   }
 
-  @JsonProperty("geneTemplate")
-  public String getGeneTemplate() {
-    return this.geneTemplate;
+  @JsonProperty("template")
+  public String getTemplate() {
+    return this.template;
   }
 
-  @JsonProperty("geneTemplate")
-  public void setGeneTemplate(String geneTemplate) {
-    this.geneTemplate = geneTemplate;
+  @JsonProperty("template")
+  public void setTemplate(String template) {
+    this.template = template;
   }
 
-  @JsonProperty("startingGeneInt")
-  public long getStartingGeneInt() {
-    return this.startingGeneInt;
+  @JsonProperty("startingInt")
+  public long getStartingInt() {
+    return this.startingInt;
   }
 
-  @JsonProperty("startingGeneInt")
-  public void setStartingGeneInt(long startingGeneInt) {
-    this.startingGeneInt = startingGeneInt;
-  }
-
-  @JsonProperty("startingTranscriptInt")
-  public long getStartingTranscriptInt() {
-    return this.startingTranscriptInt;
-  }
-
-  @JsonProperty("startingTranscriptInt")
-  public void setStartingTranscriptInt(long startingTranscriptInt) {
-    this.startingTranscriptInt = startingTranscriptInt;
+  @JsonProperty("startingInt")
+  public void setStartingInt(long startingInt) {
+    this.startingInt = startingInt;
   }
 
   @JsonProperty("organismId")
@@ -83,6 +73,16 @@ public class IdentifiedOrganismImpl implements IdentifiedOrganism {
   @JsonProperty("organismId")
   public void setOrganismId(long organismId) {
     this.organismId = organismId;
+  }
+
+  @JsonProperty("currentInt")
+  public long getCurrentInt() {
+    return this.currentInt;
+  }
+
+  @JsonProperty("currentInt")
+  public void setCurrentInt(long currentInt) {
+    this.currentInt = currentInt;
   }
 
   @JsonAnyGetter

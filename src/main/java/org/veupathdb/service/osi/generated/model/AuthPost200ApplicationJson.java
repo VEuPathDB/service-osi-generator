@@ -7,30 +7,18 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.Map;
 
 @JsonDeserialize(
-    as = OrganismImpl.class
+    as = AuthPost200ApplicationJsonImpl.class
 )
-public interface Organism {
+public interface AuthPost200ApplicationJson {
   @JsonAnyGetter
   Map<String, Object> getAdditionalProperties();
 
   @JsonAnySetter
   void setAdditionalProperties(String key, Object value);
 
-  @JsonProperty("organismName")
-  String getOrganismName();
+  @JsonProperty("apiKey")
+  String getApiKey();
 
-  @JsonProperty("organismName")
-  void setOrganismName(String organismName);
-
-  @JsonProperty("template")
-  String getTemplate();
-
-  @JsonProperty("template")
-  void setTemplate(String template);
-
-  @JsonProperty("startingInt")
-  long getStartingInt();
-
-  @JsonProperty("startingInt")
-  void setStartingInt(long startingInt);
+  @JsonProperty("apiKey")
+  void setApiKey(String apiKey);
 }
