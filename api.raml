@@ -118,7 +118,7 @@ securedBy: basic
       500:
         body: error.ServerError
   post:
-    body: GeneSet
+    body: IdSet
     responses:
       200:
         body: string
@@ -178,36 +178,45 @@ securedBy: basic
 
 types:
   ZeroBasedULong:
+    description: Int64 value with a lower bound of `0`.
     type: integer
     format: int64
     minimum: 0
     maximum: 9223372036854775807
   OneBasedULong:
+    description: Int64 value with a lower bound of `1`.
     type: integer
     format: int64
     minimum: 1
     maximum: 9223372036854775807
   Organism:
+    displayName: Organism Record Create/Update Request Body
     type: object
     properties:
       organismName:
       template:
       startingInt: OneBasedULong
   IdentifiedOrganism:
+    displayName: OSID Organism Record
     type: Organism
     properties:
       organismId: OneBasedULong
       currentInt: OneBasedULong
-  GeneSet:
+  IdSet:
+    displayName: Idset Create Request Body
     type: object
     properties:
       organism: IdentifiedOrganism
       template:
+        type: string
+        minLength: 5
+        pattern: "^.+%[0-9,+ $.]+d.+$"
       startingGeneInt: OneBasedULong
       geneIds: ZeroBasedULong
       transcriptIds: string[]
       created: ZeroBasedULong
   IdentifiedGeneSet:
-    type: GeneSet
+    displayName: OSID IdSet Record
+    type: IdSet
     properties:
       geneSetId: OneBasedULong
