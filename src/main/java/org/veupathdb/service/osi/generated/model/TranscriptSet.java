@@ -8,30 +8,24 @@ import java.util.List;
 import java.util.Map;
 
 @JsonDeserialize(
-    as = IdSetImpl.class
+    as = TranscriptSetImpl.class
 )
-public interface IdSet {
+public interface TranscriptSet {
   @JsonAnyGetter
   Map<String, Object> getAdditionalProperties();
 
   @JsonAnySetter
   void setAdditionalProperties(String key, Object value);
 
-  @JsonProperty("organism")
-  IdentifiedOrganism getOrganism();
+  @JsonProperty("geneId")
+  String getGeneId();
 
-  @JsonProperty("organism")
-  void setOrganism(IdentifiedOrganism organism);
+  @JsonProperty("geneId")
+  void setGeneId(String geneId);
 
-  @JsonProperty("issuedIds")
-  List<TranscriptSet> getIssuedIds();
+  @JsonProperty("transcriptIds")
+  List<String> getTranscriptIds();
 
-  @JsonProperty("issuedIds")
-  void setIssuedIds(List<TranscriptSet> issuedIds);
-
-  @JsonProperty("created")
-  long getCreated();
-
-  @JsonProperty("created")
-  void setCreated(long created);
+  @JsonProperty("transcriptIds")
+  void setTranscriptIds(List<String> transcriptIds);
 }

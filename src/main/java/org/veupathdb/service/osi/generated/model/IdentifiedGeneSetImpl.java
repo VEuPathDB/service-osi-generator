@@ -12,9 +12,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "organism",
-    "startingGeneInt",
-    "geneIds",
-    "transcriptIds",
+    "issuedIds",
     "created",
     "geneSetId",
     "template"
@@ -23,14 +21,8 @@ public class IdentifiedGeneSetImpl implements IdentifiedGeneSet {
   @JsonProperty("organism")
   private IdentifiedOrganism organism;
 
-  @JsonProperty("startingGeneInt")
-  private long startingGeneInt;
-
-  @JsonProperty("geneIds")
-  private long geneIds;
-
-  @JsonProperty("transcriptIds")
-  private List<String> transcriptIds;
+  @JsonProperty("issuedIds")
+  private List<TranscriptSet> issuedIds;
 
   @JsonProperty("created")
   private long created;
@@ -54,34 +46,14 @@ public class IdentifiedGeneSetImpl implements IdentifiedGeneSet {
     this.organism = organism;
   }
 
-  @JsonProperty("startingGeneInt")
-  public long getStartingGeneInt() {
-    return this.startingGeneInt;
+  @JsonProperty("issuedIds")
+  public List<TranscriptSet> getIssuedIds() {
+    return this.issuedIds;
   }
 
-  @JsonProperty("startingGeneInt")
-  public void setStartingGeneInt(long startingGeneInt) {
-    this.startingGeneInt = startingGeneInt;
-  }
-
-  @JsonProperty("geneIds")
-  public long getGeneIds() {
-    return this.geneIds;
-  }
-
-  @JsonProperty("geneIds")
-  public void setGeneIds(long geneIds) {
-    this.geneIds = geneIds;
-  }
-
-  @JsonProperty("transcriptIds")
-  public List<String> getTranscriptIds() {
-    return this.transcriptIds;
-  }
-
-  @JsonProperty("transcriptIds")
-  public void setTranscriptIds(List<String> transcriptIds) {
-    this.transcriptIds = transcriptIds;
+  @JsonProperty("issuedIds")
+  public void setIssuedIds(List<TranscriptSet> issuedIds) {
+    this.issuedIds = issuedIds;
   }
 
   @JsonProperty("created")

@@ -23,23 +23,11 @@ public interface IdentifiedGeneSet extends IdSet {
   @JsonProperty("organism")
   void setOrganism(IdentifiedOrganism organism);
 
-  @JsonProperty("startingGeneInt")
-  long getStartingGeneInt();
+  @JsonProperty("issuedIds")
+  List<TranscriptSet> getIssuedIds();
 
-  @JsonProperty("startingGeneInt")
-  void setStartingGeneInt(long startingGeneInt);
-
-  @JsonProperty("geneIds")
-  long getGeneIds();
-
-  @JsonProperty("geneIds")
-  void setGeneIds(long geneIds);
-
-  @JsonProperty("transcriptIds")
-  List<String> getTranscriptIds();
-
-  @JsonProperty("transcriptIds")
-  void setTranscriptIds(List<String> transcriptIds);
+  @JsonProperty("issuedIds")
+  void setIssuedIds(List<TranscriptSet> issuedIds);
 
   @JsonProperty("created")
   long getCreated();
