@@ -8,32 +8,95 @@
 #                                                                              #
 ################################################################################
 
+uses:
+  lib: schema/library.raml
 types:
-  HelloResponse:
+  TemplatePattern:
+    displayName: Gene ID Template String
+    type: string
+    pattern: ^.*%[0-9,+ $.]+d.*$
+    minLength: 5
+    example: !!omap
+      - "": PF3D7_%07d
+  ZeroBasedInt:
+    description: Int32 value with a lower bound of `0`.
+    type: integer
+    format: int32
+    minimum: 0
+    maximum: 2147483647
+  OneBasedInt:
+    description: Int32 value with a lower bound of `1`.
+    type: integer
+    format: int32
+    minimum: 1
+    maximum: 2147483647
+  ZeroBasedLong:
+    description: Int64 value with a lower bound of `0`.
+    type: integer
+    format: int64
+    minimum: 0
+    maximum: 9223372036854775807
+  OneBasedLong:
+    description: Int64 value with a lower bound of `1`.
+    type: integer
+    format: int64
+    minimum: 1
+    maximum: 9223372036854775807
+  IdSetPostRequest:
     type: object
-    additionalProperties: false
     properties:
-      greeting:
+      organismId: lib.OneBasedLong
+      generateGenes: lib.ZeroBasedInt
+  IdSetResponse:
+    type: object
+    properties:
+      idSetId: lib.OneBasedLong
+      template: lib.TemplatePattern
+      geneIntStart: lib.OneBasedLong
+      generatedGeneCount: lib.ZeroBasedInt
+      generatedIds: GeneratedTranscriptEntry[]
+  GeneratedTranscriptEntry:
+    type: object
+    properties:
+      geneId:
         type: string
-        enum:
-          - Hello World
-      anotherType: AnotherType
-  HelloPostRequest:
+        minLength: 3
+      transcripts: string[]
+      proteins: string[]
+  IdSetPatchEntry:
     type: object
-    additionalProperties: false
     properties:
-      greet:
-        description: Who do you want to say hello to?
+      geneId:
         type: string
-  HelloPostResponse:
+        minLength: 3
+      transcripts: lib.OneBasedInt
+  OrganismRequest:
+    displayName: Organism Record Create/Update Request Body
     type: object
-    additionalProperties: false
     properties:
-      message:
-        description: Generated greeting
+      organismName:
         type: string
-  AnotherType:
-    type: object
+        minLength: 3
+      template: lib.TemplatePattern
+      geneIntStart: lib.OneBasedLong
+      transcriptIntStart: lib.OneBasedLong
+    example: !!omap
+      - organismName: Plasmodium falciparum 3D7
+      - template: "PF3D7_%07d"
+      - geneIntStart: 1500000
+      - transcriptIntStart: 1
+  OrganismResponse:
+    type: OrganismRequest
     properties:
-      something?: string
+      organismId: lib.OneBasedInt
+      geneIntCurrent: lib.OneBasedLong
+      transcriptIntCurrent: lib.OneBasedLong
+    example: !!omap
+      - organismId: 24
+      - organismName: Plasmodium falciparum 3D7
+      - template: "PF3D7_%07d"
+      - geneIntStart: 1500000
+      - geneIntCurrent: 1501203
+      - transcriptIntStart: 1
+      - transcriptIntCurrent: 57
 

@@ -1,0 +1,35 @@
+#%RAML 1.0 Library
+
+uses:
+  lib: ../library.raml
+
+types:
+  OrganismRequest:
+    displayName: Organism Record Create/Update Request Body
+    type: object
+    properties:
+      organismName:
+        type: string
+        minLength: 3
+      template: lib.TemplatePattern
+      geneIntStart: lib.OneBasedLong
+      transcriptIntStart: lib.OneBasedLong
+    example:
+      organismName: Plasmodium falciparum 3D7
+      template: "PF3D7_%07d"
+      geneIntStart: 1500000
+      transcriptIntStart: 1
+  OrganismResponse:
+    type: OrganismRequest
+    properties:
+      organismId: lib.OneBasedInt
+      geneIntCurrent: lib.OneBasedLong
+      transcriptIntCurrent: lib.OneBasedLong
+    example:
+      organismId: 24
+      organismName: Plasmodium falciparum 3D7
+      template: "PF3D7_%07d"
+      geneIntStart: 1500000
+      geneIntCurrent: 1501203
+      transcriptIntStart: 1
+      transcriptIntCurrent: 57

@@ -29,7 +29,7 @@ securedBy: basic
       organismName?:
     responses:
       200:
-        body: IdentifiedOrganism[]
+        body: lib.OrganismResponse[]
       401:
         body: error.UnauthorizedError
       403:
@@ -42,7 +42,7 @@ securedBy: basic
     description: |
       Registers a new organism with the OSID service, returning the ID of the
       newly registered organism record on success.
-    body: Organism
+    body: lib.OrganismRequest
     responses:
       200:
         body:
@@ -67,7 +67,7 @@ securedBy: basic
         id.
       responses:
         200:
-          body: IdentifiedOrganism
+          body: lib.OrganismResponse
         401:
           body: error.UnauthorizedError
         404:
@@ -87,7 +87,7 @@ securedBy: basic
         3. The `template` value must contain a single printf integer
            placeholder.  (See [the Java string formatting cheatsheet](https://dzone.com/articles/how-to-format-a-string-clarified))
         4. The `organismName` value must not be null or empty.
-      body: Organism
+      body: lib.OrganismRequest
       responses:
         204:
         400:
@@ -106,8 +106,8 @@ securedBy: basic
 /idSets:
   get:
     queryParameters:
-      startTimeStamp: ZeroBasedULong
-      endTimeStamp: ZeroBasedULong
+      startTimeStamp: lib.ZeroBasedLong
+      endTimeStamp: lib.ZeroBasedLong
     responses:
       200:
         body: IdentifiedGeneSet[]
@@ -118,10 +118,10 @@ securedBy: basic
       500:
         body: error.ServerError
   post:
-    body: IdSet
+    body: lib.IdSetPostRequest
     responses:
       200:
-        body: string
+        body: lib.IdSetResponse
       400:
         body: error.BadRequestError
       401:
@@ -138,7 +138,22 @@ securedBy: basic
     get:
       responses:
         200:
-          body: IdentifiedGeneSet
+          body: lib.IdSetResponse
+        401:
+          body: error.UnauthorizedError
+        403:
+          body: error.ForbiddenError
+        404:
+          body: error.NotFoundError
+        500:
+          body: error.ServerError
+    patch:
+      body: lib.IdSetPatchEntry[]
+      responses:
+        200:
+          body: lib.IdSetResponse
+        400:
+          body: error.BadRequestError
         401:
           body: error.UnauthorizedError
         403:
@@ -175,80 +190,3 @@ securedBy: basic
         body: error.UnprocessableEntityError
       500:
         body: error.ServerError
-
-types:
-  ZeroBasedULong:
-    description: Int64 value with a lower bound of `0`.
-    type: integer
-    format: int64
-    minimum: 0
-    maximum: 9223372036854775807
-  OneBasedULong:
-    description: Int64 value with a lower bound of `1`.
-    type: integer
-    format: int64
-    minimum: 1
-    maximum: 9223372036854775807
-  Organism:
-    displayName: Organism Record Create/Update Request Body
-    type: object
-    properties:
-      organismName:
-      template:
-        type: string
-        minLength: 5
-        pattern: "^.+%[0-9,+ $.]+d.*$"
-      startingInt: OneBasedULong
-    example:
-      organismName: Plasmodium falciparum 3D7
-      template: "PF3D7_%07d"
-      startingInt: 1500000
-  IdentifiedOrganism:
-    displayName: OSID Organism Record
-    type: Organism
-    properties:
-      organismId: OneBasedULong
-      currentInt: OneBasedULong
-    example:
-      organismId: 23
-      organismName: Plasmodium falciparum 3D7
-      template: "PF3D7_%07d"
-      startingInt: 1500000
-      currentInt: 1500302
-  IdSet:
-    displayName: Idset Create Request Body
-    type: object
-    properties:
-      organism: IdentifiedOrganism
-      issuedIds: TranscriptSet[]
-      created: ZeroBasedULong
-    example:
-      organism:
-        organismId: 23
-        organismName: Plasmodium falciparum 3D7
-        template: "PF3D7_%07d"
-        startingInt: 1500000
-        currentInt: 1500302
-      issuedIds:
-        - geneId: PF3D7_1302521
-          transcriptIds:
-            - PF3D7_1302521.R1
-            - PF3D7_1302521.R2
-            - PF3D7_1302521.R12
-            - PF3D7_1302521.R13
-            - PF3D7_1302521.R14
-      created: 1597244587
-  IdentifiedGeneSet:
-    displayName: OSID IdSet Record
-    type: IdSet
-    properties:
-      geneSetId: OneBasedULong
-      template:
-        type: string
-        minLength: 5
-        pattern: "^.+%[0-9,+ $.]+d.*$"
-  TranscriptSet:
-    type: object
-    properties:
-      geneId:
-      transcriptIds: string[]
