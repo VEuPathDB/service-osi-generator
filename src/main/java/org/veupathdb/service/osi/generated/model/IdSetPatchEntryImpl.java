@@ -6,20 +6,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import java.util.List;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "geneId",
-    "transcriptIds"
+    "transcripts"
 })
-public class TranscriptSetImpl implements TranscriptSet {
+public class IdSetPatchEntryImpl implements IdSetPatchEntry {
   @JsonProperty("geneId")
   private String geneId;
 
-  @JsonProperty("transcriptIds")
-  private List<String> transcriptIds;
+  @JsonProperty("transcripts")
+  private int transcripts;
 
   @JsonIgnore
   private Map<String, Object> additionalProperties = new ExcludingMap();
@@ -34,14 +33,14 @@ public class TranscriptSetImpl implements TranscriptSet {
     this.geneId = geneId;
   }
 
-  @JsonProperty("transcriptIds")
-  public List<String> getTranscriptIds() {
-    return this.transcriptIds;
+  @JsonProperty("transcripts")
+  public int getTranscripts() {
+    return this.transcripts;
   }
 
-  @JsonProperty("transcriptIds")
-  public void setTranscriptIds(List<String> transcriptIds) {
-    this.transcriptIds = transcriptIds;
+  @JsonProperty("transcripts")
+  public void setTranscripts(int transcripts) {
+    this.transcripts = transcripts;
   }
 
   @JsonAnyGetter

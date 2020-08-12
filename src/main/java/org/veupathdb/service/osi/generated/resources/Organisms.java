@@ -13,9 +13,9 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import org.veupathdb.service.osi.generated.model.BadRequestError;
 import org.veupathdb.service.osi.generated.model.ForbiddenError;
-import org.veupathdb.service.osi.generated.model.IdentifiedOrganism;
 import org.veupathdb.service.osi.generated.model.NotFoundError;
-import org.veupathdb.service.osi.generated.model.Organism;
+import org.veupathdb.service.osi.generated.model.OrganismRequest;
+import org.veupathdb.service.osi.generated.model.OrganismResponse;
 import org.veupathdb.service.osi.generated.model.ServerError;
 import org.veupathdb.service.osi.generated.model.UnauthorizedError;
 import org.veupathdb.service.osi.generated.model.UnprocessableEntityError;
@@ -30,7 +30,7 @@ public interface Organisms {
   @POST
   @Produces("application/json")
   @Consumes("application/json")
-  PostOrganismsResponse postOrganisms(Organism entity);
+  PostOrganismsResponse postOrganisms(OrganismRequest entity);
 
   @GET
   @Path("/{organism-id}")
@@ -43,7 +43,7 @@ public interface Organisms {
   @Produces("application/json")
   @Consumes("application/json")
   PutOrganismsByOrganismIdResponse putOrganismsByOrganismId(
-      @PathParam("organism-id") String organismId, Organism entity);
+      @PathParam("organism-id") String organismId, OrganismRequest entity);
 
   class PostOrganismsResponse extends ResponseDelegate {
     private PostOrganismsResponse(Response response, Object entity) {
@@ -102,9 +102,9 @@ public interface Organisms {
     }
 
     public static GetOrganismsResponse respond200WithApplicationJson(
-        List<IdentifiedOrganism> entity) {
+        List<OrganismResponse> entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
-      GenericEntity<List<IdentifiedOrganism>> wrappedEntity = new GenericEntity<List<IdentifiedOrganism>>(entity){};
+      GenericEntity<List<OrganismResponse>> wrappedEntity = new GenericEntity<List<OrganismResponse>>(entity){};
       responseBuilder.entity(wrappedEntity);
       return new GetOrganismsResponse(responseBuilder.build(), wrappedEntity);
     }
@@ -202,7 +202,7 @@ public interface Organisms {
     }
 
     public static GetOrganismsByOrganismIdResponse respond200WithApplicationJson(
-        IdentifiedOrganism entity) {
+        OrganismResponse entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
       return new GetOrganismsByOrganismIdResponse(responseBuilder.build(), entity);

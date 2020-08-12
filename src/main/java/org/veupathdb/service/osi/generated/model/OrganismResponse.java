@@ -7,9 +7,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.Map;
 
 @JsonDeserialize(
-    as = IdentifiedOrganismImpl.class
+    as = OrganismResponseImpl.class
 )
-public interface IdentifiedOrganism extends Organism {
+public interface OrganismResponse extends OrganismRequest {
   @JsonAnyGetter
   Map<String, Object> getAdditionalProperties();
 
@@ -28,21 +28,33 @@ public interface IdentifiedOrganism extends Organism {
   @JsonProperty("template")
   void setTemplate(String template);
 
-  @JsonProperty("startingInt")
-  long getStartingInt();
+  @JsonProperty("geneIntStart")
+  long getGeneIntStart();
 
-  @JsonProperty("startingInt")
-  void setStartingInt(long startingInt);
+  @JsonProperty("geneIntStart")
+  void setGeneIntStart(long geneIntStart);
+
+  @JsonProperty("transcriptIntStart")
+  long getTranscriptIntStart();
+
+  @JsonProperty("transcriptIntStart")
+  void setTranscriptIntStart(long transcriptIntStart);
 
   @JsonProperty("organismId")
-  long getOrganismId();
+  int getOrganismId();
 
   @JsonProperty("organismId")
-  void setOrganismId(long organismId);
+  void setOrganismId(int organismId);
 
-  @JsonProperty("currentInt")
-  long getCurrentInt();
+  @JsonProperty("geneIntCurrent")
+  long getGeneIntCurrent();
 
-  @JsonProperty("currentInt")
-  void setCurrentInt(long currentInt);
+  @JsonProperty("geneIntCurrent")
+  void setGeneIntCurrent(long geneIntCurrent);
+
+  @JsonProperty("transcriptIntCurrent")
+  long getTranscriptIntCurrent();
+
+  @JsonProperty("transcriptIntCurrent")
+  void setTranscriptIntCurrent(long transcriptIntCurrent);
 }

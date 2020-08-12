@@ -12,25 +12,21 @@ import java.util.Map;
 @JsonPropertyOrder({
     "organismName",
     "template",
-    "startingInt",
-    "organismId",
-    "currentInt"
+    "geneIntStart",
+    "transcriptIntStart"
 })
-public class IdentifiedOrganismImpl implements IdentifiedOrganism {
+public class OrganismRequestImpl implements OrganismRequest {
   @JsonProperty("organismName")
   private String organismName;
 
   @JsonProperty("template")
   private String template;
 
-  @JsonProperty("startingInt")
-  private long startingInt;
+  @JsonProperty("geneIntStart")
+  private long geneIntStart;
 
-  @JsonProperty("organismId")
-  private long organismId;
-
-  @JsonProperty("currentInt")
-  private long currentInt;
+  @JsonProperty("transcriptIntStart")
+  private long transcriptIntStart;
 
   @JsonIgnore
   private Map<String, Object> additionalProperties = new ExcludingMap();
@@ -55,34 +51,24 @@ public class IdentifiedOrganismImpl implements IdentifiedOrganism {
     this.template = template;
   }
 
-  @JsonProperty("startingInt")
-  public long getStartingInt() {
-    return this.startingInt;
+  @JsonProperty("geneIntStart")
+  public long getGeneIntStart() {
+    return this.geneIntStart;
   }
 
-  @JsonProperty("startingInt")
-  public void setStartingInt(long startingInt) {
-    this.startingInt = startingInt;
+  @JsonProperty("geneIntStart")
+  public void setGeneIntStart(long geneIntStart) {
+    this.geneIntStart = geneIntStart;
   }
 
-  @JsonProperty("organismId")
-  public long getOrganismId() {
-    return this.organismId;
+  @JsonProperty("transcriptIntStart")
+  public long getTranscriptIntStart() {
+    return this.transcriptIntStart;
   }
 
-  @JsonProperty("organismId")
-  public void setOrganismId(long organismId) {
-    this.organismId = organismId;
-  }
-
-  @JsonProperty("currentInt")
-  public long getCurrentInt() {
-    return this.currentInt;
-  }
-
-  @JsonProperty("currentInt")
-  public void setCurrentInt(long currentInt) {
-    this.currentInt = currentInt;
+  @JsonProperty("transcriptIntStart")
+  public void setTranscriptIntStart(long transcriptIntStart) {
+    this.transcriptIntStart = transcriptIntStart;
   }
 
   @JsonAnyGetter

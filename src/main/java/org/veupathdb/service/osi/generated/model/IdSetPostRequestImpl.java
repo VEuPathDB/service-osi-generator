@@ -9,22 +9,38 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder("something")
-public class AnotherTypeImpl implements AnotherType {
-  @JsonProperty("something")
-  private String something;
+@JsonPropertyOrder({
+    "organismId",
+    "generateGenes"
+})
+public class IdSetPostRequestImpl implements IdSetPostRequest {
+  @JsonProperty("organismId")
+  private long organismId;
+
+  @JsonProperty("generateGenes")
+  private int generateGenes;
 
   @JsonIgnore
   private Map<String, Object> additionalProperties = new ExcludingMap();
 
-  @JsonProperty("something")
-  public String getSomething() {
-    return this.something;
+  @JsonProperty("organismId")
+  public long getOrganismId() {
+    return this.organismId;
   }
 
-  @JsonProperty("something")
-  public void setSomething(String something) {
-    this.something = something;
+  @JsonProperty("organismId")
+  public void setOrganismId(long organismId) {
+    this.organismId = organismId;
+  }
+
+  @JsonProperty("generateGenes")
+  public int getGenerateGenes() {
+    return this.generateGenes;
+  }
+
+  @JsonProperty("generateGenes")
+  public void setGenerateGenes(int generateGenes) {
+    this.generateGenes = generateGenes;
   }
 
   @JsonAnyGetter

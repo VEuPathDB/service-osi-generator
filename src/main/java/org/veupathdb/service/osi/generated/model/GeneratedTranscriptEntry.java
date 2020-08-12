@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 @JsonDeserialize(
-    as = TranscriptSetImpl.class
+    as = GeneratedTranscriptEntryImpl.class
 )
-public interface TranscriptSet {
+public interface GeneratedTranscriptEntry {
   @JsonAnyGetter
   Map<String, Object> getAdditionalProperties();
 
@@ -23,9 +23,15 @@ public interface TranscriptSet {
   @JsonProperty("geneId")
   void setGeneId(String geneId);
 
-  @JsonProperty("transcriptIds")
-  List<String> getTranscriptIds();
+  @JsonProperty("transcripts")
+  List<String> getTranscripts();
 
-  @JsonProperty("transcriptIds")
-  void setTranscriptIds(List<String> transcriptIds);
+  @JsonProperty("transcripts")
+  void setTranscripts(List<String> transcripts);
+
+  @JsonProperty("proteins")
+  List<String> getProteins();
+
+  @JsonProperty("proteins")
+  void setProteins(List<String> proteins);
 }

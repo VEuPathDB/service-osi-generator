@@ -7,18 +7,24 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.Map;
 
 @JsonDeserialize(
-    as = AnotherTypeImpl.class
+    as = IdSetPostRequestImpl.class
 )
-public interface AnotherType {
+public interface IdSetPostRequest {
   @JsonAnyGetter
   Map<String, Object> getAdditionalProperties();
 
   @JsonAnySetter
   void setAdditionalProperties(String key, Object value);
 
-  @JsonProperty("something")
-  String getSomething();
+  @JsonProperty("organismId")
+  long getOrganismId();
 
-  @JsonProperty("something")
-  void setSomething(String something);
+  @JsonProperty("organismId")
+  void setOrganismId(long organismId);
+
+  @JsonProperty("generateGenes")
+  int getGenerateGenes();
+
+  @JsonProperty("generateGenes")
+  void setGenerateGenes(int generateGenes);
 }

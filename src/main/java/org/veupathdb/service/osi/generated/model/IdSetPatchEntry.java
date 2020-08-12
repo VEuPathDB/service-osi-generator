@@ -7,30 +7,24 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.Map;
 
 @JsonDeserialize(
-    as = OrganismImpl.class
+    as = IdSetPatchEntryImpl.class
 )
-public interface Organism {
+public interface IdSetPatchEntry {
   @JsonAnyGetter
   Map<String, Object> getAdditionalProperties();
 
   @JsonAnySetter
   void setAdditionalProperties(String key, Object value);
 
-  @JsonProperty("organismName")
-  String getOrganismName();
+  @JsonProperty("geneId")
+  String getGeneId();
 
-  @JsonProperty("organismName")
-  void setOrganismName(String organismName);
+  @JsonProperty("geneId")
+  void setGeneId(String geneId);
 
-  @JsonProperty("template")
-  String getTemplate();
+  @JsonProperty("transcripts")
+  int getTranscripts();
 
-  @JsonProperty("template")
-  void setTemplate(String template);
-
-  @JsonProperty("startingInt")
-  long getStartingInt();
-
-  @JsonProperty("startingInt")
-  void setStartingInt(long startingInt);
+  @JsonProperty("transcripts")
+  void setTranscripts(int transcripts);
 }
