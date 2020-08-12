@@ -77,9 +77,9 @@ types:
       organismName:
         type: string
         minLength: 3
-      template: lib.TemplatePattern
-      geneIntStart: lib.OneBasedLong
-      transcriptIntStart: lib.OneBasedLong
+      template: TemplatePattern
+      geneIntStart: OneBasedLong
+      transcriptIntStart: OneBasedLong
     example: !!omap
       - organismName: Plasmodium falciparum 3D7
       - template: "PF3D7_%07d"
@@ -88,9 +88,9 @@ types:
   OrganismResponse:
     type: OrganismRequest
     properties:
-      organismId: lib.OneBasedInt
-      geneIntCurrent: lib.OneBasedLong
-      transcriptIntCurrent: lib.OneBasedLong
+      organismId: OneBasedInt
+      geneIntCurrent: OneBasedLong
+      transcriptIntCurrent: OneBasedLong
     example: !!omap
       - organismId: 24
       - organismName: Plasmodium falciparum 3D7
