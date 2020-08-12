@@ -23,12 +23,6 @@ public interface IdentifiedGeneSet extends IdSet {
   @JsonProperty("organism")
   void setOrganism(IdentifiedOrganism organism);
 
-  @JsonProperty("template")
-  String getTemplate();
-
-  @JsonProperty("template")
-  void setTemplate(String template);
-
   @JsonProperty("startingGeneInt")
   long getStartingGeneInt();
 
@@ -58,4 +52,10 @@ public interface IdentifiedGeneSet extends IdSet {
 
   @JsonProperty("geneSetId")
   void setGeneSetId(long geneSetId);
+
+  @JsonProperty("template")
+  String getTemplate();
+
+  @JsonProperty("template")
+  void setTemplate(String template);
 }

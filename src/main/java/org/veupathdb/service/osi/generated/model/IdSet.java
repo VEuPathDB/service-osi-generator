@@ -23,12 +23,6 @@ public interface IdSet {
   @JsonProperty("organism")
   void setOrganism(IdentifiedOrganism organism);
 
-  @JsonProperty("template")
-  String getTemplate();
-
-  @JsonProperty("template")
-  void setTemplate(String template);
-
   @JsonProperty("startingGeneInt")
   long getStartingGeneInt();
 

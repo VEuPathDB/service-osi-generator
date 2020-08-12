@@ -12,19 +12,16 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "organism",
-    "template",
     "startingGeneInt",
     "geneIds",
     "transcriptIds",
     "created",
-    "geneSetId"
+    "geneSetId",
+    "template"
 })
 public class IdentifiedGeneSetImpl implements IdentifiedGeneSet {
   @JsonProperty("organism")
   private IdentifiedOrganism organism;
-
-  @JsonProperty("template")
-  private String template;
 
   @JsonProperty("startingGeneInt")
   private long startingGeneInt;
@@ -41,6 +38,9 @@ public class IdentifiedGeneSetImpl implements IdentifiedGeneSet {
   @JsonProperty("geneSetId")
   private long geneSetId;
 
+  @JsonProperty("template")
+  private String template;
+
   @JsonIgnore
   private Map<String, Object> additionalProperties = new ExcludingMap();
 
@@ -52,16 +52,6 @@ public class IdentifiedGeneSetImpl implements IdentifiedGeneSet {
   @JsonProperty("organism")
   public void setOrganism(IdentifiedOrganism organism) {
     this.organism = organism;
-  }
-
-  @JsonProperty("template")
-  public String getTemplate() {
-    return this.template;
-  }
-
-  @JsonProperty("template")
-  public void setTemplate(String template) {
-    this.template = template;
   }
 
   @JsonProperty("startingGeneInt")
@@ -112,6 +102,16 @@ public class IdentifiedGeneSetImpl implements IdentifiedGeneSet {
   @JsonProperty("geneSetId")
   public void setGeneSetId(long geneSetId) {
     this.geneSetId = geneSetId;
+  }
+
+  @JsonProperty("template")
+  public String getTemplate() {
+    return this.template;
+  }
+
+  @JsonProperty("template")
+  public void setTemplate(String template) {
+    this.template = template;
   }
 
   @JsonAnyGetter

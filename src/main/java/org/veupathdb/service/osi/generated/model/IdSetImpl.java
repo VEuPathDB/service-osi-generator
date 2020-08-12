@@ -12,7 +12,6 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "organism",
-    "template",
     "startingGeneInt",
     "geneIds",
     "transcriptIds",
@@ -21,9 +20,6 @@ import java.util.Map;
 public class IdSetImpl implements IdSet {
   @JsonProperty("organism")
   private IdentifiedOrganism organism;
-
-  @JsonProperty("template")
-  private String template;
 
   @JsonProperty("startingGeneInt")
   private long startingGeneInt;
@@ -48,16 +44,6 @@ public class IdSetImpl implements IdSet {
   @JsonProperty("organism")
   public void setOrganism(IdentifiedOrganism organism) {
     this.organism = organism;
-  }
-
-  @JsonProperty("template")
-  public String getTemplate() {
-    return this.template;
-  }
-
-  @JsonProperty("template")
-  public void setTemplate(String template) {
-    this.template = template;
   }
 
   @JsonProperty("startingGeneInt")
