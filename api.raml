@@ -181,34 +181,34 @@ securedBy: basic
       responses:
         200:
           body:
-           type: IdSetResponse
-           example:
-             idSetId: 48
-             template: PF3D7_%07d
-             geneIntStart: 150000
-             generatedGeneCount: 2
-             generatedIds:
-               - geneId: PF3D7_0145842
-                 transcripts:
-                   - PF3D7_0145842.R57
-                   - PF3D7_0145842.R58
-                   - PF3D7_0145842.R59
-                   - PF3D7_0145842.R78
-                 proteins:
-                   - PF3D7_0145842.P57
-                   - PF3D7_0145842.P58
-                   - PF3D7_0145842.P59
-                   - PF3D7_0145842.P78
-               - geneId: PF3D7_150001
-                 transcripts: []
-                 proteins: []
-               - geneId: PF3D7_150002
-                 transcripts:
-                   - PF3D7_150002.R79
-                 proteins:
-                   - PF3D7_150002.P79
-             created: 1597244587
-       401:
+            type: IdSetResponse
+            example:
+              idSetId: 48
+              template: PF3D7_%07d
+              geneIntStart: 150000
+              generatedGeneCount: 2
+              generatedIds:
+              - geneId: PF3D7_0145842
+                transcripts:
+                - PF3D7_0145842.R57
+                - PF3D7_0145842.R58
+                - PF3D7_0145842.R59
+                - PF3D7_0145842.R78
+                proteins:
+                - PF3D7_0145842.P57
+                - PF3D7_0145842.P58
+                - PF3D7_0145842.P59
+                - PF3D7_0145842.P78
+              - geneId: PF3D7_150001
+                transcripts: []
+                proteins: []
+              - geneId: PF3D7_150002
+                transcripts:
+                - PF3D7_150002.R79
+                proteins:
+                - PF3D7_150002.P79
+              created: 1597244587
+        401:
           body: error.UnauthorizedError
         403:
           body: error.ForbiddenError
@@ -240,6 +240,12 @@ securedBy: basic
 
 /auth:
   post:
+    description: |
+      Register a new user/application and issue an API key for that user to
+      access this service.
+
+      This endpoint may only be used by a user or application with access to the
+      singular set of admin credentials.
     body:
       type: object
       properties:
@@ -255,6 +261,7 @@ securedBy: basic
               type: string
               minLength: 32
               maxLength: 32
+              example: 012b17855ea44007882ec152e2c54144
       400:
         body: error.BadRequestError
       401:

@@ -15,7 +15,8 @@ import java.util.Map;
     "template",
     "geneIntStart",
     "generatedGeneCount",
-    "generatedIds"
+    "generatedIds",
+    "created"
 })
 public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("idSetId")
@@ -32,6 +33,9 @@ public class IdSetResponseImpl implements IdSetResponse {
 
   @JsonProperty("generatedIds")
   private List<GeneratedTranscriptEntry> generatedIds;
+
+  @JsonProperty("created")
+  private long created;
 
   @JsonIgnore
   private Map<String, Object> additionalProperties = new ExcludingMap();
@@ -84,6 +88,16 @@ public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("generatedIds")
   public void setGeneratedIds(List<GeneratedTranscriptEntry> generatedIds) {
     this.generatedIds = generatedIds;
+  }
+
+  @JsonProperty("created")
+  public long getCreated() {
+    return this.created;
+  }
+
+  @JsonProperty("created")
+  public void setCreated(long created) {
+    this.created = created;
   }
 
   @JsonAnyGetter

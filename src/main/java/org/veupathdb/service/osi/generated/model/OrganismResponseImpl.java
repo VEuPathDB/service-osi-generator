@@ -10,15 +10,18 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+    "organismId",
     "organismName",
     "template",
     "geneIntStart",
     "transcriptIntStart",
-    "organismId",
     "geneIntCurrent",
     "transcriptIntCurrent"
 })
 public class OrganismResponseImpl implements OrganismResponse {
+  @JsonProperty("organismId")
+  private int organismId;
+
   @JsonProperty("organismName")
   private String organismName;
 
@@ -31,9 +34,6 @@ public class OrganismResponseImpl implements OrganismResponse {
   @JsonProperty("transcriptIntStart")
   private long transcriptIntStart;
 
-  @JsonProperty("organismId")
-  private int organismId;
-
   @JsonProperty("geneIntCurrent")
   private long geneIntCurrent;
 
@@ -42,6 +42,16 @@ public class OrganismResponseImpl implements OrganismResponse {
 
   @JsonIgnore
   private Map<String, Object> additionalProperties = new ExcludingMap();
+
+  @JsonProperty("organismId")
+  public int getOrganismId() {
+    return this.organismId;
+  }
+
+  @JsonProperty("organismId")
+  public void setOrganismId(int organismId) {
+    this.organismId = organismId;
+  }
 
   @JsonProperty("organismName")
   public String getOrganismName() {
@@ -81,16 +91,6 @@ public class OrganismResponseImpl implements OrganismResponse {
   @JsonProperty("transcriptIntStart")
   public void setTranscriptIntStart(long transcriptIntStart) {
     this.transcriptIntStart = transcriptIntStart;
-  }
-
-  @JsonProperty("organismId")
-  public int getOrganismId() {
-    return this.organismId;
-  }
-
-  @JsonProperty("organismId")
-  public void setOrganismId(int organismId) {
-    this.organismId = organismId;
   }
 
   @JsonProperty("geneIntCurrent")

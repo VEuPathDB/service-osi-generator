@@ -46,4 +46,10 @@ public interface IdSetResponse {
 
   @JsonProperty("generatedIds")
   void setGeneratedIds(List<GeneratedTranscriptEntry> generatedIds);
+
+  @JsonProperty("created")
+  long getCreated();
+
+  @JsonProperty("created")
+  void setCreated(long created);
 }

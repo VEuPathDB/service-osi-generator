@@ -9,12 +9,18 @@ import java.util.Map;
 @JsonDeserialize(
     as = OrganismResponseImpl.class
 )
-public interface OrganismResponse extends OrganismRequest {
+public interface OrganismResponse {
   @JsonAnyGetter
   Map<String, Object> getAdditionalProperties();
 
   @JsonAnySetter
   void setAdditionalProperties(String key, Object value);
+
+  @JsonProperty("organismId")
+  int getOrganismId();
+
+  @JsonProperty("organismId")
+  void setOrganismId(int organismId);
 
   @JsonProperty("organismName")
   String getOrganismName();
@@ -39,12 +45,6 @@ public interface OrganismResponse extends OrganismRequest {
 
   @JsonProperty("transcriptIntStart")
   void setTranscriptIntStart(long transcriptIntStart);
-
-  @JsonProperty("organismId")
-  int getOrganismId();
-
-  @JsonProperty("organismId")
-  void setOrganismId(int organismId);
 
   @JsonProperty("geneIntCurrent")
   long getGeneIntCurrent();
