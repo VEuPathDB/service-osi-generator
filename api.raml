@@ -252,6 +252,9 @@ securedBy: basic
         username:
           type: string
           minLength: 3
+      additionalProperties: false
+      example:
+        username: someApplicationName
     responses:
       200:
         body:
@@ -261,7 +264,9 @@ securedBy: basic
               type: string
               minLength: 32
               maxLength: 32
-              example: 012b17855ea44007882ec152e2c54144
+          additionalProperties: false
+          example:
+            apiKey: 012b17855ea44007882ec152e2c54144
       400:
         body: error.BadRequestError
       401:
