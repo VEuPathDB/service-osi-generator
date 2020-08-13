@@ -370,6 +370,7 @@ types:
     example:
       geneId: PF3D7_0145842
       transcripts: 4
+
   OrganismRequest:
     displayName: Organism Record Create/Update Request Body
     type: object
@@ -378,19 +379,43 @@ types:
         type: string
         minLength: 3
       template: TemplatePattern
-      geneIntStart: OneBasedLong
-      transcriptIntStart: OneBasedLong
+      geneIntStart:
+        description: Starting point for the gene ID integer counter.
+        type: OneBasedLong
+      transcriptIntStart:
+        description: Starting point for the transcript ID integer counter.
+        type: OneBasedLong
     example:
       organismName: Plasmodium falciparum 3D7
       template: "PF3D7_%07d"
       geneIntStart: 1500000
       transcriptIntStart: 1
+
   OrganismResponse:
-    type: OrganismRequest
+    type: object
     properties:
-      organismId: OneBasedInt
-      geneIntCurrent: OneBasedLong
-      transcriptIntCurrent: OneBasedLong
+      organismId:
+        description: |
+          Internal primary key value assigned to this organism record.
+        type: OneBasedInt
+      organismName:
+        type: string
+        minLength: 3
+      template:
+        description: Currently assigned gene ID template string.
+        type: TemplatePattern
+      geneIntStart:
+        description: Starting point for the gene ID integer counter.
+        type: OneBasedLong
+      transcriptIntStart:
+        description: Starting point for the transcript ID integer counter.
+        type: OneBasedLong
+      geneIntCurrent:
+        description: Current value for the gene ID integer counter.
+        type: OneBasedLong
+      transcriptIntCurrent:
+        description: Current value for the transcript ID integer counter.
+        type: OneBasedLong
     example:
       organismId: 24
       organismName: Plasmodium falciparum 3D7
