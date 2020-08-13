@@ -54,7 +54,7 @@ public interface Organisms {
       super(response);
     }
 
-    public static PostOrganismsResponse respond200WithApplicationJson(String entity) {
+    public static PostOrganismsResponse respond200WithApplicationJson(int entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
       return new PostOrganismsResponse(responseBuilder.build(), entity);
