@@ -9,7 +9,8 @@ public class OrganismQuery
   private String name;
   private OffsetDateTime start;
   private OffsetDateTime end;
-  private User createdBy;
+  private Integer createdById;
+  private String createdByName;
 
   public String getName() {
     return name;
@@ -38,12 +39,19 @@ public class OrganismQuery
     return this;
   }
 
-  public User getCreatedBy() {
-    return createdBy;
+  public Integer getCreatedById() {
+    return createdById;
   }
 
-  public OrganismQuery setCreatedBy(User createdBy) {
-    this.createdBy = createdBy;
-    return this;
+  public void setCreatedById(Integer createdById) {
+    this.createdById = createdById;
+  }
+
+  public String getCreatedByName() {
+    return createdByName;
+  }
+
+  public void setCreatedByName(String createdByName) {
+    this.createdByName = createdByName;
   }
 }

@@ -1,11 +1,15 @@
 package org.veupathdb.service.osi.repo;
 
 import io.vulpine.lib.sql.load.SqlLoader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.function.Supplier;
 
 interface SQL
 {
+  Logger log = LogManager.getLogger(SQL.class);
+
   enum Mode
   {
     DELETE,
@@ -38,7 +42,11 @@ interface SQL
     {
       interface Users
       {
-        String BY_TOKEN = select(Schema.Auth.TABLE_USERS, "lookup-user");
+        String
+          BY_ID    = select(Schema.Auth.TABLE_USERS, "by-id"),
+          BY_TOKEN = select(Schema.Auth.TABLE_USERS, "by-token"),
+          BY_EMAIL = select(Schema.Auth.TABLE_USERS, "by-name"),
+          BULK_BY_ID = select(Schema.Auth.TABLE_USERS, "bulk-by-id");
       }
     }
 
@@ -69,18 +77,22 @@ interface SQL
 
 
   private static String delete(final String table, final String file) {
+    log.trace("Loading delete query " + file + " for table " + table);
     return load(Mode.DELETE, String.format(PATH_FORMAT, table, file));
   }
 
   private static String insert(final String table, final String file) {
+    log.trace("Loading insert query " + file + " for table " + table);
     return load(Mode.INSERT, String.format(PATH_FORMAT, table, file));
   }
 
   private static String select(final String table, final String file) {
+    log.trace("Loading select query " + file + " for table " + table);
     return load(Mode.SELECT, String.format(PATH_FORMAT, table, file));
   }
 
   private static String update(final String table, final String file) {
+    log.trace("Loading update query " + file + " for table " + table);
     return load(Mode.UPDATE, String.format(PATH_FORMAT, table, file));
   }
 

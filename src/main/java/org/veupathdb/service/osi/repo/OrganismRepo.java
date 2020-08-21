@@ -1,7 +1,6 @@
 package org.veupathdb.service.osi.repo;
 
 import java.sql.Types;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -92,6 +91,14 @@ public class OrganismRepo
     }
   }
 
+  /**
+   * Searches for organisms in the database matching all of the criteria set in
+   * the given {@link OrganismQuery} object.
+   *
+   * @param query Organism search criteria
+   *
+   * @return A list of zero or more matched organisms.
+   */
   public static List < Organism > findOrganisms(OrganismQuery query)
   throws Exception {
     try (
@@ -113,10 +120,15 @@ public class OrganismRepo
       else
         ps.setObject(3, query.getEnd());
 
-      if (query.getCreatedBy() == null)
+      if (query.getCreatedById() == null)
         ps.setNull(4, Types.INTEGER);
       else
-        ps.setInt(4, query.getCreatedBy().getUserId());
+        ps.setInt(4, query.getCreatedById());
+
+      if (query.getCreatedByName() == null)
+        ps.setNull(5, Types.VARCHAR);
+      else
+        ps.setString(5, query.getCreatedByName());
 
       try (var rs = ps.executeQuery()) {
         final var out = new ArrayList<Organism>();

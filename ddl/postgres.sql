@@ -1,15 +1,17 @@
 CREATE SCHEMA auth;
 
-CREATE TABLE auth.users (
-  user_id    SERIAL PRIMARY KEY,
-  user_email VARCHAR     NOT NULL UNIQUE,
-  api_key    VARCHAR     NOT NULL UNIQUE,
-  issued     TIMESTAMPTZ NOT NULL DEFAULT now()
+CREATE TABLE auth.users
+(
+  user_id   SERIAL PRIMARY KEY,
+  user_name VARCHAR     NOT NULL UNIQUE,
+  api_key   VARCHAR     NOT NULL UNIQUE,
+  issued    TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE SCHEMA osi;
 
-CREATE TABLE osi.organisms (
+CREATE TABLE osi.organisms
+(
   organism_id                SERIAL PRIMARY KEY,
   template                   VARCHAR(16) NOT NULL UNIQUE,
   gene_counter_start         BIGINT      NOT NULL DEFAULT 1
@@ -26,18 +28,20 @@ CREATE TABLE osi.organisms (
   modified                   TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE TABLE osi.id_set_collections (
+CREATE TABLE osi.id_set_collections
+(
   id_set_coll_id SERIAL PRIMARY KEY,
   name           VARCHAR     NOT NULL UNIQUE,
   created_by     INT         NOT NULL REFERENCES auth.users (user_id),
   created        TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE TABLE osi.id_sets (
+CREATE TABLE osi.id_sets
+(
   id_set_id      SERIAL PRIMARY KEY,
   id_set_coll_id INT         NOT NULL
     REFERENCES osi.id_set_collections (id_set_coll_id),
-  organism_id    BIGINT      NOT NULL
+  organism_id    INT         NOT NULL
     REFERENCES osi.organisms (organism_id),
   template       VARCHAR(16) NOT NULL,
   created        TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -45,9 +49,10 @@ CREATE TABLE osi.id_sets (
     REFERENCES auth.users (user_id)
 );
 
-CREATE TABLE osi.genes (
+CREATE TABLE osi.genes
+(
   gene_id         SERIAL PRIMARY KEY,
-  gene_set_id     INT         NOT NULL
+  id_set_id       INT         NOT NULL
     REFERENCES osi.id_sets (id_set_id),
   gene_identifier VARCHAR     NOT NULL,
   created         TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -55,7 +60,8 @@ CREATE TABLE osi.genes (
     REFERENCES auth.users (user_id)
 );
 
-CREATE TABLE osi.transcripts (
+CREATE TABLE osi.transcripts
+(
   gene_id       INT         NOT NULL
     REFERENCES osi.genes (gene_id),
   counter_start BIGINT      NOT NULL,
@@ -66,5 +72,7 @@ CREATE TABLE osi.transcripts (
 );
 
 CREATE USER osi_service LOGIN PASSWORD '${DB_PASSWORD}';
+GRANT USAGE ON SCHEMA "osi" TO osi_service;
+GRANT USAGE ON SCHEMA "auth" TO osi_service;
 GRANT INSERT, UPDATE, SELECT ON ALL TABLES IN SCHEMA osi TO osi_service;
 GRANT INSERT, UPDATE, SELECT ON ALL TABLES IN SCHEMA auth TO osi_service;

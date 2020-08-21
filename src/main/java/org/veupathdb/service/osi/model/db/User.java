@@ -1,7 +1,6 @@
 package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
-import java.util.Objects;
 
 import org.veupathdb.service.osi.util.Validation;
 
@@ -29,7 +28,7 @@ public class User extends NewUser
   ) {
     this(
       userId,
-      from.getUserEmail(),
+      from.getUserName(),
       from.getApiKey(),
       issued
     );
@@ -41,5 +40,14 @@ public class User extends NewUser
 
   public OffsetDateTime getIssued() {
     return issued;
+  }
+
+  @Override
+  public String toString() {
+    return "User{" +
+      "userId=" + userId +
+      ", userName='" + getUserName() +
+      "', apiKey='********'" +
+      ", issued=" + issued + '}';
   }
 }

@@ -25,7 +25,9 @@ import org.veupathdb.service.osi.generated.support.ResponseDelegate;
 public interface Organisms {
   @GET
   @Produces("application/json")
-  GetOrganismsResponse getOrganisms(@QueryParam("organismName") String organismName);
+  GetOrganismsResponse getOrganisms(@QueryParam("organismName") String organismName,
+      @QueryParam("createdAfter") long createdAfter,
+      @QueryParam("createdBefore") long createdBefore, @QueryParam("createdBy") String createdBy);
 
   @POST
   @Produces("application/json")

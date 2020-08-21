@@ -8,6 +8,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "idSetId",
+    "collectionId",
     "template",
     "geneIntStart",
     "generatedGeneCount",
@@ -17,6 +18,9 @@ import java.util.List;
 public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("idSetId")
   private long idSetId;
+
+  @JsonProperty("collectionId")
+  private int collectionId;
 
   @JsonProperty("template")
   private String template;
@@ -41,6 +45,16 @@ public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("idSetId")
   public void setIdSetId(long idSetId) {
     this.idSetId = idSetId;
+  }
+
+  @JsonProperty("collectionId")
+  public int getCollectionId() {
+    return this.collectionId;
+  }
+
+  @JsonProperty("collectionId")
+  public void setCollectionId(int collectionId) {
+    this.collectionId = collectionId;
   }
 
   @JsonProperty("template")

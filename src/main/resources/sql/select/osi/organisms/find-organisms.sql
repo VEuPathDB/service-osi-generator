@@ -34,7 +34,13 @@ WHERE
   )
   -- by creation user
   AND (
-    $4 IS NULL
-    OR o.created_by = $4
+    (
+      $4 IS NULL
+      OR o.created_by = $4
+    )
+    OR (
+      $5 IS NULL
+      OR u.user_email = $5
+    )
   )
 ;

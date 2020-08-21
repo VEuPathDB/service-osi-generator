@@ -27,6 +27,24 @@ securedBy: basic
       `organismName` query parameter.
     queryParameters:
       organismName?:
+        type: string
+        description: |
+          Name of the organism to look up.
+          This field supports wildcards using the asterisk (`*`) character.
+      createdAfter?:
+        type: ZeroBasedLong
+        description: |
+          Unix timestamp of the earliest records this query should match.
+          No records created before this timestamp will be returned.
+      createdBefore?:
+        type: ZeroBasedLong
+        description: |
+          Unix timestamp of the latest records this query should match.
+          No records created after this timestamp will be returned.
+      createdBy?:
+        type: string
+        description: |
+          Filter results on the ID or name of the user that created the records.
     responses:
       200:
         body:
@@ -115,6 +133,69 @@ securedBy: basic
         500:
           body: error.ServerError
 
+/idSetCollections:
+  get:
+    queryParameters:
+      createdAfter?:
+        type: ZeroBasedLong
+        description: |
+         Unix timestamp.
+
+         Filter results to records created after this date.
+      createdBefore?:
+        type: ZeroBasedLong
+        description: |
+          Unix timestamp.
+
+          Filter results to records created before this date.
+      createdBy?:
+        type: string
+        description: |
+          Filter results by the user who created the records.  The value may be
+          either a user name or user id value.
+      name?:
+        type: string
+        description: |
+          Filter results by name.  This field supports wildcards using the
+          asterisk (`*`) character.
+    responses:
+      200:
+        body: IdSetCollection[]
+      401:
+        body: error.UnauthorizedError
+      403:
+        body: error.ForbiddenError
+      500:
+        body: error.ServerError
+  post:
+    body: IdSetCollectionPostRequest
+    responses:
+      200:
+        body: IdSetCollection
+      400:
+        body: error.BadRequestError
+      401:
+        body: error.UnauthorizedError
+      403:
+        body: error.ForbiddenError
+      422:
+        body: error.UnprocessableEntityError
+      500:
+        body: error.ServerError
+
+  /{collection-id}:
+    get:
+      responses:
+        200:
+          body: IdSetCollection
+        401:
+          body: error.UnauthorizedError
+        404:
+          body: error.NotFoundError
+        500:
+          body: error.ServerError
+
+
 /idSets:
   get:
     queryParameters:
@@ -126,6 +207,7 @@ securedBy: basic
           type: IdSetResponse[]
           example:
             - idSetId: 48
+              collectionId: 12
               template: PF3D7_%07d
               geneIntStart: 150000
               generatedGeneCount: 2
@@ -165,6 +247,7 @@ securedBy: basic
           type: IdSetResponse
           example:
             idSetId: 48
+            collectionId: 12
             template: PF3D7_%07d
             geneIntStart: 150000
             generatedGeneCount: 2
@@ -196,6 +279,7 @@ securedBy: basic
             type: IdSetResponse
             example:
               idSetId: 48
+              collectionId: 12
               template: PF3D7_%07d
               geneIntStart: 150000
               generatedGeneCount: 2
@@ -360,6 +444,7 @@ types:
           Internal storage primary key for an ID set.  Used to make requests
           that operate on or retrieve one specific ID set.
         type: OneBasedLong
+      collectionId: OneBasedInt
       template: TemplatePattern
       geneIntStart: OneBasedLong
       generatedGeneCount: ZeroBasedInt
@@ -454,4 +539,18 @@ types:
       geneIntCurrent: 1501203
       transcriptIntStart: 1
       transcriptIntCurrent: 57
+
+  IdSetCollection:
+    type: object
+    properties:
+      collectionId: OneBasedInt
+      name:
+      createdBy:
+      created: ZeroBasedLong
+      idSets: IdSetResponse[]
+
+  IdSetCollectionPostRequest:
+    type: object
+    properties:
+      name:
 

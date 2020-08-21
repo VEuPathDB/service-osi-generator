@@ -14,6 +14,12 @@ public interface IdSetResponse {
   @JsonProperty("idSetId")
   void setIdSetId(long idSetId);
 
+  @JsonProperty("collectionId")
+  int getCollectionId();
+
+  @JsonProperty("collectionId")
+  void setCollectionId(int collectionId);
+
   @JsonProperty("template")
   String getTemplate();
 

@@ -1,17 +1,22 @@
 package org.veupathdb.service.osi.repo;
 
 import java.time.OffsetDateTime;
-import java.util.Optional;
+import java.util.*;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.osi.model.db.NewUser;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.service.DbMan;
+import org.veupathdb.service.osi.util.Validation;
 
 /**
  * User table queries.
  */
 public class UserRepo
 {
+  private static final Logger log = LogManager.getLogger(UserRepo.class);
+
   /**
    * Inserts a new user record based on the given user instance.
    * <p>
@@ -25,11 +30,12 @@ public class UserRepo
    * values.
    */
   public static User insertNewUser(NewUser user) throws Exception {
+    log.trace("UserRepo#insertNewUser({})", user);
     try (
       var cn = DbMan.connection();
       var ps = cn.prepareStatement(SQL.Insert.Auth.NEW_USER)
     ) {
-      ps.setString(1, user.getUserEmail());
+      ps.setString(1, user.getUserName());
       ps.setString(2, user.getApiKey());
 
       try (var rs = ps.executeQuery()) {
@@ -41,6 +47,56 @@ public class UserRepo
           rs.getObject(Schema.Auth.Users.COLUMN_ISSUED, OffsetDateTime.class),
           user
         );
+      }
+    }
+  }
+
+  public static Map <Integer, User> selectUsers(Collection <Integer> ids)
+  throws Exception {
+    log.trace("UserRepo#selectUsers({})", ids);
+    final var out = new HashMap<Integer, User>(ids.size());
+
+    try (
+      var cn = DbMan.connection();
+      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BULK_BY_ID)
+    ) {
+      ps.setObject(1, ids.stream().mapToInt(Integer::intValue).toArray());
+
+      try (var rs = ps.executeQuery()) {
+        while (rs.next()) {
+          final var user = Utils.newUser(rs);
+          out.put(user.getUserId(), user);
+        }
+      }
+    }
+
+    return out;
+  }
+
+  /**
+   * Looks up a user record by email alone.
+   * <p>
+   * WARNING: This method should not be used for authentication in any way, this
+   * is for secondary internal tasks only.
+   *
+   * @param email User email address to search by
+   *
+   * @return An option containing either a user record or nothing if no such
+   * record was found.
+   */
+  public static Optional < User > selectUser(String email) throws Exception {
+    log.trace("UserRepo#selectUser({})", email);
+    try (
+      var cn = DbMan.connection();
+      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_EMAIL)
+    ) {
+      ps.setString(1, Validation.nonEmpty(email));
+
+      try (var rs = ps.executeQuery()) {
+        if (!rs.next())
+          return Optional.empty();
+
+        return Optional.of(Utils.newUser(rs));
       }
     }
   }
@@ -58,20 +114,38 @@ public class UserRepo
    * @return An option containing the user record if such a user was found, or
    *         nothing if no such user exists.
    */
-  public static Optional < User > selectByToken(String email, String token)
+  public static Optional < User > selectUser(String email, String token)
   throws Exception {
+    log.trace("UserRepo#selectUser({}, ********)", email);
     try (
       var cn = DbMan.connection();
       var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_TOKEN)
     ) {
-      ps.setString(1, email);
-      ps.setString(2, token);
+      ps.setString(1, Validation.nonEmpty(email));
+      ps.setString(2, Validation.nonEmpty(token));
 
       try (var rs = ps.executeQuery()) {
         if (!rs.next())
           return Optional.empty();
 
-        return Optional.of(Utils.userFromRs(rs));
+        return Optional.of(Utils.newUser(rs));
+      }
+    }
+  }
+
+  public static Optional < User > selectUser(int userId) throws Exception {
+    log.trace("UserRepo#selectUser({})", userId);
+    try (
+      var cn = DbMan.connection();
+      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_ID)
+    ) {
+      ps.setInt(1, userId);
+
+      try (var rs = ps.executeQuery()) {
+        if (!rs.next())
+          return Optional.empty();
+
+        return Optional.of(Utils.newUser(rs));
       }
     }
   }
