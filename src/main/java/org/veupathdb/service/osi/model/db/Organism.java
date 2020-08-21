@@ -2,19 +2,18 @@ package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
 
-public class Organism
+import org.veupathdb.service.osi.util.Validation;
+
+public class Organism extends NewOrganism
 {
-  private int organismId;
-  private final String template;
-  private final long geneCounterStart;
+  private final int organismId;
   private final long geneCounterCurrent;
-  private final long transcriptCounterStart;
   private final long transcriptCounterCurrent;
-  private final User createdBy;
   private final OffsetDateTime created;
   private final OffsetDateTime modified;
 
   public Organism(
+    int organismId,
     String template,
     long geneCounterStart,
     long geneCounterCurrent,
@@ -24,47 +23,45 @@ public class Organism
     OffsetDateTime created,
     OffsetDateTime modified
   ) {
-    this.template                 = template;
-    this.geneCounterStart         = geneCounterStart;
-    this.geneCounterCurrent       = geneCounterCurrent;
-    this.transcriptCounterStart   = transcriptCounterStart;
-    this.transcriptCounterCurrent = transcriptCounterCurrent;
-    this.createdBy                = createdBy;
-    this.created                  = created;
-    this.modified                 = modified;
+    super(template, geneCounterStart, transcriptCounterStart, createdBy);
+    this.organismId               = Validation.oneMinimum(organismId);
+    this.geneCounterCurrent       = Validation.setMinimum(geneCounterCurrent, geneCounterStart);
+    this.transcriptCounterCurrent = Validation.setMinimum(transcriptCounterCurrent, transcriptCounterStart);
+    this.created                  = Validation.nonNull(created);
+    this.modified                 = Validation.nonNull(modified);
+  }
+
+  public Organism(
+    int organismId,
+    long geneCounterCurrent,
+    long transcriptCounterCurrent,
+    OffsetDateTime created,
+    OffsetDateTime modified,
+    NewOrganism from
+  ) {
+    this(
+      organismId,
+      from.getTemplate(),
+      from.getGeneCounterStart(),
+      geneCounterCurrent,
+      from.getTranscriptCounterStart(),
+      transcriptCounterCurrent,
+      from.getCreatedBy(),
+      created,
+      modified
+    );
   }
 
   public int getOrganismId() {
     return organismId;
   }
 
-  public Organism setOrganismId(int organismId) {
-    this.organismId = organismId;
-    return this;
-  }
-
-  public String getTemplate() {
-    return template;
-  }
-
-  public long getGeneCounterStart() {
-    return geneCounterStart;
-  }
-
   public long getGeneCounterCurrent() {
     return geneCounterCurrent;
   }
 
-  public long getTranscriptCounterStart() {
-    return transcriptCounterStart;
-  }
-
   public long getTranscriptCounterCurrent() {
     return transcriptCounterCurrent;
-  }
-
-  public User getCreatedBy() {
-    return createdBy;
   }
 
   public OffsetDateTime getCreated() {

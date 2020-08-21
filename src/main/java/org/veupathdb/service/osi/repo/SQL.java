@@ -26,6 +26,10 @@ interface SQL
     {
       String NEW_USER = insert(Schema.Auth.TABLE_USERS, "new-user");
     }
+
+    interface Osi {
+      String ORGANISM = insert(Schema.Osi.TABLE_ORGANISMS, "new-organism");
+    }
   }
 
   interface Select
@@ -43,7 +47,8 @@ interface SQL
       interface Organisms
       {
         String
-          BY_ID = select(Schema.Osi.TABLE_ORGANISMS, "by-id");
+          BY_ID = select(Schema.Osi.TABLE_ORGANISMS, "by-id"),
+          BY_QUERY = select(Schema.Osi.TABLE_ORGANISMS, "find-organism");
       }
     }
   }
@@ -54,8 +59,11 @@ interface SQL
     {
       interface Organisms
       {
-        String COUNTER = update(Schema.Osi.TABLE_ORGANISMS, "counter");
+        String
+          GENE_COUNTER = update(Schema.Osi.TABLE_ORGANISMS, "gene-counter"),
+          TRANSCRIPT_COUNTER = update(Schema.Osi.TABLE_ORGANISMS, "transcript-counter");
       }
+
     }
   }
 

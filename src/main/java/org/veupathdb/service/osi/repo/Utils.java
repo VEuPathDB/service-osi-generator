@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 
+import org.veupathdb.service.osi.model.db.NewOrganism;
 import org.veupathdb.service.osi.model.db.Organism;
 import org.veupathdb.service.osi.model.db.User;
 
@@ -22,11 +23,11 @@ class Utils
    */
   static User userFromRs(final ResultSet rs) throws SQLException {
     return new User(
+      rs.getInt(Schema.Auth.Users.USER_ID),
       rs.getString(Schema.Auth.Users.COLUMN_USER_EMAIL),
-      rs.getString(Schema.Auth.Users.COLUMN_API_KEY)
-    )
-      .setUserId(rs.getInt(Schema.Auth.Users.USER_ID))
-      .setIssued(rs.getObject(Schema.Auth.Users.COLUMN_ISSUED, OffsetDateTime.class));
+      rs.getString(Schema.Auth.Users.COLUMN_API_KEY),
+      rs.getObject(Schema.Auth.Users.COLUMN_ISSUED, OffsetDateTime.class)
+    );
   }
 
   /**
@@ -41,8 +42,9 @@ class Utils
    * @throws SQLException Thrown if a database error occurs while attempting to
    * retrieve row data.
    */
-  static Organism organismFromRs(final ResultSet rs) throws SQLException {
+  static Organism newOrganism(final ResultSet rs) throws SQLException {
     return new Organism(
+      rs.getInt(Schema.Osi.Organisms.ORGANISM_ID),
       rs.getString(Schema.Osi.Organisms.TEMPLATE),
       rs.getLong(Schema.Osi.Organisms.GENE_COUNTER_START),
       rs.getLong(Schema.Osi.Organisms.GENE_COUNTER_CURRENT),
@@ -51,6 +53,17 @@ class Utils
       userFromRs(rs),
       rs.getObject(Schema.Osi.Organisms.CREATED_ON, OffsetDateTime.class),
       rs.getObject(Schema.Osi.Organisms.LAST_MODIFIED, OffsetDateTime.class)
-    ).setOrganismId(rs.getInt(Schema.Osi.Organisms.ORGANISM_ID));
+    );
+  }
+
+  static Organism newOrganism(ResultSet rs, NewOrganism org) throws SQLException {
+    return new Organism(
+      rs.getInt(Schema.Osi.Organisms.ORGANISM_ID),
+      org.getGeneCounterStart(),
+      org.getTranscriptCounterStart(),
+      rs.getObject(Schema.Osi.Organisms.CREATED_ON, OffsetDateTime.class),
+      rs.getObject(Schema.Osi.Organisms.LAST_MODIFIED, OffsetDateTime.class),
+      org
+    );
   }
 }

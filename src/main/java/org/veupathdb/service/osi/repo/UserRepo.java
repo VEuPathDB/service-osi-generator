@@ -3,6 +3,7 @@ package org.veupathdb.service.osi.repo;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
+import org.veupathdb.service.osi.model.db.NewUser;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.service.DbMan;
 
@@ -17,16 +18,13 @@ public class UserRepo
    * If a user already exists with the email and api-key attached to the given
    * user instance this method will throw and SQL Exception for unique key
    * violation.
-   * <p>
-   * Additionally this method mutates the given user instance by appending the
-   * new user id and creation time on insert success.
    *
-   * @param user User instance to insert into the users table.
+   * @param user NewUser instance to insert into the users table.
    *
-   * @return The given user instance modified with the new userId and issued
-   *         values.
+   * @return A full User instance including the newly assigned userId and issued
+   * values.
    */
-  public static User insertNewUser(User user) throws Exception {
+  public static User insertNewUser(NewUser user) throws Exception {
     try (
       var cn = DbMan.connection();
       var ps = cn.prepareStatement(SQL.Insert.Auth.NEW_USER)
@@ -38,12 +36,13 @@ public class UserRepo
         if (!rs.next())
           throw new IllegalStateException("User insert query did not return an ID.");
 
-        user.setUserId(rs.getInt(Schema.Auth.Users.USER_ID));
-        user.setIssued(rs.getObject(Schema.Auth.Users.COLUMN_ISSUED,
-          OffsetDateTime.class));
+        return new User(
+          rs.getInt(Schema.Auth.Users.USER_ID),
+          rs.getObject(Schema.Auth.Users.COLUMN_ISSUED, OffsetDateTime.class),
+          user
+        );
       }
     }
-    return user;
   }
 
   /**

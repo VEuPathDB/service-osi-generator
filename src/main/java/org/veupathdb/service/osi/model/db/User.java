@@ -5,41 +5,41 @@ import java.util.Objects;
 
 import org.veupathdb.service.osi.util.Validation;
 
-public class User
+public class User extends NewUser
 {
-  private int userId;
-  private final String userEmail;
-  private final String apiKey;
-  private OffsetDateTime issued;
+  private final int userId;
 
-  public User(String userEmail, String apiKey) {
-    this.userEmail = Validation.nonEmpty(userEmail);
-    this.apiKey    = Validation.nonEmpty(apiKey);
+  private final OffsetDateTime issued;
+
+  public User(
+    int userId,
+    String userEmail,
+    String apiKey,
+    OffsetDateTime issued
+  ) {
+    super(userEmail, apiKey);
+    this.userId = Validation.oneMinimum(userId);
+    this.issued = Validation.nonNull(issued);
+  }
+
+  public User(
+    int userId,
+    OffsetDateTime issued,
+    NewUser from
+  ) {
+    this(
+      userId,
+      from.getUserEmail(),
+      from.getApiKey(),
+      issued
+    );
   }
 
   public int getUserId() {
     return userId;
   }
 
-  public User setUserId(int userId) {
-    this.userId = Validation.oneMinimum(userId);
-    return this;
-  }
-
-  public String getUserEmail() {
-    return userEmail;
-  }
-
-  public String getApiKey() {
-    return apiKey;
-  }
-
   public OffsetDateTime getIssued() {
     return issued;
-  }
-
-  public User setIssued(OffsetDateTime time) {
-    this.issued = Objects.requireNonNull(time);
-    return this;
   }
 }
