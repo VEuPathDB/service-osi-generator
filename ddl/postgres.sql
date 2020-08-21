@@ -37,26 +37,32 @@ CREATE TABLE osi.id_sets (
   id_set_id      SERIAL PRIMARY KEY,
   id_set_coll_id INT         NOT NULL
     REFERENCES osi.id_set_collections (id_set_coll_id),
-  organism_id    BIGINT      NOT NULL REFERENCES osi.organisms (organism_id),
+  organism_id    BIGINT      NOT NULL
+    REFERENCES osi.organisms (organism_id),
   template       VARCHAR(16) NOT NULL,
   created        TIMESTAMPTZ NOT NULL DEFAULT now(),
-  created_by     INT         NOT NULL REFERENCES auth.users (user_id)
+  created_by     INT         NOT NULL
+    REFERENCES auth.users (user_id)
 );
 
 CREATE TABLE osi.genes (
   gene_id         SERIAL PRIMARY KEY,
-  gene_set_id     INT         NOT NULL REFERENCES osi.id_sets (id_set_id),
+  gene_set_id     INT         NOT NULL
+    REFERENCES osi.id_sets (id_set_id),
   gene_identifier VARCHAR     NOT NULL,
   created         TIMESTAMPTZ NOT NULL DEFAULT now(),
-  created_by      INT         NOT NULL REFERENCES auth.users (user_id)
+  created_by      INT         NOT NULL
+    REFERENCES auth.users (user_id)
 );
 
 CREATE TABLE osi.transcripts (
-  gene_id       INT         NOT NULL REFERENCES osi.genes (gene_id),
+  gene_id       INT         NOT NULL
+    REFERENCES osi.genes (gene_id),
   counter_start BIGINT      NOT NULL,
   num_issued    INT         NOT NULL,
   created       TIMESTAMPTZ NOT NULL DEFAULT now(),
-  created_by    INT         NOT NULL REFERENCES auth.users (user_id)
+  created_by    INT         NOT NULL
+    REFERENCES auth.users (user_id)
 );
 
 CREATE USER osi_service LOGIN PASSWORD '${DB_PASSWORD}';

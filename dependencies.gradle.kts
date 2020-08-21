@@ -51,10 +51,8 @@ dependencies {
     "vendor/xstreams.jar"
   ))
 
-
   // Core lib, prefers local checkout if available
   implementation(findProject(":core") ?: "org.veupathdb.lib:jaxrs-container-core:${coreLib}")
-
 
   // Jersey
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:${jersey}")
@@ -78,6 +76,10 @@ dependencies {
   // Utils
   implementation("io.vulpine.lib:Jackfish:1.+")
   implementation("com.devskiller.friendly-id:friendly-id:1.+")
+  implementation("io.vulpine.lib:java-sql-import:0.2.0")
+  implementation("com.zaxxer:HikariCP:3.4.5")
+  implementation("org.postgresql:postgresql:42.2.15")
+  implementation("info.picocli:picocli:4.5.0")
 
   // Unit Testing
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junit}")
