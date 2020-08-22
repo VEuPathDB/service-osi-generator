@@ -5,6 +5,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.WebApplicationException;
 
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
@@ -22,9 +24,37 @@ public class IdSetManager
 {
   private static final Logger log = LogProvider.logger(IdSetManager.class);
 
+  public static IdSetResponse getIdsSet(int idSetId) {
+    try {
+      var row = IdSetRepo.selectIdSetById(idSetId)
+        .orElseThrow(NotFoundException::new);
+
+      var col   = CollectionRepo.selectCollection(row.getCollectionId())
+        .orElseThrow();
+      var org   = OrganismRepo.selectOrganism(row.getOrganismId())
+        .orElseThrow();
+      var idSet = new IdSet(row.getIdSetId(), col, org, row.getTemplate(),
+        UserManager.lookup(row.getCreatedBy()).orElseThrow(),
+        row.getCounterStart(), row.getNumIssued(), row.getCreated());
+      var genes = GeneRepo.selectGenesByIdSet(idSet);
+
+      return buildTree(idSet, genes, TranscriptRepo.selectTranscriptsByGenes(
+        genes.keySet().stream().mapToInt(i -> i).toArray(),
+        genes
+      ));
+    } catch (WebApplicationException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new InternalServerErrorException(e);
+    }
+  }
+
   public static List < IdSetResponse > findIdSets(RecordQuery query) {
     try {
       var rows = IdSetRepo.findIdSets(query);
+
+      if (rows.isEmpty())
+        return Collections.emptyList();
 
       var idSet = new HashSet<Integer>();
       var collIdSet = new HashSet<Integer>();
@@ -47,7 +77,7 @@ public class IdSetManager
       var idSets  = rows.stream()
         .map(row -> IdSetUtils.rowToNode(row, users, orgs, colls))
         .collect(Collectors.toMap(IdSet::getIdSetId, Function.identity()));
-      var genes   = GeneRepo.selectGenesByIdSets(ids, users, idSets);
+      var genes   = GeneRepo.selectGenesByIdSets(ids, idSets);
 
       return buildTrees(
         idSets,
@@ -57,7 +87,6 @@ public class IdSetManager
             .stream()
             .mapToInt(i -> i)
             .toArray(),
-          users,
           genes
         ));
     } catch (Exception e) {

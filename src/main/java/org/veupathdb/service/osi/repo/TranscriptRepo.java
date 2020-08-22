@@ -15,7 +15,6 @@ public class TranscriptRepo
 {
   public static List < Transcript > selectTranscriptsByGenes(
     final int[] geneIds,
-    final Map < Integer, User > users,
     final Map < Integer, Gene > genes
   ) throws Exception {
     var out = new ArrayList<Transcript>();
@@ -28,7 +27,7 @@ public class TranscriptRepo
 
       try (var rs = ps.executeQuery()) {
         while (rs.next())
-          out.add(TranscriptUtils.newTranscript(rs, users, genes));
+          out.add(TranscriptUtils.newTranscript(rs, genes));
       }
     }
 

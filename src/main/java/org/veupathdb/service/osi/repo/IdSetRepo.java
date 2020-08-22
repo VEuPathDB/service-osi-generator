@@ -9,6 +9,7 @@ import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.Organism;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.model.db.raw.IdSetRow;
+import org.veupathdb.service.osi.repo.SQL.Select.Osi.IdSets;
 import org.veupathdb.service.osi.service.DbMan;
 import org.veupathdb.service.osi.service.IdSetUtils;
 
@@ -20,7 +21,7 @@ public class IdSetRepo
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.IdSets.BY_QUERY)
+      var ps = cn.prepareStatement(IdSets.BY_QUERY)
     ) {
       if (query.hasStart())
         ps.setObject(1, query.getStart());
@@ -52,6 +53,22 @@ public class IdSetRepo
     return out;
   }
 
+  public static Optional < IdSetRow > selectIdSetById(int id) throws Exception {
+    try (
+      var cn = DbMan.connection();
+      var ps = cn.prepareStatement(IdSets.BY_ID)
+    ) {
+      ps.setInt(1, id);
+
+      try (var rs = ps.executeQuery()) {
+        if (!rs.next())
+          return Optional.empty();
+
+        return Optional.of(IdSetUtils.newIdSetRow(rs));
+      }
+    }
+  }
+
   public static Map < Integer, IdSet > selectIdSetsByCollections(
     final int[] collectionIds,
     final Map < Integer, User > users,
@@ -62,7 +79,7 @@ public class IdSetRepo
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.IdSets.BY_COLLECTIONS)
+      var ps = cn.prepareStatement(IdSets.BY_COLLECTIONS)
     ) {
       ps.setObject(1, collectionIds);
 
@@ -86,7 +103,7 @@ public class IdSetRepo
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.IdSets.BY_COLLECTIONS)
+      var ps = cn.prepareStatement(IdSets.BY_COLLECTIONS)
     ) {
       ps.setInt(1, collection.getCollectionId());
 

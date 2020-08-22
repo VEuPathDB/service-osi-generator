@@ -28,6 +28,19 @@ public class TranscriptUtils
     );
   }
 
+  public static Transcript newTranscript(
+    final ResultSet rs,
+    final Map < Integer, Gene > genes
+  ) throws Exception {
+    return new Transcript(
+      genes.get(rs.getInt(Transcripts.GENE_ID)),
+      rs.getLong(Transcripts.COUNTER_START),
+      rs.getInt(Transcripts.NUM_ISSUED),
+      UserManager.getLocal(rs.getInt(Transcripts.CREATED_BY)).orElseThrow(),
+      rs.getObject(Transcripts.CREATED_ON, OffsetDateTime.class)
+    );
+  }
+
   public static List < String > expandTranscriptIds(Transcript transcript) {
     var out = new ArrayList <String>(transcript.getNumIssued());
 

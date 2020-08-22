@@ -1,7 +1,7 @@
 SELECT
   gene_id
-, counter_start
-, num_issued
+, id_set_id
+, gene_identifier
 , created
 , created_by
 , user_id
@@ -9,9 +9,9 @@ SELECT
 , api_key
 , issued
 FROM
-  osi.transcripts       AS t
+  osi.genes             AS g
   INNER JOIN auth.users AS u
-    ON t.created_by = u.user_id
+  ON g.created_by = u.user_id
 WHERE
-  gene_id IN (unnest(?::INT[]))
+  id_set_id IN (unnest(?::INT[]))
 ;

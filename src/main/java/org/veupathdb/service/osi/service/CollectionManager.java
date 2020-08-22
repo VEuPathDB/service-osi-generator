@@ -41,12 +41,10 @@ public class CollectionManager
 
   public static IdSetCollection getCollection(final int collectionId) {
     try {
-      var row = CollectionRepo.selectCollection(collectionId)
+      var collection = CollectionRepo.selectCollection(collectionId)
         .orElseThrow(NotFoundException::new);
 
       var users = UserRepo.selectUsersByCollection(collectionId);
-
-      var collection = CollectionUtils.newCollection(row, users);
 
       var idSets = IdSetRepo.selectIdSetsByCollection(
         collection,

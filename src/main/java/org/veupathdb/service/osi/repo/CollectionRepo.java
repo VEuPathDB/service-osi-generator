@@ -55,7 +55,7 @@ public class CollectionRepo
     return out;
   }
 
-  public static Optional < IdSetCollectionRow > selectCollection(int id)
+  public static Optional < IdSetCollection > selectCollection(int id)
   throws Exception {
     try (
       var cn = DbMan.connection();
@@ -67,7 +67,7 @@ public class CollectionRepo
         if (!rs.next())
           return Optional.empty();
 
-        return Optional.of(CollectionUtils.newCollectionRow(rs));
+        return Optional.of(CollectionUtils.newCollection(rs));
       }
     }
   }

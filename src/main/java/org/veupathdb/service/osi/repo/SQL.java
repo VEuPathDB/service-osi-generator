@@ -78,16 +78,18 @@ public interface SQL
       interface Genes
       {
         String
-          BY_COLLECTION      = select(Schema.Table.GENES, "by-collection"),
-          BY_BULK_ID_SET     = select(Schema.Table.GENES, "bulk-by-id-set"),
-          BY_BULK_COLLECTION = select(Schema.Table.GENES, "bulk-by-collection");
+          BY_COLLECTION  = select(Schema.Table.GENES, "by-collection"),
+          BY_COLLECTIONS = select(Schema.Table.GENES, "by-collections"),
+          BY_ID_SET      = select(Schema.Table.GENES, "by-id-set"),
+          BY_ID_SETS     = select(Schema.Table.GENES, "by-id-sets");
       }
 
       interface IdSets
       {
         String
+          BY_ID          = select(Schema.Table.ID_SETS, "by-id"),
           BY_QUERY       = select(Schema.Table.ID_SETS, "by-query"),
-          BY_COLLECTIONS = select(Schema.Table.ID_SETS, "bulk-by-collection");
+          BY_COLLECTIONS = select(Schema.Table.ID_SETS, "by-collections");
       }
 
       interface Organisms

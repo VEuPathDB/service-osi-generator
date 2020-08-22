@@ -24,4 +24,30 @@ public class GeneUtils
       rs.getObject(Genes.CREATED_ON, OffsetDateTime.class)
     );
   }
+
+  public static Gene newGene(
+    final ResultSet rs,
+    final Map < Integer, IdSet > idSets
+  ) throws Exception {
+    return new Gene(
+      rs.getInt(Genes.GENE_ID),
+      idSets.get(rs.getInt(Genes.ID_SET_ID)),
+      rs.getString(Genes.GENE_NAME),
+      UserUtils.newUser(rs),
+      rs.getObject(Genes.CREATED_ON, OffsetDateTime.class)
+    );
+  }
+
+  public static Gene newGene(
+    final ResultSet rs,
+    final IdSet idSet
+  ) throws Exception {
+    return new Gene(
+      rs.getInt(Genes.GENE_ID),
+      idSet,
+      rs.getString(Genes.GENE_NAME),
+      UserUtils.newUser(rs),
+      rs.getObject(Genes.CREATED_ON, OffsetDateTime.class)
+    );
+  }
 }

@@ -11,22 +11,42 @@ import org.veupathdb.service.osi.service.GeneUtils;
 
 public class GeneRepo
 {
+  public static Map < Integer, Gene > selectGenesByIdSet(IdSet set)
+  throws Exception {
+    var out = new HashMap < Integer, Gene >();
+
+    try (
+      var cn = DbMan.connection();
+      var ps = cn.prepareStatement(SQL.Select.Osi.Genes.BY_ID_SET)
+    ) {
+      ps.setInt(1, set.getIdSetId());
+
+      try (var rs = ps.executeQuery()) {
+        while (rs.next()) {
+          var row = GeneUtils.newGene(rs, set);
+          out.put(row.getGeneId(), row);
+        }
+      }
+    }
+
+    return out;
+  }
+
   public static Map < Integer, Gene > selectGenesByIdSets(
     final int[] setIds,
-    final Map < Integer, User > users,
     final Map < Integer, IdSet > idSets
   ) throws Exception {
     var out = new HashMap < Integer, Gene >();
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.Genes.BY_BULK_ID_SET)
+      var ps = cn.prepareStatement(SQL.Select.Osi.Genes.BY_ID_SETS)
     ) {
       ps.setObject(1, setIds);
 
       try (var rs = ps.executeQuery()) {
         while (rs.next()) {
-          var row = GeneUtils.newGene(rs, users, idSets);
+          var row = GeneUtils.newGene(rs, idSets);
           out.put(row.getGeneId(), row);
         }
       }
@@ -44,7 +64,7 @@ public class GeneRepo
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.Genes.BY_BULK_COLLECTION)
+      var ps = cn.prepareStatement(SQL.Select.Osi.Genes.BY_COLLECTIONS)
     ) {
       ps.setObject(1, collectionIds);
 
