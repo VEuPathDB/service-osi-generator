@@ -1,6 +1,8 @@
 package org.veupathdb.service.osi.service;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.InternalServerErrorException;
 
@@ -14,7 +16,7 @@ import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.Transcript;
-import org.veupathdb.service.osi.repo.IdSetRepo;
+import org.veupathdb.service.osi.repo.*;
 
 public class IdSetManager
 {
@@ -24,9 +26,40 @@ public class IdSetManager
     try {
       var rows = IdSetRepo.findIdSets(query);
 
-      var orgs = new ArrayList<Integer>();
-      var 
+      var idSet = new HashSet<Integer>();
+      var collIdSet = new HashSet<Integer>();
+      var orgIdSet = new HashSet<Integer>();
 
+      for (var row : rows) {
+        idSet.add(row.getIdSetId());
+        collIdSet.add(row.getCollectionId());
+        orgIdSet.add(row.getOrganismId());
+      }
+
+      var ids     = idSet.stream().mapToInt(i -> i).toArray();
+      var users   = UserRepo.selectUsersByIdSets(ids);
+      var colls   = CollectionRepo.selectCollections(collIdSet.stream()
+        .mapToInt(i -> i)
+        .toArray());
+      var orgs    = OrganismRepo.selectOrganisms(orgIdSet.stream()
+        .mapToInt(i -> i)
+        .toArray());
+      var idSets  = rows.stream()
+        .map(row -> IdSetUtils.rowToNode(row, users, orgs, colls))
+        .collect(Collectors.toMap(IdSet::getIdSetId, Function.identity()));
+      var genes   = GeneRepo.selectGenesByIdSets(ids, users, idSets);
+
+      return buildTrees(
+        idSets,
+        genes,
+        TranscriptRepo.selectTranscriptsByGenes(
+          genes.keySet()
+            .stream()
+            .mapToInt(i -> i)
+            .toArray(),
+          users,
+          genes
+        ));
     } catch (Exception e) {
       throw new InternalServerErrorException(e);
     }

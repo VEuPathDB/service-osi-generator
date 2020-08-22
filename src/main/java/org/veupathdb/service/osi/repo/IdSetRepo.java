@@ -62,7 +62,7 @@ public class IdSetRepo
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.IdSets.BULK_BY_COLLECTION)
+      var ps = cn.prepareStatement(SQL.Select.Osi.IdSets.BY_COLLECTIONS)
     ) {
       ps.setObject(1, collectionIds);
 
@@ -86,7 +86,7 @@ public class IdSetRepo
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.IdSets.BULK_BY_COLLECTION)
+      var ps = cn.prepareStatement(SQL.Select.Osi.IdSets.BY_COLLECTIONS)
     ) {
       ps.setInt(1, collection.getCollectionId());
 

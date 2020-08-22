@@ -2,9 +2,7 @@ package org.veupathdb.service.osi.repo;
 
 import java.sql.Types;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.IdSetCollection;
@@ -34,6 +32,27 @@ public class CollectionRepo
           coll);
       }
     }
+  }
+
+  public static Map < Integer, IdSetCollection > selectCollections(int[] ids)
+  throws Exception {
+    var out = new HashMap<Integer, IdSetCollection>(ids.length);
+
+    try (
+      var cn = DbMan.connection();
+      var ps = cn.prepareStatement(SQL.Select.Osi.Collections.BY_IDS)
+    ) {
+      ps.setObject(1, ids);
+
+      try (var rs = ps.executeQuery()) {
+        while (rs.next()) {
+          var row = CollectionUtils.newCollection(rs);
+          out.put(row.getCollectionId(), row);
+        }
+      }
+    }
+
+    return out;
   }
 
   public static Optional < IdSetCollectionRow > selectCollection(int id)

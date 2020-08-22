@@ -74,6 +74,29 @@ public class UserRepo
     return out;
   }
 
+  public static Map < Integer, User > selectUsersByIdSets(int[] ids)
+  throws Exception {
+    log.trace("UserRepo#selectUsersByIdSets({})", Arrays.toString(ids));
+    final var out = new HashMap<Integer, User>();
+
+    try (
+      var cn = DbMan.connection();
+      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_BULK_ID_SETS)
+    ) {
+      ps.setObject(1, ids);
+
+      try (var rs = ps.executeQuery()) {
+        while (rs.next()) {
+          var row = UserUtils.newUser(rs);
+          out.put(row.getUserId(), row);
+        }
+      }
+    }
+
+    return out;
+  }
+
+
   public static Map < Integer, User > selectUsersByCollections(int[] ids)
   throws Exception {
     log.trace("UserRepo#selectUsersByCollections({})", Arrays.toString(ids));

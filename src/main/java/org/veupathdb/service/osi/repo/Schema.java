@@ -6,10 +6,19 @@ public interface Schema
     AUTH = "auth",
     OSI  = "osi";
 
+  interface Table {
+    String USERS = Schema.AUTH + ".users";
+
+    String
+      ORGANISMS          = Schema.OSI + ".organisms",
+      ID_SET_COLLECTIONS = Schema.OSI + ".id_set_collections",
+      ID_SETS            = Schema.OSI + ".id_sets",
+      GENES              = Schema.OSI + ".genes",
+      TRANSCRIPTS        = Schema.OSI + ".transcripts";
+  }
+
   interface Auth
   {
-    String TABLE_USERS = Schema.AUTH + ".users";
-
     interface Users
     {
       String
@@ -22,13 +31,6 @@ public interface Schema
 
   interface Osi
   {
-    String
-      TABLE_ORGANISMS          = Schema.OSI + ".organisms",
-      TABLE_ID_SET_COLLECTIONS = Schema.OSI + ".id_set_collections",
-      TABLE_ID_SETS            = Schema.OSI + ".id_sets",
-      TABLE_GENES              = Schema.OSI + ".genes",
-      TABLE_TRANSCRIPTS        = Schema.OSI + ".transcripts";
-
     interface Genes
     {
       String

@@ -28,15 +28,15 @@ public interface SQL
   {
     interface Auth
     {
-      String NEW_USER = insert(Schema.Auth.TABLE_USERS, "new-user");
+      String NEW_USER = insert(Schema.Table.USERS, "new-user");
     }
 
     interface Osi {
       String
         COLLECTION = insert(
-          Schema.Osi.TABLE_ID_SET_COLLECTIONS,
+          Schema.Table.ID_SET_COLLECTIONS,
           "new-collection"),
-        ORGANISM   = insert(Schema.Osi.TABLE_ORGANISMS, "new-organism");
+        ORGANISM   = insert(Schema.Table.ORGANISMS, "new-organism");
     }
   }
 
@@ -47,12 +47,19 @@ public interface SQL
       interface Users
       {
         String
-          BY_ID    = select(Schema.Auth.TABLE_USERS, "by-id"),
-          BY_TOKEN = select(Schema.Auth.TABLE_USERS, "by-token"),
-          BY_EMAIL = select(Schema.Auth.TABLE_USERS, "by-name"),
-          BY_COLLECTION = select(Schema.Auth.TABLE_USERS, "by-collection"),
-          BULK_BY_ID = select(Schema.Auth.TABLE_USERS, "bulk-by-id"),
-          BULK_BY_COLLECTIONS = select(Schema.Auth.TABLE_USERS, "bulk-by-collection");
+          BY_ID               = select(Schema.Table.USERS, "by-id"),
+          BY_TOKEN            = select(Schema.Table.USERS, "by-token"),
+          BY_EMAIL            = select(Schema.Table.USERS, "by-name"),
+          BY_COLLECTION       = select(
+            Schema.Table.USERS,
+            "by-collection"),
+          BULK_BY_ID          = select(Schema.Table.USERS, "bulk-by-id"),
+          BULK_BY_COLLECTIONS = select(
+            Schema.Table.USERS,
+            "bulk-by-collection"),
+          BY_BULK_ID_SETS     = select(
+            Schema.Table.USERS,
+            "bulk-by-id-set");
       }
     }
 
@@ -61,41 +68,43 @@ public interface SQL
       interface Collections
       {
         String
-          BY_ID    = select(Schema.Osi.TABLE_ID_SET_COLLECTIONS, "by-id"),
-          BY_QUERY = select(Schema.Osi.TABLE_ID_SET_COLLECTIONS, "find-collections");
+          BY_ID    = select(Schema.Table.ID_SET_COLLECTIONS, "by-id"),
+          BY_IDS   = select(Schema.Table.ID_SET_COLLECTIONS, "by-ids"),
+          BY_QUERY = select(
+            Schema.Table.ID_SET_COLLECTIONS,
+            "find-collections");
       }
 
       interface Genes
       {
         String
-          BY_COLLECTION      = select(Schema.Osi.TABLE_GENES, "by-collection"),
-          BY_BULK_COLLECTION = select(Schema.Osi.TABLE_GENES, "bulk-by-collection");
+          BY_COLLECTION      = select(Schema.Table.GENES, "by-collection"),
+          BY_BULK_ID_SET     = select(Schema.Table.GENES, "bulk-by-id-set"),
+          BY_BULK_COLLECTION = select(Schema.Table.GENES, "bulk-by-collection");
       }
 
       interface IdSets
       {
         String
-          BY_QUERY           = select(Schema.Osi.TABLE_ID_SETS, "by-query"),
-          BULK_BY_COLLECTION = select(Schema.Osi.TABLE_ID_SETS, "bulk-by-collection");
+          BY_QUERY       = select(Schema.Table.ID_SETS, "by-query"),
+          BY_COLLECTIONS = select(Schema.Table.ID_SETS, "bulk-by-collection");
       }
 
       interface Organisms
       {
         String
-          BY_ID = select(Schema.Osi.TABLE_ORGANISMS, "by-id"),
-          BY_QUERY = select(Schema.Osi.TABLE_ORGANISMS, "find-organism"),
-          BY_BULK_COLLECTIONS = select(Schema.Osi.TABLE_ORGANISMS, "bulk-by-collection");
+          BY_ID          = select(Schema.Table.ORGANISMS, "by-id"),
+          BY_IDS         = select(Schema.Table.ORGANISMS, "by-ids"),
+          BY_QUERY       = select(Schema.Table.ORGANISMS, "find-organism"),
+          BY_COLLECTIONS = select(Schema.Table.ORGANISMS, "bulk-by-collection");
       }
 
       interface Transcripts
       {
         String
-          BY_COLLECTION       = select(
-            Schema.Osi.TABLE_TRANSCRIPTS,
-            "by-collection"),
-          BY_BULK_COLLECTIONS = select(
-            Schema.Osi.TABLE_TRANSCRIPTS,
-            "bulk-by-collection");
+          BY_GENES       = select(Schema.Table.TRANSCRIPTS, "by-genes"),
+          BY_COLLECTION  = select(Schema.Table.TRANSCRIPTS, "by-collection"),
+          BY_COLLECTIONS = select(Schema.Table.TRANSCRIPTS, "bulk-by-collection");
       }
     }
   }
@@ -107,8 +116,10 @@ public interface SQL
       interface Organisms
       {
         String
-          GENE_COUNTER = update(Schema.Osi.TABLE_ORGANISMS, "gene-counter"),
-          TRANSCRIPT_COUNTER = update(Schema.Osi.TABLE_ORGANISMS, "transcript-counter");
+          GENE_COUNTER       = update(Schema.Table.ORGANISMS, "gene-counter"),
+          TRANSCRIPT_COUNTER = update(
+            Schema.Table.ORGANISMS,
+            "transcript-counter");
       }
 
     }

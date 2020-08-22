@@ -32,4 +32,13 @@ public class CollectionUtils
       row.getCreatedOn()
     );
   }
+
+  public static IdSetCollection newCollection(ResultSet rs) throws Exception {
+    return new IdSetCollection(
+      rs.getInt(Collections.COLLECTION_ID),
+      rs.getString(Collections.NAME),
+      UserUtils.newUser(rs),
+      rs.getObject(Collections.CREATED_ON, OffsetDateTime.class)
+    );
+  }
 }

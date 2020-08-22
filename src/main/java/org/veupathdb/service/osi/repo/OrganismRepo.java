@@ -62,7 +62,7 @@ public class OrganismRepo
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.Organisms.BY_BULK_COLLECTIONS)
+      var ps = cn.prepareStatement(SQL.Select.Osi.Organisms.BY_COLLECTIONS)
     ) {
       ps.setObject(1, collectionIds);
 
@@ -83,7 +83,7 @@ public class OrganismRepo
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.Organisms.BY_BULK_COLLECTIONS)
+      var ps = cn.prepareStatement(SQL.Select.Osi.Organisms.BY_COLLECTIONS)
     ) {
       ps.setInt(1, collectionId);
 
@@ -132,6 +132,28 @@ public class OrganismRepo
       }
     }
   }
+
+  public static Map < Integer, Organism > selectOrganisms(int[] organismIds)
+  throws Exception {
+    var out = new HashMap<Integer, Organism>(organismIds.length);
+
+    try (
+      var cn = DbMan.connection();
+      var ps = cn.prepareStatement(SQL.Select.Osi.Organisms.BY_IDS)
+    ) {
+      ps.setObject(1, organismIds);
+
+      try (var rs = ps.executeQuery()) {
+        while (rs.next()) {
+          var row = OrganismUtils.newOrganism(rs);
+          out.put(row.getOrganismId(), row);
+        }
+      }
+    }
+
+    return out;
+  }
+
 
   /**
    * Searches for organisms in the database matching all of the criteria set in

@@ -11,6 +11,30 @@ import org.veupathdb.service.osi.service.GeneUtils;
 
 public class GeneRepo
 {
+  public static Map < Integer, Gene > selectGenesByIdSets(
+    final int[] setIds,
+    final Map < Integer, User > users,
+    final Map < Integer, IdSet > idSets
+  ) throws Exception {
+    var out = new HashMap < Integer, Gene >();
+
+    try (
+      var cn = DbMan.connection();
+      var ps = cn.prepareStatement(SQL.Select.Osi.Genes.BY_BULK_ID_SET)
+    ) {
+      ps.setObject(1, setIds);
+
+      try (var rs = ps.executeQuery()) {
+        while (rs.next()) {
+          var row = GeneUtils.newGene(rs, users, idSets);
+          out.put(row.getGeneId(), row);
+        }
+      }
+    }
+
+    return out;
+  }
+
   public static Map < Integer, Gene > selectGenesByCollections(
     final int[] collectionIds,
     final Map < Integer, User > users,

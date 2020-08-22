@@ -13,12 +13,32 @@ import org.veupathdb.service.osi.repo.Schema.Osi.IdSets;
 
 public class IdSetUtils
 {
+  public static IdSet rowToNode(
+    final IdSetRow row,
+    final Map < Integer, User > users,
+    final Map < Integer, Organism > organisms,
+    final Map < Integer, IdSetCollection > collections
+  ) {
+    return new IdSet(
+      row.getIdSetId(),
+      collections.get(row.getCollectionId()),
+      organisms.get(row.getOrganismId()),
+      row.getTemplate(),
+      users.get(row.getCreatedBy()),
+      row.getCounterStart(),
+      row.getNumIssued(),
+      row.getCreated()
+    );
+  }
+
   public static IdSetRow newIdSetRow(final ResultSet rs) throws Exception {
     return new IdSetRow(
       rs.getInt(IdSets.ID_SET_ID),
       rs.getInt(IdSets.COLLECTION_ID),
       rs.getInt(IdSets.ORGANISM_ID),
       rs.getString(IdSets.TEMPLATE),
+      rs.getLong(IdSets.COUNTER_START),
+      rs.getInt(IdSets.NUM_ISSUED),
       rs.getObject(IdSets.CREATED_ON, OffsetDateTime.class),
       rs.getInt(IdSets.CREATED_BY)
     );

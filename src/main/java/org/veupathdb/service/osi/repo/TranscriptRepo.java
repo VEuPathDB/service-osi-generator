@@ -13,6 +13,28 @@ import org.veupathdb.service.osi.service.TranscriptUtils;
 
 public class TranscriptRepo
 {
+  public static List < Transcript > selectTranscriptsByGenes(
+    final int[] geneIds,
+    final Map < Integer, User > users,
+    final Map < Integer, Gene > genes
+  ) throws Exception {
+    var out = new ArrayList<Transcript>();
+
+    try (
+      var cn = DbMan.connection();
+      var ps = cn.prepareStatement(Transcripts.BY_GENES)
+    ) {
+      ps.setObject(1, geneIds);
+
+      try (var rs = ps.executeQuery()) {
+        while (rs.next())
+          out.add(TranscriptUtils.newTranscript(rs, users, genes));
+      }
+    }
+
+    return out;
+  }
+
   public static List < Transcript > selectTranscriptsByCollections(
     final int[] collectionIds,
     final Map < Integer, User > users,
@@ -22,7 +44,7 @@ public class TranscriptRepo
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(Transcripts.BY_BULK_COLLECTIONS)
+      var ps = cn.prepareStatement(Transcripts.BY_COLLECTIONS)
     ) {
       ps.setObject(1, collectionIds);
 
