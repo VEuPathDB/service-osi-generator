@@ -184,6 +184,8 @@ securedBy: basic
         body: error.ServerError
 
   /{collection-id}:
+    uriParameters:
+      collection-id: OneBasedInt
     get:
       responses:
         200:
@@ -199,8 +201,9 @@ securedBy: basic
 /idSets:
   get:
     queryParameters:
-      startTimeStamp: ZeroBasedLong
-      endTimeStamp: ZeroBasedLong
+      createdAfter?: ZeroBasedLong
+      createdBefore?: ZeroBasedLong
+      createdBy?:
     responses:
       200:
         body:
@@ -232,6 +235,7 @@ securedBy: basic
                   proteins:
                     - PF3D7_150002.P79
               created: 1597244587
+              createdBy: some user
 
       401:
         body: error.UnauthorizedError
@@ -259,6 +263,7 @@ securedBy: basic
                 transcripts: []
                 proteins: []
             created: 1597244587
+            createdBy: some user
       400:
         body: error.BadRequestError
       401:
@@ -304,6 +309,7 @@ securedBy: basic
                 proteins:
                 - PF3D7_150002.P79
               created: 1597244587
+              createdBy: some user
         401:
           body: error.UnauthorizedError
         403:
@@ -353,16 +359,7 @@ securedBy: basic
         username: someApplicationName
     responses:
       200:
-        body:
-          type: object
-          properties:
-            apiKey:
-              type: string
-              minLength: 32
-              maxLength: 32
-          additionalProperties: false
-          example:
-            apiKey: 012b17855ea44007882ec152e2c54144
+        body: NewUserResponse
       400:
         body: error.BadRequestError
       401:
@@ -450,6 +447,7 @@ types:
       generatedGeneCount: ZeroBasedInt
       generatedIds: GeneratedTranscriptEntry[]
       created: ZeroBasedLong
+      createdBy:
     additionalProperties: false
   GeneratedTranscriptEntry:
     type: object
@@ -540,6 +538,15 @@ types:
       transcriptIntStart: 1
       transcriptIntCurrent: 57
 
+  NewUserResponse:
+    type: object
+    properties:
+      userId: OneBasedInt
+      userName:
+      apiKey:
+      issued: datetime
+    additionalProperties: false
+
   IdSetCollection:
     type: object
     properties:
@@ -548,9 +555,10 @@ types:
       createdBy:
       created: ZeroBasedLong
       idSets: IdSetResponse[]
+    additionalProperties: false
 
   IdSetCollectionPostRequest:
     type: object
     properties:
       name:
-
+    additionalProperties: false

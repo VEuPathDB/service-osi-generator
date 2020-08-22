@@ -1,7 +1,9 @@
-package org.veupathdb.service.osi.model.db;
+package org.veupathdb.service.osi.model.db.raw;
 
 import java.time.OffsetDateTime;
 
+import org.veupathdb.service.osi.model.db.Organism;
+import org.veupathdb.service.osi.service.UserManager;
 import org.veupathdb.service.osi.util.Validation;
 
 public class OrganismRow
@@ -72,5 +74,19 @@ public class OrganismRow
 
   public OffsetDateTime getModified() {
     return modified;
+  }
+
+  public Organism toOrganism() throws Exception {
+    return new Organism(
+      organismId,
+      template,
+      geneCounterStart,
+      geneCounterCurrent,
+      transcriptCounterStart,
+      transcriptCounterCurrent,
+      UserManager.lookup(createdBy).orElseThrow(),
+      created,
+      modified
+    );
   }
 }

@@ -16,9 +16,11 @@ public class IdSet extends NewIdSet
     Organism organism,
     String template,
     User createdBy,
+    long counterStart,
+    int numIssued,
     OffsetDateTime createdOn
   ) {
-    super(collection, organism, template, createdBy);
+    super(collection, organism, template, createdBy, counterStart, numIssued);
     this.idSetId   = Validation.oneMinimum(idSetId);
     this.createdOn = Validation.nonNull(createdOn);
   }
@@ -30,6 +32,8 @@ public class IdSet extends NewIdSet
       from.getOrganism(),
       from.getTemplate(),
       from.getCreatedBy(),
+      from.getCounterStart(),
+      from.getNumIssued(),
       createdOn
     );
   }

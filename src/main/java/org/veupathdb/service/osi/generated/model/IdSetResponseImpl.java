@@ -13,7 +13,8 @@ import java.util.List;
     "geneIntStart",
     "generatedGeneCount",
     "generatedIds",
-    "created"
+    "created",
+    "createdBy"
 })
 public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("idSetId")
@@ -36,6 +37,9 @@ public class IdSetResponseImpl implements IdSetResponse {
 
   @JsonProperty("created")
   private long created;
+
+  @JsonProperty("createdBy")
+  private String createdBy;
 
   @JsonProperty("idSetId")
   public long getIdSetId() {
@@ -105,5 +109,15 @@ public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("created")
   public void setCreated(long created) {
     this.created = created;
+  }
+
+  @JsonProperty("createdBy")
+  public String getCreatedBy() {
+    return this.createdBy;
+  }
+
+  @JsonProperty("createdBy")
+  public void setCreatedBy(String createdBy) {
+    this.createdBy = createdBy;
   }
 }

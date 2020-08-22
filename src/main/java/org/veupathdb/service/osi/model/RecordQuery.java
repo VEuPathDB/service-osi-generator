@@ -2,9 +2,7 @@ package org.veupathdb.service.osi.model;
 
 import java.time.OffsetDateTime;
 
-import org.veupathdb.service.osi.model.db.User;
-
-public class OrganismQuery
+public class RecordQuery
 {
   private String name;
   private OffsetDateTime start;
@@ -16,27 +14,39 @@ public class OrganismQuery
     return name;
   }
 
-  public OrganismQuery setName(String name) {
+  public RecordQuery setName(String name) {
     this.name = name;
     return this;
+  }
+
+  public boolean hasName() {
+    return name != null;
   }
 
   public OffsetDateTime getStart() {
     return start;
   }
 
-  public OrganismQuery setStart(OffsetDateTime start) {
+  public RecordQuery setStart(OffsetDateTime start) {
     this.start = start;
     return this;
+  }
+
+  public boolean hasStart() {
+    return start != null;
   }
 
   public OffsetDateTime getEnd() {
     return end;
   }
 
-  public OrganismQuery setEnd(OffsetDateTime end) {
+  public RecordQuery setEnd(OffsetDateTime end) {
     this.end = end;
     return this;
+  }
+
+  public boolean hasEnd() {
+    return end != null;
   }
 
   public Integer getCreatedById() {
@@ -47,11 +57,19 @@ public class OrganismQuery
     this.createdById = createdById;
   }
 
+  public boolean hasCreatedById() {
+    return createdById != null;
+  }
+
   public String getCreatedByName() {
     return createdByName;
   }
 
   public void setCreatedByName(String createdByName) {
     this.createdByName = createdByName;
+  }
+
+  public boolean hasCreatedByName() {
+    return createdByName != null;
   }
 }

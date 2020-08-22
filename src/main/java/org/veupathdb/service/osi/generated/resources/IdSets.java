@@ -26,8 +26,8 @@ import org.veupathdb.service.osi.generated.support.ResponseDelegate;
 public interface IdSets {
   @GET
   @Produces("application/json")
-  GetIdSetsResponse getIdSets(@QueryParam("startTimeStamp") long startTimeStamp,
-      @QueryParam("endTimeStamp") long endTimeStamp);
+  GetIdSetsResponse getIdSets(@QueryParam("createdAfter") Long createdAfter,
+      @QueryParam("createdBefore") Long createdBefore, @QueryParam("createdBy") String createdBy);
 
   @POST
   @Produces("application/json")

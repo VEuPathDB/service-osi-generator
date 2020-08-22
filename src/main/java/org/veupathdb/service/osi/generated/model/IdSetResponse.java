@@ -49,4 +49,10 @@ public interface IdSetResponse {
 
   @JsonProperty("created")
   void setCreated(long created);
+
+  @JsonProperty("createdBy")
+  String getCreatedBy();
+
+  @JsonProperty("createdBy")
+  void setCreatedBy(String createdBy);
 }

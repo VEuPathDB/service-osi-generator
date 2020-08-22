@@ -22,6 +22,14 @@ public class BasicAuthFilter implements ContainerRequestFilter
     authHeader = "Authorization",
     authPrefix = "Basic ";
 
+  private final String user;
+  private final String pass;
+
+  public BasicAuthFilter(String user, String pass) {
+    this.user = user;
+    this.pass = pass;
+  }
+
   @Override
   public void filter(ContainerRequestContext ctx) throws IOException {
     final var headers = ctx.getHeaders();
@@ -38,6 +46,15 @@ public class BasicAuthFilter implements ContainerRequestFilter
       final var joined = new String(Base64.getDecoder()
         .decode(auth.substring(authPrefix.length())));
       final var split = joined.split(":", 1);
+
+      // For the specific case of a POST request to the /auth endpoint with the
+      // admin credentials let the request through without a user lookup.
+      if (split[0].equals(user)
+        && split[1].equals(pass)
+        && ctx.getUriInfo().getPath().equals("/auth")
+        && ctx.getMethod().equals("POST")
+      )
+        return;
 
       final var opt = UserManager.lookup(split[0], split[1]);
 

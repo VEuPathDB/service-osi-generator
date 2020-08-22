@@ -1,8 +1,6 @@
-package org.veupathdb.service.osi.model.db;
+package org.veupathdb.service.osi.model.db.raw;
 
 import java.time.OffsetDateTime;
-
-import org.veupathdb.service.osi.util.Validation;
 
 public class IdSetRow
 {

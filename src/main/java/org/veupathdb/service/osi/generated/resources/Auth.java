@@ -5,10 +5,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-import org.veupathdb.service.osi.generated.model.AuthPost200ApplicationJson;
 import org.veupathdb.service.osi.generated.model.AuthPostApplicationJson;
 import org.veupathdb.service.osi.generated.model.BadRequestError;
 import org.veupathdb.service.osi.generated.model.ForbiddenError;
+import org.veupathdb.service.osi.generated.model.NewUserResponse;
 import org.veupathdb.service.osi.generated.model.ServerError;
 import org.veupathdb.service.osi.generated.model.UnauthorizedError;
 import org.veupathdb.service.osi.generated.model.UnprocessableEntityError;
@@ -30,8 +30,7 @@ public interface Auth {
       super(response);
     }
 
-    public static PostAuthResponse respond200WithApplicationJson(
-        AuthPost200ApplicationJson entity) {
+    public static PostAuthResponse respond200WithApplicationJson(NewUserResponse entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
       return new PostAuthResponse(responseBuilder.build(), entity);

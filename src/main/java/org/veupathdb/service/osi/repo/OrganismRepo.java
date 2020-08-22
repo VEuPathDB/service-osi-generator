@@ -1,14 +1,14 @@
 package org.veupathdb.service.osi.repo;
 
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import org.veupathdb.service.osi.model.OrganismQuery;
+import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.NewOrganism;
 import org.veupathdb.service.osi.model.db.Organism;
+import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.service.DbMan;
+import org.veupathdb.service.osi.service.OrganismUtils;
 
 public class OrganismRepo
 {
@@ -54,6 +54,48 @@ public class OrganismRepo
     }
   }
 
+  public static Map < Integer, Organism > organismsByCollectionIds(
+    final int[] collectionIds,
+    final Map < Integer, User > users
+  ) throws Exception {
+    var out = new HashMap<Integer, Organism>();
+
+    try (
+      var cn = DbMan.connection();
+      var ps = cn.prepareStatement(SQL.Select.Osi.Organisms.BY_BULK_COLLECTIONS)
+    ) {
+      ps.setObject(1, collectionIds);
+
+      try (var rs = ps.executeQuery()) {
+        var row = OrganismUtils.newOrganism(rs, users);
+        out.put(row.getOrganismId(), row);
+      }
+    }
+
+    return out;
+  }
+
+  public static Map < Integer, Organism > organismsByCollectionId(
+    final int collectionId,
+    final Map < Integer, User > users
+  ) throws Exception {
+    var out = new HashMap<Integer, Organism>();
+
+    try (
+      var cn = DbMan.connection();
+      var ps = cn.prepareStatement(SQL.Select.Osi.Organisms.BY_BULK_COLLECTIONS)
+    ) {
+      ps.setInt(1, collectionId);
+
+      try (var rs = ps.executeQuery()) {
+        var row = OrganismUtils.newOrganism(rs, users);
+        out.put(row.getOrganismId(), row);
+      }
+    }
+
+    return out;
+  }
+
   public static Organism insertOrganism(NewOrganism organism) throws Exception {
     try (
       var cn = DbMan.connection();
@@ -93,13 +135,13 @@ public class OrganismRepo
 
   /**
    * Searches for organisms in the database matching all of the criteria set in
-   * the given {@link OrganismQuery} object.
+   * the given {@link RecordQuery} object.
    *
    * @param query Organism search criteria
    *
    * @return A list of zero or more matched organisms.
    */
-  public static List < Organism > findOrganisms(OrganismQuery query)
+  public static List < Organism > findOrganisms(RecordQuery query)
   throws Exception {
     try (
       var cn = DbMan.connection();

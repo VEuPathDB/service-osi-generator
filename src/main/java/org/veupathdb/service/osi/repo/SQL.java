@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.function.Supplier;
 
-interface SQL
+public interface SQL
 {
   Logger log = LogManager.getLogger(SQL.class);
 
@@ -32,7 +32,11 @@ interface SQL
     }
 
     interface Osi {
-      String ORGANISM = insert(Schema.Osi.TABLE_ORGANISMS, "new-organism");
+      String
+        COLLECTION = insert(
+          Schema.Osi.TABLE_ID_SET_COLLECTIONS,
+          "new-collection"),
+        ORGANISM   = insert(Schema.Osi.TABLE_ORGANISMS, "new-organism");
     }
   }
 
@@ -46,17 +50,52 @@ interface SQL
           BY_ID    = select(Schema.Auth.TABLE_USERS, "by-id"),
           BY_TOKEN = select(Schema.Auth.TABLE_USERS, "by-token"),
           BY_EMAIL = select(Schema.Auth.TABLE_USERS, "by-name"),
-          BULK_BY_ID = select(Schema.Auth.TABLE_USERS, "bulk-by-id");
+          BY_COLLECTION = select(Schema.Auth.TABLE_USERS, "by-collection"),
+          BULK_BY_ID = select(Schema.Auth.TABLE_USERS, "bulk-by-id"),
+          BULK_BY_COLLECTIONS = select(Schema.Auth.TABLE_USERS, "bulk-by-collection");
       }
     }
 
     interface Osi
     {
+      interface Collections
+      {
+        String
+          BY_ID    = select(Schema.Osi.TABLE_ID_SET_COLLECTIONS, "by-id"),
+          BY_QUERY = select(Schema.Osi.TABLE_ID_SET_COLLECTIONS, "find-collections");
+      }
+
+      interface Genes
+      {
+        String
+          BY_COLLECTION      = select(Schema.Osi.TABLE_GENES, "by-collection"),
+          BY_BULK_COLLECTION = select(Schema.Osi.TABLE_GENES, "bulk-by-collection");
+      }
+
+      interface IdSets
+      {
+        String
+          BY_QUERY           = select(Schema.Osi.TABLE_ID_SETS, "by-query"),
+          BULK_BY_COLLECTION = select(Schema.Osi.TABLE_ID_SETS, "bulk-by-collection");
+      }
+
       interface Organisms
       {
         String
           BY_ID = select(Schema.Osi.TABLE_ORGANISMS, "by-id"),
-          BY_QUERY = select(Schema.Osi.TABLE_ORGANISMS, "find-organism");
+          BY_QUERY = select(Schema.Osi.TABLE_ORGANISMS, "find-organism"),
+          BY_BULK_COLLECTIONS = select(Schema.Osi.TABLE_ORGANISMS, "bulk-by-collection");
+      }
+
+      interface Transcripts
+      {
+        String
+          BY_COLLECTION       = select(
+            Schema.Osi.TABLE_TRANSCRIPTS,
+            "by-collection"),
+          BY_BULK_COLLECTIONS = select(
+            Schema.Osi.TABLE_TRANSCRIPTS,
+            "bulk-by-collection");
       }
     }
   }

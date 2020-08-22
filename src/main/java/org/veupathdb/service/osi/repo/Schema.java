@@ -1,6 +1,6 @@
 package org.veupathdb.service.osi.repo;
 
-interface Schema
+public interface Schema
 {
   String
     AUTH = "auth",
@@ -25,7 +25,7 @@ interface Schema
     String
       TABLE_ORGANISMS          = Schema.OSI + ".organisms",
       TABLE_ID_SET_COLLECTIONS = Schema.OSI + ".id_set_collections",
-      TABLE_ID_ID_SETS         = Schema.OSI + ".id_sets",
+      TABLE_ID_SETS            = Schema.OSI + ".id_sets",
       TABLE_GENES              = Schema.OSI + ".genes",
       TABLE_TRANSCRIPTS        = Schema.OSI + ".transcripts";
 
@@ -39,7 +39,7 @@ interface Schema
         CREATED_BY = "created_by";
     }
 
-    interface IdSetCollections
+    interface Collections
     {
       String
         COLLECTION_ID = "id_set_coll_id",
@@ -52,11 +52,13 @@ interface Schema
     {
       String
         ID_SET_ID     = "id_set_id",
-        COLLECTION_ID = IdSetCollections.COLLECTION_ID,
+        COLLECTION_ID = Collections.COLLECTION_ID,
         ORGANISM_ID   = Organisms.ORGANISM_ID,
         TEMPLATE      = "template",
+        COUNTER_START = "counter_start",
+        NUM_ISSUED    = "num_issued",
         CREATED_BY    = "created_by",
-        CREATED_ON    = "created_on";
+        CREATED_ON    = "created";
     }
 
     interface Organisms
@@ -76,11 +78,11 @@ interface Schema
     interface Transcripts
     {
       String
-        GENE_ID = Genes.GENE_ID,
+        GENE_ID       = Genes.GENE_ID,
         COUNTER_START = "counter_start",
-        NUM_ISSUED = "num_issued",
-        CREATED_ON = "created",
-        CREATED_BY = "created_by";
+        NUM_ISSUED    = "num_issued",
+        CREATED_ON    = "created",
+        CREATED_BY    = "created_by";
     }
   }
 

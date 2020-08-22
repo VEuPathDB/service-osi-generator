@@ -76,6 +76,22 @@ public class CliConfig extends Options
   )
   private String dbName;
 
+  @Option(
+    arity = "1",
+    defaultValue = "${env:ADMIN_USER}",
+    names = "admin-username",
+    description = "Admin username, used exclusively to register new users with the service."
+  )
+  private String adminUser;
+
+  @Option(
+    arity = "1",
+    defaultValue = "${env:ADMIN_PASS}",
+    names = "admin-password-do-not-use",
+    description = "Admin password, used exclusively to register new users with the service."
+  )
+  private String adminPass;
+
   public String getDbUsername() {
     if (dbUsername == null)
       dbUsername = DEFAULT_USERNAME;
@@ -116,5 +132,18 @@ public class CliConfig extends Options
       dbName = DEFAULT_DB_NAME;
 
     return dbName;
+  }
+
+  public String getAdminUser() {
+    if (adminUser == null)
+      throw new RuntimeException("Missing required environment variable ADMIN_USER");
+
+    return adminUser;
+  }
+
+  public String getAdminPass() {
+    if (adminPass == null)
+      throw new RuntimeException("Missing required environment variable ADMIN_PASS");
+    return adminPass;
   }
 }

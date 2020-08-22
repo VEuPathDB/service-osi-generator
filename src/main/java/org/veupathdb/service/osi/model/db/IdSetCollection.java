@@ -1,7 +1,9 @@
 package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
+import java.util.Map;
 
+import org.veupathdb.service.osi.model.db.raw.IdSetCollectionRow;
 import org.veupathdb.service.osi.util.Validation;
 
 public class IdSetCollection extends NewIdSetCollection
@@ -26,6 +28,18 @@ public class IdSetCollection extends NewIdSetCollection
     NewIdSetCollection from
   ) {
     this(collectionId, from.getName(), from.getCreatedBy(), createdOn);
+  }
+
+  public IdSetCollection(
+    IdSetCollectionRow row,
+    Map < Integer, User > users
+  ) {
+    this(
+      row.getCollectionId(),
+      row.getName(),
+      users.get(row.getCreatedBy()),
+      row.getCreatedOn()
+    );
   }
 
   public int getCollectionId() {

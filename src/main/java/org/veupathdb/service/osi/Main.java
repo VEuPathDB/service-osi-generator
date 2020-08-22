@@ -5,6 +5,8 @@ import java.io.IOException;
 import org.veupathdb.lib.container.jaxrs.config.Options;
 import org.veupathdb.lib.container.jaxrs.server.ContainerResources;
 import org.veupathdb.lib.container.jaxrs.server.Server;
+import org.veupathdb.service.osi.model.config.CliConfig;
+import org.veupathdb.service.osi.service.DbMan;
 
 public class Main extends Server {
   public static void main(String[] args) throws IOException {
@@ -23,5 +25,15 @@ public class Main extends Server {
       .property("jersey.config.server.tracing.threshold", "VERBOSE");
 
     return out;
+  }
+
+  @Override
+  protected Options newOptions() {
+    return new CliConfig();
+  }
+
+  @Override
+  protected void postCliParse(Options opts) {
+    DbMan.initialize((CliConfig) opts);
   }
 }

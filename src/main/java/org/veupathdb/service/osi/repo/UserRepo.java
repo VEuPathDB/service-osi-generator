@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.osi.model.db.NewUser;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.service.DbMan;
+import org.veupathdb.service.osi.service.UserUtils;
 import org.veupathdb.service.osi.util.Validation;
 
 /**
@@ -64,8 +65,52 @@ public class UserRepo
 
       try (var rs = ps.executeQuery()) {
         while (rs.next()) {
-          final var user = Utils.newUser(rs);
+          final var user = UserUtils.newUser(rs);
           out.put(user.getUserId(), user);
+        }
+      }
+    }
+
+    return out;
+  }
+
+  public static Map < Integer, User > selectUsersByCollections(int[] ids)
+  throws Exception {
+    log.trace("UserRepo#selectUsersByCollections({})", Arrays.toString(ids));
+    final var out = new HashMap<Integer, User>();
+
+    try (
+      var cn = DbMan.connection();
+      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BULK_BY_COLLECTIONS)
+    ) {
+      ps.setObject(1, ids);
+
+      try (var rs = ps.executeQuery()) {
+        while (rs.next()) {
+          var row = UserUtils.newUser(rs);
+          out.put(row.getUserId(), row);
+        }
+      }
+    }
+
+    return out;
+  }
+
+  public static Map < Integer, User > selectUsersByCollection(int collectionId)
+  throws Exception {
+    log.trace("UserRepo#selectUsersByCollection({})", collectionId);
+    final var out = new HashMap<Integer, User>();
+
+    try (
+      var cn = DbMan.connection();
+      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_COLLECTION)
+    ) {
+      ps.setInt(1, collectionId);
+
+      try (var rs = ps.executeQuery()) {
+        while (rs.next()) {
+          var row = UserUtils.newUser(rs);
+          out.put(row.getUserId(), row);
         }
       }
     }
@@ -96,7 +141,7 @@ public class UserRepo
         if (!rs.next())
           return Optional.empty();
 
-        return Optional.of(Utils.newUser(rs));
+        return Optional.of(UserUtils.newUser(rs));
       }
     }
   }
@@ -128,7 +173,7 @@ public class UserRepo
         if (!rs.next())
           return Optional.empty();
 
-        return Optional.of(Utils.newUser(rs));
+        return Optional.of(UserUtils.newUser(rs));
       }
     }
   }
@@ -145,7 +190,7 @@ public class UserRepo
         if (!rs.next())
           return Optional.empty();
 
-        return Optional.of(Utils.newUser(rs));
+        return Optional.of(UserUtils.newUser(rs));
       }
     }
   }

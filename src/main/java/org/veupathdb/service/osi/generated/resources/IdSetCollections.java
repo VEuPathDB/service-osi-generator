@@ -37,7 +37,7 @@ public interface IdSetCollections {
   @Path("/{collection-id}")
   @Produces("application/json")
   GetIdSetCollectionsByCollectionIdResponse getIdSetCollectionsByCollectionId(
-      @PathParam("collection-id") String collectionId);
+      @PathParam("collection-id") int collectionId);
 
   class PostIdSetCollectionsResponse extends ResponseDelegate {
     private PostIdSetCollectionsResponse(Response response, Object entity) {

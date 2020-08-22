@@ -44,6 +44,9 @@ CREATE TABLE osi.id_sets
   organism_id    INT         NOT NULL
     REFERENCES osi.organisms (organism_id),
   template       VARCHAR(16) NOT NULL,
+  counter_start  BIGINT      NOT NULL,
+  num_issued     INT         NOT NULL
+    CHECK ( num_issued >= 0 ),
   created        TIMESTAMPTZ NOT NULL DEFAULT now(),
   created_by     INT         NOT NULL
     REFERENCES auth.users (user_id)

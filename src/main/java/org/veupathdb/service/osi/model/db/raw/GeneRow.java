@@ -1,5 +1,6 @@
-package org.veupathdb.service.osi.model.db;
+package org.veupathdb.service.osi.model.db.raw;
 
+import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 
 public class GeneRow
