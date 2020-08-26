@@ -1,10 +1,8 @@
-package org.veupathdb.service.osi.service;
+package org.veupathdb.service.osi.service.collections;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
@@ -15,8 +13,10 @@ import org.veupathdb.service.osi.generated.model.IdSetCollectionImpl;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.NewIdSetCollection;
 import org.veupathdb.service.osi.model.db.User;
-import org.veupathdb.service.osi.model.db.raw.IdSetCollectionRow;
 import org.veupathdb.service.osi.repo.*;
+import org.veupathdb.service.osi.service.idsets.IdSetManager;
+import org.veupathdb.service.osi.service.organism.OrganismRepo;
+import org.veupathdb.service.osi.service.user.UserRepo;
 
 public class CollectionManager
 {
@@ -49,7 +49,7 @@ public class CollectionManager
       var idSets = IdSetRepo.selectIdSetsByCollection(
         collection,
         users,
-        OrganismRepo.organismsByCollectionId(collectionId, users));
+        OrganismRepo.selectByCollectionId(collectionId, users));
 
       var genes = GeneRepo.selectGenesByCollection(
         collectionId, users, idSets);
@@ -70,24 +70,18 @@ public class CollectionManager
 
   public static List < IdSetCollection > findCollections(RecordQuery query) {
     try {
-      var rows = CollectionRepo.findCollectionRows(query);
-      var collIds = rows.stream()
-        .mapToInt(IdSetCollectionRow::getCollectionId)
+      var collections = CollectionRepo.findCollectionRows(query);
+
+      var collIds = collections.stream()
+        .mapToInt(org.veupathdb.service.osi.model.db.IdSetCollection::getCollectionId)
         .toArray();
 
       var users = UserRepo.selectUsersByCollections(collIds);
 
-      var collections = rows.stream()
-        .map(r -> new org.veupathdb.service.osi.model.db.IdSetCollection(r, users))
-        .collect(Collectors.toMap(
-          org.veupathdb.service.osi.model.db.IdSetCollection::getCollectionId,
-          Function.identity()
-        ));
-
       var idSets = IdSetRepo.selectIdSetsByCollections(
         collIds,
         users,
-        OrganismRepo.organismsByCollectionIds(
+        OrganismRepo.selectByCollectionIds(
           collIds,
           users
         ),

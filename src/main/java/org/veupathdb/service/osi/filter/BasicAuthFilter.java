@@ -12,7 +12,7 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.ext.Provider;
 
 import org.veupathdb.lib.container.jaxrs.Globals;
-import org.veupathdb.service.osi.service.UserManager;
+import org.veupathdb.service.osi.service.user.UserManager;
 
 @Provider
 @Priority(4)

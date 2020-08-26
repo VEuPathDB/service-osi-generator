@@ -11,6 +11,7 @@ import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.Transcript;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.repo.Schema.Osi.Transcripts;
+import org.veupathdb.service.osi.service.user.UserManager;
 
 public class TranscriptUtils
 {

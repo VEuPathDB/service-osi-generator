@@ -3,23 +3,33 @@ package org.veupathdb.service.osi.model.db.raw;
 import java.time.OffsetDateTime;
 
 import org.veupathdb.service.osi.model.db.Organism;
-import org.veupathdb.service.osi.service.UserManager;
-import org.veupathdb.service.osi.util.Validation;
+import org.veupathdb.service.osi.service.user.UserManager;
 
 public class OrganismRow
 {
-  private final int organismId;
+  private final int id;
+
+  private final String name;
+
   private final String template;
+
   private final long geneCounterStart;
+
   private final long geneCounterCurrent;
+
   private final long transcriptCounterStart;
+
   private final long transcriptCounterCurrent;
+
   private final int createdBy;
+
   private final OffsetDateTime created;
+
   private final OffsetDateTime modified;
 
   public OrganismRow(
-    int organismId,
+    int id,
+    String name,
     String template,
     long geneCounterStart,
     long geneCounterCurrent,
@@ -29,7 +39,8 @@ public class OrganismRow
     OffsetDateTime created,
     OffsetDateTime modified
   ) {
-    this.organismId               = organismId;
+    this.id                       = id;
+    this.name                     = name;
     this.template                 = template;
     this.geneCounterStart         = geneCounterStart;
     this.geneCounterCurrent       = geneCounterCurrent;
@@ -40,8 +51,12 @@ public class OrganismRow
     this.modified                 = modified;
   }
 
-  public int getOrganismId() {
-    return organismId;
+  public int getId() {
+    return id;
+  }
+
+  public String getName() {
+    return name;
   }
 
   public String getTemplate() {
@@ -78,7 +93,8 @@ public class OrganismRow
 
   public Organism toOrganism() throws Exception {
     return new Organism(
-      organismId,
+      id,
+      name,
       template,
       geneCounterStart,
       geneCounterCurrent,

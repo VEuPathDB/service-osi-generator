@@ -14,12 +14,11 @@ import javax.ws.rs.core.Request;
 import org.glassfish.jersey.server.ContainerRequest;
 import org.veupathdb.lib.container.jaxrs.Globals;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
-import org.veupathdb.lib.container.jaxrs.providers.UserProvider;
 import org.veupathdb.service.osi.generated.model.IdSetCollectionPostRequest;
 import org.veupathdb.service.osi.generated.resources.IdSetCollections;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.User;
-import org.veupathdb.service.osi.service.CollectionManager;
+import org.veupathdb.service.osi.service.collections.CollectionManager;
 
 public class CollectionController implements IdSetCollections
 {

@@ -1,13 +1,10 @@
-package org.veupathdb.service.osi.service;
+package org.veupathdb.service.osi.service.user;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.sql.ResultSet;
+import java.util.*;
 
 import org.veupathdb.service.osi.model.db.NewUser;
 import org.veupathdb.service.osi.model.db.User;
-import org.veupathdb.service.osi.repo.UserRepo;
 
 public class UserManager
 {
@@ -21,6 +18,8 @@ public class UserManager
     byId   = new HashMap <>();
     byName = new HashMap <>();
   }
+
+  //////////////////////////////////////////////////////////////////////////////
 
   public Optional < User > getLocalUser(int userId) {
     synchronized (byId) {
@@ -44,6 +43,31 @@ public class UserManager
       byName.put(tmp.getUserName(), tmp);
     }
     return tmp;
+  }
+
+  public Map < Integer, User > lookupUsers(int[] ids) throws Exception {
+    var out = new HashMap<Integer, User>(ids.length);
+
+    synchronized (byId) {
+      for (var i = 0; i < ids.length; i++) {
+        if (byId.containsKey(ids[i])) {
+          out.put(ids[i], byId.get(ids[i]));
+          ids[i] = 0;
+        }
+      }
+    }
+
+    var tmp = UserRepo.selectUsers(Arrays.stream(ids)
+      .filter(i -> i > 0)
+      .distinct()
+      .toArray());
+
+    for (var u : tmp.values()) {
+      putLocalUser(u);
+      out.put(u.getUserId(), u);
+    }
+
+    return out;
   }
 
   public Optional < User > lookupUser(int id) throws Exception {
@@ -88,11 +112,24 @@ public class UserManager
       .filter(u -> u.getApiKey().equals(token));
   }
 
+  public User getOrCreateUser(int userId, ResultSet rs) throws Exception {
+    var tmp = getLocalUser(userId).orElse(null);
+
+    if (tmp != null)
+      return tmp;
+
+    return putLocalUser(UserUtils.newUser(rs));
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+
   public static UserManager getInstance() {
     if (instance == null)
       instance = new UserManager();
     return instance;
   }
+
+  //////////////////////////////////////////////////////////////////////////////
 
   public static Optional < User > getLocal(int userId) {
     return getInstance().getLocalUser(userId);

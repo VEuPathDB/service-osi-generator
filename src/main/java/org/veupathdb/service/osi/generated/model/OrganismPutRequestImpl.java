@@ -6,33 +6,19 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "organismName",
     "template",
     "geneIntStart",
     "transcriptIntStart"
 })
-public class OrganismRequestImpl implements OrganismRequest {
-  @JsonProperty("organismName")
-  private String organismName;
-
+public class OrganismPutRequestImpl implements OrganismPutRequest {
   @JsonProperty("template")
   private String template;
 
   @JsonProperty("geneIntStart")
-  private long geneIntStart;
+  private Long geneIntStart;
 
   @JsonProperty("transcriptIntStart")
-  private long transcriptIntStart;
-
-  @JsonProperty("organismName")
-  public String getOrganismName() {
-    return this.organismName;
-  }
-
-  @JsonProperty("organismName")
-  public void setOrganismName(String organismName) {
-    this.organismName = organismName;
-  }
+  private Long transcriptIntStart;
 
   @JsonProperty("template")
   public String getTemplate() {
@@ -45,22 +31,22 @@ public class OrganismRequestImpl implements OrganismRequest {
   }
 
   @JsonProperty("geneIntStart")
-  public long getGeneIntStart() {
+  public Long getGeneIntStart() {
     return this.geneIntStart;
   }
 
   @JsonProperty("geneIntStart")
-  public void setGeneIntStart(long geneIntStart) {
+  public void setGeneIntStart(Long geneIntStart) {
     this.geneIntStart = geneIntStart;
   }
 
   @JsonProperty("transcriptIntStart")
-  public long getTranscriptIntStart() {
+  public Long getTranscriptIntStart() {
     return this.transcriptIntStart;
   }
 
   @JsonProperty("transcriptIntStart")
-  public void setTranscriptIntStart(long transcriptIntStart) {
+  public void setTranscriptIntStart(Long transcriptIntStart) {
     this.transcriptIntStart = transcriptIntStart;
   }
 }

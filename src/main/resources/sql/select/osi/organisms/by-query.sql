@@ -1,5 +1,6 @@
 SELECT
   o.organism_id
+, o.name
 , o.template
 , o.gene_counter_start
 , o.gene_counter_current
@@ -9,7 +10,7 @@ SELECT
 , o.created
 , o.modified
 , u.user_id
-, u.user_email
+, u.user_name
 , u.api_key
 , u.issued
 FROM
@@ -20,7 +21,7 @@ WHERE
   -- by name
   (
     $1 IS NULL
-    OR o.organism_id LIKE $1
+    OR o.name LIKE $1
   )
   -- by creation date begin
   AND (

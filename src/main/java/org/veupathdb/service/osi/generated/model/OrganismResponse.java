@@ -2,6 +2,7 @@ package org.veupathdb.service.osi.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.Date;
 
 @JsonDeserialize(
     as = OrganismResponseImpl.class
@@ -48,4 +49,16 @@ public interface OrganismResponse {
 
   @JsonProperty("transcriptIntCurrent")
   void setTranscriptIntCurrent(long transcriptIntCurrent);
+
+  @JsonProperty("createdOn")
+  Date getCreatedOn();
+
+  @JsonProperty("createdOn")
+  void setCreatedOn(Date createdOn);
+
+  @JsonProperty("createdBy")
+  int getCreatedBy();
+
+  @JsonProperty("createdBy")
+  void setCreatedBy(int createdBy);
 }

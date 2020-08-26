@@ -13,6 +13,7 @@ CREATE SCHEMA osi;
 CREATE TABLE osi.organisms
 (
   organism_id                SERIAL PRIMARY KEY,
+  name                       VARCHAR(32) NOT NULL UNIQUE,
   template                   VARCHAR(16) NOT NULL UNIQUE,
   gene_counter_start         BIGINT      NOT NULL DEFAULT 1
     CHECK (gene_counter_start >= 1),

@@ -2,37 +2,48 @@ package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
 
+import org.veupathdb.service.osi.util.Errors;
+import org.veupathdb.service.osi.util.Format;
 import org.veupathdb.service.osi.util.Validation;
 
 public class Organism extends NewOrganism
 {
-  private final int organismId;
-  private final long geneCounterCurrent;
-  private final long transcriptCounterCurrent;
+  private final int id;
+
+  private final long geneCountCur;
+
+  private final long tranCountCur;
+
   private final OffsetDateTime created;
+
   private final OffsetDateTime modified;
 
   public Organism(
-    int organismId,
+    int id,
+    String name,
     String template,
-    long geneCounterStart,
-    long geneCounterCurrent,
-    long transcriptCounterStart,
-    long transcriptCounterCurrent,
+    long geneCountStart,
+    long geneCountCurrent,
+    long transcriptCountStart,
+    long transcriptCountCurrent,
     User createdBy,
     OffsetDateTime created,
     OffsetDateTime modified
   ) {
-    super(template, geneCounterStart, transcriptCounterStart, createdBy);
-    this.organismId               = Validation.oneMinimum(organismId);
-    this.geneCounterCurrent       = Validation.setMinimum(geneCounterCurrent, geneCounterStart);
-    this.transcriptCounterCurrent = Validation.setMinimum(transcriptCounterCurrent, transcriptCounterStart);
-    this.created                  = Validation.nonNull(created);
-    this.modified                 = Validation.nonNull(modified);
+    super(name, template, geneCountStart, transcriptCountStart, createdBy);
+
+    this.id           = Validation.oneMinimum(id);
+    this.geneCountCur = Validation.setMinimum(geneCountCurrent, geneCountStart);
+    this.tranCountCur = Validation.setMinimum(
+      transcriptCountCurrent,
+      transcriptCountStart
+    );
+    this.created      = Validation.nonNull(created);
+    this.modified     = Validation.nonNull(modified);
   }
 
   public Organism(
-    int organismId,
+    int id,
     long geneCounterCurrent,
     long transcriptCounterCurrent,
     OffsetDateTime created,
@@ -40,7 +51,8 @@ public class Organism extends NewOrganism
     NewOrganism from
   ) {
     this(
-      organismId,
+      id,
+      from.getName(),
       from.getTemplate(),
       from.getGeneCounterStart(),
       geneCounterCurrent,
@@ -52,23 +64,59 @@ public class Organism extends NewOrganism
     );
   }
 
-  public int getOrganismId() {
-    return organismId;
+  public int getId() {
+    return id;
   }
 
   public long getGeneCounterCurrent() {
-    return geneCounterCurrent;
+    return geneCountCur;
   }
 
   public long getTranscriptCounterCurrent() {
-    return transcriptCounterCurrent;
+    return tranCountCur;
   }
 
-  public OffsetDateTime getCreated() {
+  public OffsetDateTime getCreatedOn() {
     return created;
   }
 
   public OffsetDateTime getModified() {
     return modified;
   }
+
+  @Override
+  public String toString() {
+    return Errors.toRuntime(this, Format.Json()::writeValueAsString);
+  }
+
+  public Organism incrementGeneCounter(int by) {
+    return new Organism(
+      getId(),
+      getName(),
+      getTemplate(),
+      getGeneCounterStart(),
+      getGeneCounterCurrent() + by,
+      getTranscriptCounterStart(),
+      getTranscriptCounterCurrent(),
+      getCreatedBy(),
+      getCreatedOn(),
+      getModified()
+    );
+  }
+
+  public Organism incrementTranscriptCounter(int by) {
+    return new Organism(
+      getId(),
+      getName(),
+      getTemplate(),
+      getGeneCounterStart(),
+      getGeneCounterCurrent(),
+      getTranscriptCounterStart(),
+      getTranscriptCounterCurrent() + by,
+      getCreatedBy(),
+      getCreatedOn(),
+      getModified()
+    );
+  }
+
 }

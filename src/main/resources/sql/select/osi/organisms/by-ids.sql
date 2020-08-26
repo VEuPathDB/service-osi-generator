@@ -1,5 +1,6 @@
 SELECT
   o.organism_id
+, o.name
 , o.template
 , o.gene_counter_start
 , o.gene_counter_current

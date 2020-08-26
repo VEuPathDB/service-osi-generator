@@ -9,7 +9,7 @@ import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
 import org.veupathdb.service.osi.generated.model.AuthPostApplicationJson;
 import org.veupathdb.service.osi.generated.model.NewUserResponseImpl;
 import org.veupathdb.service.osi.generated.resources.Auth;
-import org.veupathdb.service.osi.service.UserManager;
+import org.veupathdb.service.osi.service.user.UserManager;
 
 public class AuthController implements Auth
 {

@@ -11,7 +11,7 @@ import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.model.db.raw.IdSetRow;
 import org.veupathdb.service.osi.repo.SQL.Select.Osi.IdSets;
 import org.veupathdb.service.osi.service.DbMan;
-import org.veupathdb.service.osi.service.IdSetUtils;
+import org.veupathdb.service.osi.service.idsets.IdSetUtils;
 
 public class IdSetRepo
 {

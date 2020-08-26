@@ -55,7 +55,7 @@ public class NewIdSet
   public String toString() {
     return "NewIdSet{" +
       "collection=" + collection.getCollectionId() +
-      ", organism=" + organism.getOrganismId() +
+      ", organism=" + organism.getId() +
       ", template='" + template + '\'' +
       ", createdBy=" + createdBy.getUserId() +
       ", counterStart=" + counterStart +

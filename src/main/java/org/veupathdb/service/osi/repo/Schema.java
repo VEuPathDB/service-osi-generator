@@ -66,15 +66,16 @@ public interface Schema
     interface Organisms
     {
       String
-        ORGANISM_ID                = "organism_id",
-        TEMPLATE                   = "template",
-        GENE_COUNTER_START         = "gene_counter_start",
-        GENE_COUNTER_CURRENT       = "gene_counter_current",
-        TRANSCRIPT_COUNTER_START   = "transcript_counter_start",
-        TRANSCRIPT_COUNTER_CURRENT = "transcript_counter_current",
         CREATED_BY                 = "created_by",
         CREATED_ON                 = "created",
-        LAST_MODIFIED              = "modified";
+        GENE_COUNTER_CURRENT       = "gene_counter_current",
+        GENE_COUNTER_START         = "gene_counter_start",
+        LAST_MODIFIED              = "modified",
+        NAME                       = "name",
+        ORGANISM_ID                = "organism_id",
+        TEMPLATE                   = "template",
+        TRANSCRIPT_COUNTER_CURRENT = "transcript_counter_current",
+        TRANSCRIPT_COUNTER_START   = "transcript_counter_start";
     }
 
     interface Transcripts

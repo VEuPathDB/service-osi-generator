@@ -20,6 +20,7 @@ version = buildProps["project.version"] ?: error("empty 2")
 
 repositories {
   jcenter()
+  mavenCentral()
 }
 
 tasks.jar {

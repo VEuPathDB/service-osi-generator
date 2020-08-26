@@ -1,0 +1,1 @@
+LOCK osi.organisms IN ACCESS EXCLUSIVE MODE;

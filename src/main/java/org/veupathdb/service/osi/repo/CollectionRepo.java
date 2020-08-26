@@ -7,9 +7,8 @@ import java.util.*;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.NewIdSetCollection;
-import org.veupathdb.service.osi.model.db.raw.IdSetCollectionRow;
 import org.veupathdb.service.osi.repo.Schema.Osi.Collections;
-import org.veupathdb.service.osi.service.CollectionUtils;
+import org.veupathdb.service.osi.service.collections.CollectionUtils;
 import org.veupathdb.service.osi.service.DbMan;
 
 public class CollectionRepo
@@ -72,7 +71,7 @@ public class CollectionRepo
     }
   }
 
-  public static List < IdSetCollectionRow > findCollectionRows(
+  public static List < IdSetCollection > findCollectionRows(
     final RecordQuery query
   ) throws Exception {
     try (
@@ -105,10 +104,10 @@ public class CollectionRepo
         ps.setNull(5, Types.VARCHAR);
 
       try (var rs = ps.executeQuery()) {
-        var out = new ArrayList <IdSetCollectionRow>();
+        var out = new ArrayList <IdSetCollection>();
 
         while (rs.next())
-          out.add(CollectionUtils.newCollectionRow(rs));
+          out.add(CollectionUtils.newCollection(rs));
 
         return out;
       }

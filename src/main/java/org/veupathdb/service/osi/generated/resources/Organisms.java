@@ -14,7 +14,8 @@ import javax.ws.rs.core.Response;
 import org.veupathdb.service.osi.generated.model.BadRequestError;
 import org.veupathdb.service.osi.generated.model.ForbiddenError;
 import org.veupathdb.service.osi.generated.model.NotFoundError;
-import org.veupathdb.service.osi.generated.model.OrganismRequest;
+import org.veupathdb.service.osi.generated.model.OrganismPostRequest;
+import org.veupathdb.service.osi.generated.model.OrganismPutRequest;
 import org.veupathdb.service.osi.generated.model.OrganismResponse;
 import org.veupathdb.service.osi.generated.model.ServerError;
 import org.veupathdb.service.osi.generated.model.UnauthorizedError;
@@ -26,13 +27,13 @@ public interface Organisms {
   @GET
   @Produces("application/json")
   GetOrganismsResponse getOrganisms(@QueryParam("organismName") String organismName,
-      @QueryParam("createdAfter") long createdAfter,
-      @QueryParam("createdBefore") long createdBefore, @QueryParam("createdBy") String createdBy);
+      @QueryParam("createdAfter") Long createdAfter,
+      @QueryParam("createdBefore") Long createdBefore, @QueryParam("createdBy") String createdBy);
 
   @POST
   @Produces("application/json")
   @Consumes("application/json")
-  PostOrganismsResponse postOrganisms(OrganismRequest entity);
+  PostOrganismsResponse postOrganisms(OrganismPostRequest entity);
 
   @GET
   @Path("/{organism-id}")
@@ -45,7 +46,7 @@ public interface Organisms {
   @Produces("application/json")
   @Consumes("application/json")
   PutOrganismsByOrganismIdResponse putOrganismsByOrganismId(
-      @PathParam("organism-id") String organismId, OrganismRequest entity);
+      @PathParam("organism-id") String organismId, OrganismPutRequest entity);
 
   class PostOrganismsResponse extends ResponseDelegate {
     private PostOrganismsResponse(Response response, Object entity) {

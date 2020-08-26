@@ -1,4 +1,4 @@
-package org.veupathdb.service.osi.service;
+package org.veupathdb.service.osi.service.idsets;
 
 import java.util.*;
 import java.util.function.Function;
@@ -19,6 +19,10 @@ import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.Transcript;
 import org.veupathdb.service.osi.repo.*;
+import org.veupathdb.service.osi.service.TranscriptUtils;
+import org.veupathdb.service.osi.service.organism.OrganismRepo;
+import org.veupathdb.service.osi.service.user.UserManager;
+import org.veupathdb.service.osi.service.user.UserRepo;
 
 public class IdSetManager
 {
@@ -31,7 +35,7 @@ public class IdSetManager
 
       var col   = CollectionRepo.selectCollection(row.getCollectionId())
         .orElseThrow();
-      var org   = OrganismRepo.selectOrganism(row.getOrganismId())
+      var org   = OrganismRepo.selectById(row.getOrganismId())
         .orElseThrow();
       var idSet = new IdSet(row.getIdSetId(), col, org, row.getTemplate(),
         UserManager.lookup(row.getCreatedBy()).orElseThrow(),
@@ -71,7 +75,7 @@ public class IdSetManager
       var colls   = CollectionRepo.selectCollections(collIdSet.stream()
         .mapToInt(i -> i)
         .toArray());
-      var orgs    = OrganismRepo.selectOrganisms(orgIdSet.stream()
+      var orgs    = OrganismRepo.selectByIds(orgIdSet.stream()
         .mapToInt(i -> i)
         .toArray());
       var idSets  = rows.stream()

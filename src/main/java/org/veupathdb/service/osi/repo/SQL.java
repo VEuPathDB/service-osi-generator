@@ -3,6 +3,7 @@ package org.veupathdb.service.osi.repo;
 import io.vulpine.lib.sql.load.SqlLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.veupathdb.service.osi.repo.Schema.Table;
 
 import java.util.function.Supplier;
 
@@ -14,6 +15,7 @@ public interface SQL
   {
     DELETE,
     INSERT,
+    LOCK,
     SELECT,
     UPDATE
   }
@@ -28,15 +30,23 @@ public interface SQL
   {
     interface Auth
     {
-      String NEW_USER = insert(Schema.Table.USERS, "new-user");
+      String NEW_USER = insert(Table.USERS, "new-user");
     }
 
-    interface Osi {
+    interface Osi
+    {
       String
         COLLECTION = insert(
-          Schema.Table.ID_SET_COLLECTIONS,
-          "new-collection"),
-        ORGANISM   = insert(Schema.Table.ORGANISMS, "new-organism");
+        Table.ID_SET_COLLECTIONS,
+        "new-collection"
+      ),
+        ORGANISM   = insert(Table.ORGANISMS, "new-organism");
+    }
+  }
+
+  interface Lock {
+    interface Osi {
+      String ORGANISMS = load(Mode.LOCK, "osi.organisms");
     }
   }
 
@@ -47,19 +57,13 @@ public interface SQL
       interface Users
       {
         String
-          BY_ID               = select(Schema.Table.USERS, "by-id"),
-          BY_TOKEN            = select(Schema.Table.USERS, "by-token"),
-          BY_EMAIL            = select(Schema.Table.USERS, "by-name"),
-          BY_COLLECTION       = select(
-            Schema.Table.USERS,
-            "by-collection"),
-          BULK_BY_ID          = select(Schema.Table.USERS, "bulk-by-id"),
-          BULK_BY_COLLECTIONS = select(
-            Schema.Table.USERS,
-            "bulk-by-collection"),
-          BY_BULK_ID_SETS     = select(
-            Schema.Table.USERS,
-            "bulk-by-id-set");
+          BY_ID          = select(Table.USERS, "by-id"),
+          BY_TOKEN       = select(Table.USERS, "by-token"),
+          BY_EMAIL       = select(Table.USERS, "by-name"),
+          BY_COLLECTION  = select(Table.USERS, "by-collection"),
+          BY_IDS         = select(Table.USERS, "bulk-by-id"),
+          BY_COLLECTIONS = select(Table.USERS, "bulk-by-collection"),
+          BY_ID_SETS     = select(Table.USERS, "bulk-by-id-set");
       }
     }
 
@@ -68,45 +72,44 @@ public interface SQL
       interface Collections
       {
         String
-          BY_ID    = select(Schema.Table.ID_SET_COLLECTIONS, "by-id"),
-          BY_IDS   = select(Schema.Table.ID_SET_COLLECTIONS, "by-ids"),
-          BY_QUERY = select(
-            Schema.Table.ID_SET_COLLECTIONS,
-            "find-collections");
+          BY_ID    = select(Table.ID_SET_COLLECTIONS, "by-id"),
+          BY_IDS   = select(Table.ID_SET_COLLECTIONS, "by-ids"),
+          BY_QUERY = select(Table.ID_SET_COLLECTIONS, "find-collections");
       }
 
       interface Genes
       {
         String
-          BY_COLLECTION  = select(Schema.Table.GENES, "by-collection"),
-          BY_COLLECTIONS = select(Schema.Table.GENES, "by-collections"),
-          BY_ID_SET      = select(Schema.Table.GENES, "by-id-set"),
-          BY_ID_SETS     = select(Schema.Table.GENES, "by-id-sets");
+          BY_COLLECTION  = select(Table.GENES, "by-collection"),
+          BY_COLLECTIONS = select(Table.GENES, "by-collections"),
+          BY_ID_SET      = select(Table.GENES, "by-id-set"),
+          BY_ID_SETS     = select(Table.GENES, "by-id-sets");
       }
 
       interface IdSets
       {
         String
-          BY_ID          = select(Schema.Table.ID_SETS, "by-id"),
-          BY_QUERY       = select(Schema.Table.ID_SETS, "by-query"),
-          BY_COLLECTIONS = select(Schema.Table.ID_SETS, "by-collections");
+          BY_ID          = select(Table.ID_SETS, "by-id"),
+          BY_QUERY       = select(Table.ID_SETS, "by-query"),
+          BY_COLLECTIONS = select(Table.ID_SETS, "by-collections");
       }
 
       interface Organisms
       {
         String
-          BY_ID          = select(Schema.Table.ORGANISMS, "by-id"),
-          BY_IDS         = select(Schema.Table.ORGANISMS, "by-ids"),
-          BY_QUERY       = select(Schema.Table.ORGANISMS, "find-organism"),
-          BY_COLLECTIONS = select(Schema.Table.ORGANISMS, "bulk-by-collection");
+          BY_COLLECTIONS = select(Table.ORGANISMS, "by-collections"),
+          BY_ID          = select(Table.ORGANISMS, "by-id"),
+          BY_IDS         = select(Table.ORGANISMS, "by-ids"),
+          BY_NAME        = select(Table.ORGANISMS, "by-name"),
+          BY_QUERY       = select(Table.ORGANISMS, "by-query");
       }
 
       interface Transcripts
       {
         String
-          BY_GENES       = select(Schema.Table.TRANSCRIPTS, "by-genes"),
-          BY_COLLECTION  = select(Schema.Table.TRANSCRIPTS, "by-collection"),
-          BY_COLLECTIONS = select(Schema.Table.TRANSCRIPTS, "bulk-by-collection");
+          BY_GENES       = select(Table.TRANSCRIPTS, "by-genes"),
+          BY_COLLECTION  = select(Table.TRANSCRIPTS, "by-collection"),
+          BY_COLLECTIONS = select(Table.TRANSCRIPTS, "by-collections");
       }
     }
   }
@@ -118,10 +121,10 @@ public interface SQL
       interface Organisms
       {
         String
-          GENE_COUNTER       = update(Schema.Table.ORGANISMS, "gene-counter"),
-          TRANSCRIPT_COUNTER = update(
-            Schema.Table.ORGANISMS,
-            "transcript-counter");
+          FULL_RECORD        = update(Table.ORGANISMS, "update-full"),
+          GENE_COUNTER       = update(Table.ORGANISMS, "gene-counter"),
+          TEMPLATE           = update(Table.ORGANISMS, "update-template"),
+          TRANSCRIPT_COUNTER = update(Table.ORGANISMS, "transcript-counter");
       }
 
     }
@@ -152,6 +155,7 @@ public interface SQL
     return switch (mode) {
       case INSERT -> LOADER.insert(path).orElseThrow(error(mode, path));
       case SELECT -> LOADER.select(path).orElseThrow(error(mode, path));
+      case LOCK ->   LOADER.rawSql("lock."+path).orElseThrow(error(mode, path));
       case UPDATE -> LOADER.udpate(path).orElseThrow(error(mode, path));
       case DELETE -> LOADER.delete(path).orElseThrow(error(mode, path));
     };

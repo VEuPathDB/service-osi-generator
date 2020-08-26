@@ -1,4 +1,4 @@
-package org.veupathdb.service.osi.service;
+package org.veupathdb.service.osi.service.user;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

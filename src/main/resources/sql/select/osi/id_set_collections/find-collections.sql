@@ -3,8 +3,14 @@ SELECT
 , name
 , created_by
 , created
+, user_id
+, user_name
+, api_key
+, issued
 FROM
-  osi.id_set_collections
+  osi.id_set_collections AS c
+  INNER JOIN auth.users  AS u
+    ON c.created_by = u.user_id
 WHERE
   -- name wildcard
   (

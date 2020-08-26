@@ -79,6 +79,12 @@ fix-path:
 
 gen-jaxrs: api.raml merge-raml
 	@$(BIN_DIR)/generate-jaxrs.sh $(APP_PACKAGE)
+	@echo "$(C_BLUE)Monkeypatch workarounds for generator bugs$(C_NONE)"
+	# Fix Organism API Interface
+	@sed -i 's/long/Long/g' "$(GEN_DIR)/resources/Organisms.java"
+	# Fix Organism PUT request
+	@sed -i 's/long/Long/g' "$(GEN_DIR)/model/OrganismPutRequest.java"
+	@sed -i 's/long/Long/g' "$(GEN_DIR)/model/OrganismPutRequestImpl.java"
 
 gen-docs: api.raml merge-raml
 	@$(BIN_DIR)/generate-docs.sh

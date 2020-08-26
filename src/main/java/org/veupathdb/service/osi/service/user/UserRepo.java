@@ -1,4 +1,4 @@
-package org.veupathdb.service.osi.repo;
+package org.veupathdb.service.osi.service.user;
 
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -7,8 +7,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.osi.model.db.NewUser;
 import org.veupathdb.service.osi.model.db.User;
+import org.veupathdb.service.osi.repo.SQL;
+import org.veupathdb.service.osi.repo.Schema;
 import org.veupathdb.service.osi.service.DbMan;
-import org.veupathdb.service.osi.service.UserUtils;
 import org.veupathdb.service.osi.util.Validation;
 
 /**
@@ -52,16 +53,16 @@ public class UserRepo
     }
   }
 
-  public static Map <Integer, User> selectUsers(Collection <Integer> ids)
+  public static Map <Integer, User> selectUsers(int[] ids)
   throws Exception {
     log.trace("UserRepo#selectUsers({})", ids);
-    final var out = new HashMap<Integer, User>(ids.size());
+    final var out = new HashMap<Integer, User>(ids.length);
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BULK_BY_ID)
+      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_IDS)
     ) {
-      ps.setObject(1, ids.stream().mapToInt(Integer::intValue).toArray());
+      ps.setObject(1, ids);
 
       try (var rs = ps.executeQuery()) {
         while (rs.next()) {
@@ -81,7 +82,7 @@ public class UserRepo
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_BULK_ID_SETS)
+      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_ID_SETS)
     ) {
       ps.setObject(1, ids);
 
@@ -104,7 +105,7 @@ public class UserRepo
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BULK_BY_COLLECTIONS)
+      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_COLLECTIONS)
     ) {
       ps.setObject(1, ids);
 

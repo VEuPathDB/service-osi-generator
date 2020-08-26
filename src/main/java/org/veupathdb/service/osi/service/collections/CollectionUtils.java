@@ -1,4 +1,4 @@
-package org.veupathdb.service.osi.service;
+package org.veupathdb.service.osi.service.collections;
 
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
@@ -8,6 +8,7 @@ import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.model.db.raw.IdSetCollectionRow;
 import org.veupathdb.service.osi.repo.Schema.Osi.Collections;
+import org.veupathdb.service.osi.service.user.UserManager;
 
 public class CollectionUtils
 {
@@ -37,7 +38,8 @@ public class CollectionUtils
     return new IdSetCollection(
       rs.getInt(Collections.COLLECTION_ID),
       rs.getString(Collections.NAME),
-      UserUtils.newUser(rs),
+      UserManager.getInstance()
+        .getOrCreateUser(rs.getInt(Collections.CREATED_BY), rs),
       rs.getObject(Collections.CREATED_ON, OffsetDateTime.class)
     );
   }

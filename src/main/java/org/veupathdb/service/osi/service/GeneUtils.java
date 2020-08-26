@@ -8,6 +8,7 @@ import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.repo.Schema.Osi.Genes;
+import org.veupathdb.service.osi.service.user.UserUtils;
 
 public class GeneUtils
 {

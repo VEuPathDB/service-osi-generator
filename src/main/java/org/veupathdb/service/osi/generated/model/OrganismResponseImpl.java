@@ -1,8 +1,11 @@
 package org.veupathdb.service.osi.generated.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -12,7 +15,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "geneIntStart",
     "transcriptIntStart",
     "geneIntCurrent",
-    "transcriptIntCurrent"
+    "transcriptIntCurrent",
+    "createdOn",
+    "createdBy"
 })
 public class OrganismResponseImpl implements OrganismResponse {
   @JsonProperty("organismId")
@@ -35,6 +40,19 @@ public class OrganismResponseImpl implements OrganismResponse {
 
   @JsonProperty("transcriptIntCurrent")
   private long transcriptIntCurrent;
+
+  @JsonFormat(
+      shape = JsonFormat.Shape.STRING,
+      pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+  )
+  @JsonDeserialize(
+      using = TimestampDeserializer.class
+  )
+  @JsonProperty("createdOn")
+  private Date createdOn;
+
+  @JsonProperty("createdBy")
+  private int createdBy;
 
   @JsonProperty("organismId")
   public int getOrganismId() {
@@ -104,5 +122,25 @@ public class OrganismResponseImpl implements OrganismResponse {
   @JsonProperty("transcriptIntCurrent")
   public void setTranscriptIntCurrent(long transcriptIntCurrent) {
     this.transcriptIntCurrent = transcriptIntCurrent;
+  }
+
+  @JsonProperty("createdOn")
+  public Date getCreatedOn() {
+    return this.createdOn;
+  }
+
+  @JsonProperty("createdOn")
+  public void setCreatedOn(Date createdOn) {
+    this.createdOn = createdOn;
+  }
+
+  @JsonProperty("createdBy")
+  public int getCreatedBy() {
+    return this.createdBy;
+  }
+
+  @JsonProperty("createdBy")
+  public void setCreatedBy(int createdBy) {
+    this.createdBy = createdBy;
   }
 }

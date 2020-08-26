@@ -17,5 +17,5 @@ FROM
   INNER JOIN auth.users u
     ON o.created_by = u.user_id
 WHERE
-  o.organism_id = ?
+  o.name = ?
 ;

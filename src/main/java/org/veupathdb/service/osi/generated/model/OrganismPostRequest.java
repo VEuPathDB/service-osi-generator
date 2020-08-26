@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(
-    as = OrganismRequestImpl.class
+    as = OrganismPostRequestImpl.class
 )
-public interface OrganismRequest {
+public interface OrganismPostRequest {
   @JsonProperty("organismName")
   String getOrganismName();
 
