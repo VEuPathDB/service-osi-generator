@@ -19,22 +19,8 @@ import org.veupathdb.service.osi.repo.Schema.Osi.IdSets;
 
 public class IdSetUtils
 {
-  public static IdSet rowToNode(
-    final IdSetRow row,
-    final Map < Integer, User > users,
-    final Map < Integer, Organism > organisms,
-    final Map < Integer, IdSetCollection > collections
-  ) {
-    return new IdSet(
-      row.getId(),
-      collections.get(row.getCollectionId()),
-      organisms.get(row.getOrganismId()),
-      row.getTemplate(),
-      users.get(row.getCreatedBy()),
-      row.getCounterStart(),
-      row.getNumIssued(),
-      row.getCreatedOn()
-    );
+  public static long getId(final ResultSet rs) throws Exception {
+    return rs.getLong(IdSets.ID_SET_ID);
   }
 
   public static IdSetRow newIdSetRow(final ResultSet rs) throws Exception {

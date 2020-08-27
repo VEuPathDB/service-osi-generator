@@ -3,6 +3,7 @@ package org.veupathdb.service.osi.repo;
 import java.sql.Types;
 import java.util.*;
 
+import io.vulpine.lib.query.util.basic.BasicPreparedMapReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.IdSet;
@@ -89,27 +90,17 @@ public class IdSetRepo
     return out;
   }
 
-  public static Map < Integer, IdSet > selectIdSetsByCollection(
+  public static Map < Long, IdSet > selectIdSetsByCollection(
     final IdSetCollection collection,
-    final Map < Integer, User > users,
-    final Map < Integer, Organism > organisms
+    final Map < Long, User > users,
+    final Map < Long, Organism > organisms
   ) throws Exception {
-    var out = new HashMap < Integer, IdSet >();
-
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(IdSets.BY_COLLECTIONS)
-    ) {
-      ps.setInt(1, collection.getCollectionId());
-
-      try (var rs = ps.executeQuery()) {
-        while (rs.next()) {
-          var row = IdSetUtils.newIdSet(rs, users, organisms, collection);
-          out.put(row.getId(), row);
-        }
-      }
-    }
-
-    return out;
+    return new BasicPreparedMapReadQuery<>(
+      IdSets.BY_COLLECTIONS,
+      DbMan::connection,
+      IdSetUtils::getId,
+      rs -> IdSetUtils.newIdSet(rs, users, organisms, collection),
+      QueryUtil.singleId(collection.getCollectionId())
+    ).execute().getValue();
   }
 }
