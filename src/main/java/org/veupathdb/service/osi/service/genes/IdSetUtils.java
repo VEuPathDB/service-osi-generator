@@ -38,9 +38,9 @@ public class IdSetUtils
 
   public static IdSet newIdSet(
     final ResultSet rs,
-    final Map < Integer, User > users,
-    final Map < Integer, Organism > organisms,
-    final Map < Integer, IdSetCollection > collections
+    final Map < Long, User > users,
+    final Map < Long, Organism > organisms,
+    final Map < Long, IdSetCollection > collections
   ) throws Exception {
     return newIdSet(rs, users, organisms,
       collections.get(rs.getInt(IdSets.COLLECTION_ID)));
@@ -48,8 +48,8 @@ public class IdSetUtils
 
   public static IdSet newIdSet(
     final ResultSet rs,
-    final Map < Integer, User > users,
-    final Map < Integer, Organism > organisms,
+    final Map < Long, User > users,
+    final Map < Long, Organism > organisms,
     final IdSetCollection collection
   ) throws Exception {
     return new IdSet(
