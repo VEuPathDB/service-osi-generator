@@ -28,6 +28,11 @@ public class Main extends Server {
   }
 
   @Override
+  protected void onShutdown() {
+    DbMan.getInstance().close();
+  }
+
+  @Override
   protected Options newOptions() {
     return new CliConfig();
   }

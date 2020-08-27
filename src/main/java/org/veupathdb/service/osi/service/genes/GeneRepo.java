@@ -1,6 +1,5 @@
 package org.veupathdb.service.osi.service.genes;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedMapReadQuery;
@@ -38,51 +37,31 @@ public class GeneRepo
     ).execute().getValue();
   }
 
-  public static Map < Integer, Gene > selectGenesByCollections(
-    final int[] collectionIds,
-    final Map < Integer, User > users,
-    final Map < Integer, IdSet > idSets
+  public static Map < Long, Gene > selectByCollectionIds(
+    final long[] collectionIds,
+    final Map < Long, User > users,
+    final Map < Long, IdSet > idSets
   ) throws Exception {
-    var out = new HashMap < Integer, Gene >();
-
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(Genes.BY_COLLECTIONS)
-    ) {
-      ps.setObject(1, collectionIds);
-
-      try (var rs = ps.executeQuery()) {
-        while (rs.next()) {
-          var row = GeneUtil.newGene(rs, users, idSets);
-          out.put(row.getGeneId(), row);
-        }
-      }
-    }
-
-    return out;
+    return new BasicPreparedMapReadQuery<>(
+      Genes.BY_COLLECTIONS,
+      DbMan::connection,
+      GeneUtil.getInstance()::parseId,
+      rs -> GeneUtil.newGene(rs, users, idSets),
+      QueryUtil.idSet(collectionIds)
+    ).execute().getValue();
   }
 
-  public static Map < Integer, Gene > selectGenesByCollection(
-    final int collection,
-    final Map < Integer, User > users,
-    final Map < Integer, IdSet > idSets
+  public static Map < Long, Gene > selectByCollectionId(
+    final long collection,
+    final Map < Long, User > users,
+    final Map < Long, IdSet > idSets
   ) throws Exception {
-    var out = new HashMap < Integer, Gene >();
-
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(Genes.BY_COLLECTION)
-    ) {
-      ps.setInt(1, collection);
-
-      try (var rs = ps.executeQuery()) {
-        while (rs.next()) {
-          var row = GeneUtil.newGene(rs, users, idSets);
-          out.put(row.getGeneId(), row);
-        }
-      }
-    }
-
-    return out;
+    return new BasicPreparedMapReadQuery<>(
+      Genes.BY_COLLECTION,
+      DbMan::connection,
+      GeneUtil.getInstance()::parseId,
+      rs -> GeneUtil.newGene(rs, users, idSets),
+      QueryUtil.singleId(collection)
+    ).execute().getValue();
   }
 }

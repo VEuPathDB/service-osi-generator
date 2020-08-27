@@ -53,7 +53,7 @@ public class CollectionManager
         users,
         OrganismRepo.selectByCollectionId(collectionId, users));
 
-      var genes = GeneRepo.selectGenesByCollection(
+      var genes = GeneRepo.selectByCollectionId(
         collectionId, users, idSets);
 
       var out = toExternal(collection);
@@ -90,7 +90,7 @@ public class CollectionManager
         collections
       );
 
-      var genes = GeneRepo.selectGenesByCollections(
+      var genes = GeneRepo.selectByCollectionIds(
         collIds,
         users,
         idSets
