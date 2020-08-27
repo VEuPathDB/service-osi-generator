@@ -5,13 +5,7 @@ import java.time.OffsetDateTime;
 import java.util.*;
 
 import org.veupathdb.service.osi.generated.model.*;
-import org.veupathdb.service.osi.model.db.IdSet;
-import org.veupathdb.service.osi.model.db.IdSetCollection;
-import org.veupathdb.service.osi.model.db.Organism;
-import org.veupathdb.service.osi.model.db.User;
-import org.veupathdb.service.osi.model.db.raw.GeneRow;
 import org.veupathdb.service.osi.model.db.raw.IdSetRow;
-import org.veupathdb.service.osi.model.db.raw.TranscriptRow;
 import org.veupathdb.service.osi.repo.Schema.Osi.IdSets;
 
 public class IdSetUtils
@@ -30,34 +24,6 @@ public class IdSetUtils
       rs.getInt(IdSets.NUM_ISSUED),
       rs.getObject(IdSets.CREATED_ON, OffsetDateTime.class),
       rs.getInt(IdSets.CREATED_BY)
-    );
-  }
-
-  public static IdSet newIdSet(
-    final ResultSet rs,
-    final Map < Long, User > users,
-    final Map < Long, Organism > organisms,
-    final Map < Long, IdSetCollection > collections
-  ) throws Exception {
-    return newIdSet(rs, users, organisms,
-      collections.get(rs.getLong(IdSets.COLLECTION_ID)));
-  }
-
-  public static IdSet newIdSet(
-    final ResultSet rs,
-    final Map < Long, User > users,
-    final Map < Long, Organism > organisms,
-    final IdSetCollection collection
-  ) throws Exception {
-    return new IdSet(
-      rs.getInt(IdSets.ID_SET_ID),
-      collection,
-      organisms.get(rs.getLong(IdSets.ORGANISM_ID)),
-      rs.getString(IdSets.TEMPLATE),
-      users.get(rs.getLong(IdSets.CREATED_BY)),
-      rs.getLong(IdSets.COUNTER_START),
-      rs.getInt(IdSets.NUM_ISSUED),
-      rs.getObject(IdSets.CREATED_ON, OffsetDateTime.class)
     );
   }
 

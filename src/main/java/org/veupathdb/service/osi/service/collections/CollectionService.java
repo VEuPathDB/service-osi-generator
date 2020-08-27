@@ -1,7 +1,6 @@
 package org.veupathdb.service.osi.service.collections;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;

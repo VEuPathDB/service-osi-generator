@@ -34,35 +34,12 @@ public class GeneRepo
     return getInstance().getBySetIds(ids);
   }
 
-  public static Map < Long, Gene > selectByIdSets(
-    final long[] setIds,
-    final Map < Long, IdSet > idSets
-  ) throws Exception {
-    return getInstance().getByIdSetIds(setIds, idSets);
-  }
-
-  public static Map < Long, Gene > selectByCollectionIds(
-    final long[] collectionIds,
-    final Map < Long, User > users,
-    final Map < Long, IdSet > idSets
-  ) throws Exception {
-    return getInstance().getByCollectionIds(collectionIds, users, idSets);
-  }
-
   public static Map < Long, GeneRow > selectByCollectionIds(
     final long[] collectionIds
   ) throws Exception {
     return getInstance().getByCollectionIds(collectionIds);
   }
 
-
-  public static Map < Long, Gene > selectByCollectionId(
-    final long collection,
-    final Map < Long, User > users,
-    final Map < Long, IdSet > idSets
-  ) throws Exception {
-    return getInstance().getByCollectionId(collection, users, idSets);
-  }
 
   public static Map < Long, GeneRow > selectByCollectionId(
     final long collection
@@ -88,60 +65,16 @@ public class GeneRepo
     ).execute().getValue();
   }
 
-  public Map < Long, Gene > getByIdSetIds(
-    final long[] setIds,
-    final Map < Long, IdSet > idSets
-  ) throws Exception {
-    log.trace("GeneRepo#getBySetIds(long[], Map)");
-    return new BasicPreparedMapReadQuery<>(
-      Genes.BY_ID_SETS,
-      DbMan::connection,
-      GeneUtil.getInstance()::parseId,
-      rs -> GeneUtil.newGene(rs, idSets),
-      QueryUtil.idSet(setIds)
-    ).execute().getValue();
-  }
-
-  public Map < Long, Gene > getByCollectionIds(
-    final long[] collectionIds,
-    final Map < Long, User > users,
-    final Map < Long, IdSet > idSets
-  ) throws Exception {
-    log.trace("GeneRepo#getByCollectionIds(long[], Map, Map)");
-    return new BasicPreparedMapReadQuery<>(
-      Genes.BY_COLLECTIONS,
-      DbMan::connection,
-      GeneUtil.getInstance()::parseId,
-      rs -> GeneUtil.newGene(rs, users, idSets),
-      QueryUtil.idSet(collectionIds)
-    ).execute().getValue();
-  }
-
   public Map < Long, GeneRow > getByCollectionIds(
     final long[] collectionIds
   ) throws Exception {
-    log.trace("GeneRepo#getByCollectionIds(long[], Map, Map)");
+    log.trace("GeneRepo#getByCollectionIds(long[])");
     return new BasicPreparedMapReadQuery<>(
       Genes.BY_COLLECTIONS,
       DbMan::connection,
       GeneUtil.getInstance()::parseId,
       GeneUtil::newGeneRow,
       QueryUtil.idSet(collectionIds)
-    ).execute().getValue();
-  }
-
-  public Map < Long, Gene > getByCollectionId(
-    final long collection,
-    final Map < Long, User > users,
-    final Map < Long, IdSet > idSets
-  ) throws Exception {
-    log.trace("GeneRepo#getByCollectionId(long, Map, Map)");
-    return new BasicPreparedMapReadQuery<>(
-      Genes.BY_COLLECTION,
-      DbMan::connection,
-      GeneUtil.getInstance()::parseId,
-      rs -> GeneUtil.newGene(rs, users, idSets),
-      QueryUtil.singleId(collection)
     ).execute().getValue();
   }
 

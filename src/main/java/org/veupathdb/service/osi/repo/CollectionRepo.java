@@ -1,32 +1,24 @@
 package org.veupathdb.service.osi.repo;
 
 import java.sql.Types;
-import java.time.OffsetDateTime;
 import java.util.*;
 
-import io.vulpine.lib.query.util.basic.BasicPreparedMapReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import org.veupathdb.service.osi.model.RecordQuery;
-import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.NewIdSetCollection;
 import org.veupathdb.service.osi.model.db.raw.IdSetCollectionRow;
-import org.veupathdb.service.osi.repo.Schema.Osi.Collections;
 import org.veupathdb.service.osi.service.collections.CollectionUtils;
 import org.veupathdb.service.osi.service.DbMan;
 import org.veupathdb.service.osi.util.QueryUtil;
 
 public class CollectionRepo
 {
-  public static IdSetCollection insert(NewIdSetCollection coll)
+  public static IdSetCollectionRow insert(NewIdSetCollection coll)
   throws Exception {
     return new BasicPreparedReadQuery <>(
       SQL.Insert.Osi.COLLECTION,
       DbMan::connection,
-      QueryUtil.must(rs -> new IdSetCollection(
-        rs.getInt(Collections.COLLECTION_ID),
-        rs.getObject(Collections.CREATED_ON, OffsetDateTime.class),
-        coll
-      )),
+      QueryUtil.must(rs -> CollectionUtils.newCollectionRow(rs, coll)),
       ps -> {
         ps.setString(1, coll.getName());
         ps.setLong(2, coll.getCreatedBy().getUserId());
@@ -34,23 +26,12 @@ public class CollectionRepo
     ).execute().getValue();
   }
 
-  public static Map < Long, IdSetCollection > select(long[] ids)
-  throws Exception {
-    return new BasicPreparedMapReadQuery <>(
-      SQL.Select.Osi.Collections.BY_IDS,
-      DbMan::connection,
-      CollectionUtils::getCollectionId,
-      CollectionUtils::newCollection,
-      QueryUtil.idSet(ids)
-    ).execute().getValue();
-  }
-
-  public static Optional < IdSetCollection > select(long id)
+  public static Optional < IdSetCollectionRow > select(long id)
   throws Exception {
     return new BasicPreparedReadQuery<>(
       SQL.Select.Osi.Collections.BY_ID,
       DbMan::connection,
-      QueryUtil.option(CollectionUtils::newCollection),
+      QueryUtil.option(CollectionUtils::newCollectionRow),
       QueryUtil.singleId(id)
     ).execute().getValue();
   }

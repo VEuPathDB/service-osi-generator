@@ -1,6 +1,5 @@
 package org.veupathdb.service.osi.service.user;
 
-import java.sql.ResultSet;
 import java.util.*;
 
 import org.veupathdb.service.osi.model.db.NewUser;
@@ -10,7 +9,7 @@ public class UserManager
 {
   private static UserManager instance;
 
-  private final Map < Integer, User > byId;
+  private final Map < Long, User > byId;
 
   private final Map < String, User >  byName;
 
@@ -43,31 +42,6 @@ public class UserManager
       byName.put(tmp.getUserName(), tmp);
     }
     return tmp;
-  }
-
-  public Map < Integer, User > lookupUsers(long[] ids) throws Exception {
-    var out = new HashMap<Integer, User>(ids.length);
-
-    synchronized (byId) {
-      for (var i = 0; i < ids.length; i++) {
-        if (byId.containsKey(ids[i])) {
-          out.put(ids[i], byId.get(ids[i]));
-          ids[i] = 0;
-        }
-      }
-    }
-
-    var tmp = UserRepo.selectUsers(Arrays.stream(ids)
-      .filter(i -> i > 0)
-      .distinct()
-      .toArray());
-
-    for (var u : tmp.values()) {
-      putLocalUser(u);
-      out.put(u.getUserId(), u);
-    }
-
-    return out;
   }
 
   public Optional < User > lookupUser(long id) throws Exception {
@@ -110,15 +84,6 @@ public class UserManager
   throws Exception {
     return lookupUser(name)
       .filter(u -> u.getApiKey().equals(token));
-  }
-
-  public User getOrCreateUser(int userId, ResultSet rs) throws Exception {
-    var tmp = getLocalUser(userId).orElse(null);
-
-    if (tmp != null)
-      return tmp;
-
-    return putLocalUser(UserUtil.newUser(rs));
   }
 
   //////////////////////////////////////////////////////////////////////////////

@@ -7,10 +7,9 @@ import java.util.*;
 import org.veupathdb.service.osi.generated.model.CollectionResponse;
 import org.veupathdb.service.osi.generated.model.CollectionResponseImpl;
 import org.veupathdb.service.osi.model.db.IdSetCollection;
-import org.veupathdb.service.osi.model.db.User;
+import org.veupathdb.service.osi.model.db.NewIdSetCollection;
 import org.veupathdb.service.osi.model.db.raw.IdSetCollectionRow;
 import org.veupathdb.service.osi.repo.Schema.Osi.Collections;
-import org.veupathdb.service.osi.service.user.UserManager;
 
 public class CollectionUtils
 {
@@ -20,22 +19,24 @@ public class CollectionUtils
     return instance;
   }
 
-  public static IdSetCollectionRow newCollectionRow(final ResultSet rs)
-  throws Exception {
+  public static IdSetCollectionRow newCollectionRow(
+    final ResultSet rs,
+    final NewIdSetCollection base
+  ) throws Exception {
     return new IdSetCollectionRow(
-      rs.getInt(Collections.COLLECTION_ID),
-      rs.getString(Collections.NAME),
-      rs.getInt(Collections.CREATED_BY),
+      rs.getLong(Collections.COLLECTION_ID),
+      base.getName(),
+      base.getCreatedBy().getUserId(),
       rs.getObject(Collections.CREATED_ON, OffsetDateTime.class)
     );
   }
 
-  public static IdSetCollection newCollection(ResultSet rs) throws Exception {
-    return new IdSetCollection(
-      rs.getInt(Collections.COLLECTION_ID),
+  public static IdSetCollectionRow newCollectionRow(final ResultSet rs)
+  throws Exception {
+    return new IdSetCollectionRow(
+      rs.getLong(Collections.COLLECTION_ID),
       rs.getString(Collections.NAME),
-      UserManager.getInstance()
-        .getOrCreateUser(rs.getInt(Collections.CREATED_BY), rs),
+      rs.getLong(Collections.CREATED_BY),
       rs.getObject(Collections.CREATED_ON, OffsetDateTime.class)
     );
   }
@@ -44,7 +45,7 @@ public class CollectionUtils
     return rs.getLong(Collections.COLLECTION_ID);
   }
 
-  public static CollectionResponse toCollectionResponse(IdSetCollection col) {
+  public static CollectionResponse toCollectionResponse(IdSetCollectionRow col) {
     return getInstance().collectionToResponse(col);
   }
 
