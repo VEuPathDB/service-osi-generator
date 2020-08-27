@@ -55,7 +55,7 @@ public class OrganismService
 
   public static OrganismResponse handleGet(String identifier) {
     try {
-      var either = Params.stringOrInt(identifier);
+      var either = Params.stringOrLong(identifier);
 
       return (either.isLeft()
         ? OrganismRepo.selectByName(either.getLeft())
@@ -123,7 +123,7 @@ public class OrganismService
   public static void handleUpdate(String identifier, OrganismPutRequest req) {
     prevalidatePutReq(req);
 
-    Params.stringOrInt(identifier)
+    Params.stringOrLong(identifier)
       .ifLeft(s -> handleStrPutRequest(s, req))
       .ifRight(i -> handleIntPutRequest(i, req));
   }

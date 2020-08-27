@@ -69,7 +69,7 @@ public class IdSetService
     var query = new RecordQuery()
       .setStart(Params.nullableTimestamp(start))
       .setEnd(Params.nullableTimestamp(end));
-    Params.stringOrInt(user)
+    Params.stringOrLong(user)
       .ifLeft(query::setCreatedByName)
       .ifRight(query::setCreatedById);
 

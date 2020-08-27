@@ -20,4 +20,12 @@ public class AuthController implements Auth
     return PostAuthResponse.respond200WithApplicationJson(
       UserService.createUser(entity, req));
   }
+
+  @Override
+  public GetAuthByUserIdentifierResponse getAuthByUserIdentifier(
+    final String userIdentifier
+  ) {
+    return GetAuthByUserIdentifierResponse.respond200WithApplicationJson(
+      UserService.lookupUser(userIdentifier, req));
+  }
 }

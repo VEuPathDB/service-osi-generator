@@ -9,9 +9,9 @@ import org.gusdb.fgputil.functional.Either;
 
 public class Params
 {
-  public static Either < String, Integer > stringOrInt(String value) {
+  public static Either < String, Long > stringOrLong(String value) {
     try {
-      return Either.right(Integer.parseInt(value));
+      return Either.right(Long.parseLong(value));
     } catch (Exception __) {
       return Either.left(value);
     }

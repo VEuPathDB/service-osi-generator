@@ -35,7 +35,7 @@ public class OrganismController implements Organisms
       .setName(organismName);
 
     if (createdBy != null)
-      Params.stringOrInt(createdBy)
+      Params.stringOrLong(createdBy)
         .ifLeft(query::setCreatedByName)
         .ifRight(query::setCreatedById);
 
