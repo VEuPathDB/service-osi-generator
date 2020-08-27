@@ -43,4 +43,8 @@ public class CollectionUtils
       rs.getObject(Collections.CREATED_ON, OffsetDateTime.class)
     );
   }
+
+  public static long getCollectionId(final ResultSet rs) throws Exception {
+    return rs.getLong(Collections.COLLECTION_ID);
+  }
 }

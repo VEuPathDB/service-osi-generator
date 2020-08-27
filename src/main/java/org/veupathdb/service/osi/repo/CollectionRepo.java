@@ -4,6 +4,8 @@ import java.sql.Types;
 import java.time.OffsetDateTime;
 import java.util.*;
 
+import io.vulpine.lib.query.util.basic.BasicPreparedMapReadQuery;
+import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.NewIdSetCollection;
@@ -13,45 +15,32 @@ import org.veupathdb.service.osi.service.DbMan;
 
 public class CollectionRepo
 {
-  public static IdSetCollection insertCollection(NewIdSetCollection coll)
+  public static IdSetCollection insert(NewIdSetCollection coll)
   throws Exception {
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Insert.Osi.COLLECTION)
-    ) {
-      ps.setString(1, coll.getName());
-      ps.setLong(2, coll.getCreatedBy().getUserId());
-
-      try (var rs = ps.executeQuery()) {
-        rs.next();
-
-        return new IdSetCollection(
-          rs.getInt(Collections.COLLECTION_ID),
-          rs.getObject(Collections.CREATED_ON, OffsetDateTime.class),
-          coll);
+    return new BasicPreparedReadQuery <>(
+      SQL.Insert.Osi.COLLECTION,
+      DbMan.connection(),
+      rs -> new IdSetCollection(
+        rs.getInt(Collections.COLLECTION_ID),
+        rs.getObject(Collections.CREATED_ON, OffsetDateTime.class),
+        coll
+      ),
+      ps -> {
+        ps.setString(1, coll.getName());
+        ps.setLong(2, coll.getCreatedBy().getUserId());
       }
-    }
+    ).execute().getValue();
   }
 
-  public static Map < Integer, IdSetCollection > select(long[] ids)
+  public static Map < Long, IdSetCollection > select(long[] ids)
   throws Exception {
-    var out = new HashMap<Integer, IdSetCollection>(ids.length);
-
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.Collections.BY_IDS)
-    ) {
-      ps.setObject(1, ids);
-
-      try (var rs = ps.executeQuery()) {
-        while (rs.next()) {
-          var row = CollectionUtils.newCollection(rs);
-          out.put(row.getCollectionId(), row);
-        }
-      }
-    }
-
-    return out;
+    return new BasicPreparedMapReadQuery <>(
+      SQL.Insert.Osi.COLLECTION,
+      DbMan.connection(),
+      CollectionUtils::getCollectionId,
+      CollectionUtils::newCollection,
+      ps -> ps.setObject(1, ids)
+    ).execute().getValue();
   }
 
   public static Optional < IdSetCollection > select(long id)

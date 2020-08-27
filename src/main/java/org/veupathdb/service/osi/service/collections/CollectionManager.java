@@ -32,7 +32,7 @@ public class CollectionManager
     final User   user
   ) {
     try {
-      return toExternal(CollectionRepo.insertCollection(new NewIdSetCollection(
+      return toExternal(CollectionRepo.insert(new NewIdSetCollection(
         name,
         user
       )));
