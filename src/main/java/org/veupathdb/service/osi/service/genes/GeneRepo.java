@@ -3,6 +3,8 @@ package org.veupathdb.service.osi.service.genes;
 import java.util.Map;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedMapReadQuery;
+import org.apache.logging.log4j.Logger;
+import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.User;
@@ -14,6 +16,8 @@ import org.veupathdb.service.osi.util.QueryUtil;
 public class GeneRepo
 {
   private static final GeneRepo instance = new GeneRepo();
+
+  private final Logger log = LogProvider.logger(getClass());
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                    ║ //
@@ -34,7 +38,7 @@ public class GeneRepo
     final long[] setIds,
     final Map < Long, IdSet > idSets
   ) throws Exception {
-    return getInstance().getByIdSets(setIds, idSets);
+    return getInstance().getByIdSetIds(setIds, idSets);
   }
 
   public static Map < Long, Gene > selectByCollectionIds(
@@ -61,6 +65,7 @@ public class GeneRepo
 
   public Map < Long, GeneRow > getBySetIds(long[] ids)
   throws Exception {
+    log.trace("GeneRepo#getBySetIds(long[])");
     return new BasicPreparedMapReadQuery <>(
       Genes.BY_ID_SETS,
       DbMan::connection,
@@ -70,10 +75,11 @@ public class GeneRepo
     ).execute().getValue();
   }
 
-  public Map < Long, Gene > getByIdSets(
+  public Map < Long, Gene > getByIdSetIds(
     final long[] setIds,
     final Map < Long, IdSet > idSets
   ) throws Exception {
+    log.trace("GeneRepo#getBySetIds(long[], Map)");
     return new BasicPreparedMapReadQuery<>(
       Genes.BY_ID_SETS,
       DbMan::connection,
@@ -88,6 +94,7 @@ public class GeneRepo
     final Map < Long, User > users,
     final Map < Long, IdSet > idSets
   ) throws Exception {
+    log.trace("GeneRepo#getByCollectionIds(long[], Map, Map)");
     return new BasicPreparedMapReadQuery<>(
       Genes.BY_COLLECTIONS,
       DbMan::connection,
@@ -102,6 +109,7 @@ public class GeneRepo
     final Map < Long, User > users,
     final Map < Long, IdSet > idSets
   ) throws Exception {
+    log.trace("GeneRepo#getByCollectionId(long, Map, Map)");
     return new BasicPreparedMapReadQuery<>(
       Genes.BY_COLLECTION,
       DbMan::connection,
@@ -110,5 +118,4 @@ public class GeneRepo
       QueryUtil.singleId(collection)
     ).execute().getValue();
   }
-
 }
