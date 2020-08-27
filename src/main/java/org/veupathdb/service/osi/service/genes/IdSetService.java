@@ -1,5 +1,6 @@
 package org.veupathdb.service.osi.service.genes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.repo.IdSetRepo;
 import org.veupathdb.service.osi.service.transcript.TranscriptRepo;
+import org.veupathdb.service.osi.service.transcript.TranscriptUtils;
 import org.veupathdb.service.osi.util.Errors;
 import org.veupathdb.service.osi.util.Params;
 
@@ -79,26 +81,32 @@ public class IdSetService
         .map(IdSetUtils::setToRes)
         .collect(Collectors.toMap(
           IdSetResponse::getIdSetId,
-          Function.identity()
-        ));
+          Function.identity()));
 
-      var genes = GeneRepo.selectBySetIds(sets.values()
-        .stream()
-        .mapToLong(IdSetResponse::getIdSetId)
-        .toArray());
+      var ids = new long[sets.size()];
+      var out = new ArrayList <IdSetResponse>(sets.size());
 
-      var transcripts = TranscriptRepo.selectByGeneIds(genes.keySet()
-        .stream()
-        .mapToLong(Integer::intValue)
-        .toArray());
+      var i = 0;
+      for (var s : sets.values()) {
+        ids[i] = s.getIdSetId();
+        out.set(i++, s);
+      }
 
+      var genes = GeneRepo.selectBySetIds(ids);
+      var outGenes = GeneUtil.toEntries(genes.values(), sets);
 
+      TranscriptUtils.assign(
+        TranscriptRepo.selectByGeneIds(genes.keySet()
+          .stream()
+          .mapToLong(Long::longValue)
+          .toArray()),
+        genes,
+        outGenes);
 
+      return out;
     } catch (Exception e) {
       throw Errors.wrapErr(e);
     }
-
-    return null;
   }
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
