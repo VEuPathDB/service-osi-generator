@@ -16,7 +16,7 @@ import java.util.Date;
 })
 public class NewUserResponseImpl implements NewUserResponse {
   @JsonProperty("userId")
-  private int userId;
+  private long userId;
 
   @JsonProperty("userName")
   private String userName;
@@ -24,7 +24,6 @@ public class NewUserResponseImpl implements NewUserResponse {
   @JsonProperty("apiKey")
   private String apiKey;
 
-  @JsonProperty("issued")
   @JsonFormat(
       shape = JsonFormat.Shape.STRING,
       pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
@@ -32,15 +31,16 @@ public class NewUserResponseImpl implements NewUserResponse {
   @JsonDeserialize(
       using = TimestampDeserializer.class
   )
+  @JsonProperty("issued")
   private Date issued;
 
   @JsonProperty("userId")
-  public int getUserId() {
+  public long getUserId() {
     return this.userId;
   }
 
   @JsonProperty("userId")
-  public void setUserId(int userId) {
+  public void setUserId(long userId) {
     this.userId = userId;
   }
 

@@ -9,10 +9,10 @@ import java.util.Date;
 )
 public interface OrganismResponse {
   @JsonProperty("organismId")
-  int getOrganismId();
+  long getOrganismId();
 
   @JsonProperty("organismId")
-  void setOrganismId(int organismId);
+  void setOrganismId(long organismId);
 
   @JsonProperty("organismName")
   String getOrganismName();
@@ -57,8 +57,8 @@ public interface OrganismResponse {
   void setCreatedOn(Date createdOn);
 
   @JsonProperty("createdBy")
-  int getCreatedBy();
+  long getCreatedBy();
 
   @JsonProperty("createdBy")
-  void setCreatedBy(int createdBy);
+  void setCreatedBy(long createdBy);
 }

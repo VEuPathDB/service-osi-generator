@@ -80,7 +80,7 @@ securedBy: basic
       200:
         body:
           description: Primary key value for the newly created organism record.
-          type: OneBasedInt
+          type: OneBasedLong
       400:
         body: error.BadRequestError
       401:
@@ -192,7 +192,7 @@ securedBy: basic
 
   /{collection-id}:
     uriParameters:
-      collection-id: OneBasedInt
+      collection-id: OneBasedLong
     get:
       responses:
         200:
@@ -407,13 +407,6 @@ types:
     minimum: 0
     maximum: 2147483647
 
-  OneBasedInt:
-    description: Int32 value with a valid value range of `[1..2147483647]`.
-    type: integer
-    format: int32
-    minimum: 1
-    maximum: 2147483647
-
   ZeroBasedLong:
     description: |
       Int64 value with a valid value range of `[0..9223372036854775807]`.
@@ -452,14 +445,14 @@ types:
         description: |
           Internal storage primary key for an ID set.  Used to make requests
           that operate on or retrieve one specific ID set.
-        type: OneBasedInt
-      collectionId: OneBasedInt
+        type: OneBasedLong
+      collectionId: OneBasedLong
       template: TemplatePattern
       geneIntStart: OneBasedLong
       generatedGeneCount: ZeroBasedInt
       generatedIds: GeneratedTranscriptEntry[]
       createdOn: datetime
-      createdBy: OneBasedInt
+      createdBy: OneBasedLong
     additionalProperties: false
 
   GeneratedTranscriptEntry:
@@ -489,7 +482,7 @@ types:
       geneId:
         type: string
         minLength: 3
-      transcripts: OneBasedInt
+      transcripts: OneBasedLong
     additionalProperties: false
     example:
       geneId: PF3D7_0145842
@@ -547,7 +540,7 @@ types:
       organismId:
         description: |
           Internal primary key value assigned to this organism record.
-        type: OneBasedInt
+        type: OneBasedLong
       organismName:
         type: string
         minLength: 3
@@ -571,7 +564,7 @@ types:
         type: datetime
       createdBy:
         description: User ID of the user/app that created this record.
-        type: OneBasedInt
+        type: OneBasedLong
     additionalProperties: false
     example:
       organismId: 24
@@ -587,7 +580,7 @@ types:
   NewUserResponse:
     type: object
     properties:
-      userId: OneBasedInt
+      userId: OneBasedLong
       userName:
       apiKey:
       issued: datetime
@@ -596,9 +589,9 @@ types:
   IdSetCollection:
     type: object
     properties:
-      collectionId: OneBasedInt
+      collectionId: OneBasedLong
       name:
-      createdBy: OneBasedInt
+      createdBy: OneBasedLong
       createdOn: datetime
       idSets: IdSetResponse[]
     additionalProperties: false

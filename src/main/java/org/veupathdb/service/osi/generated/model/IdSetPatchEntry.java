@@ -14,8 +14,8 @@ public interface IdSetPatchEntry {
   void setGeneId(String geneId);
 
   @JsonProperty("transcripts")
-  int getTranscripts();
+  long getTranscripts();
 
   @JsonProperty("transcripts")
-  void setTranscripts(int transcripts);
+  void setTranscripts(long transcripts);
 }

@@ -10,10 +10,10 @@ import java.util.List;
 )
 public interface IdSetCollection {
   @JsonProperty("collectionId")
-  int getCollectionId();
+  long getCollectionId();
 
   @JsonProperty("collectionId")
-  void setCollectionId(int collectionId);
+  void setCollectionId(long collectionId);
 
   @JsonProperty("name")
   String getName();
@@ -22,10 +22,10 @@ public interface IdSetCollection {
   void setName(String name);
 
   @JsonProperty("createdBy")
-  int getCreatedBy();
+  long getCreatedBy();
 
   @JsonProperty("createdBy")
-  void setCreatedBy(int createdBy);
+  void setCreatedBy(long createdBy);
 
   @JsonProperty("createdOn")
   Date getCreatedOn();

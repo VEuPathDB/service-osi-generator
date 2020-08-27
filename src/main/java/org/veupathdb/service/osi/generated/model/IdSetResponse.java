@@ -10,16 +10,16 @@ import java.util.List;
 )
 public interface IdSetResponse {
   @JsonProperty("idSetId")
-  int getIdSetId();
+  long getIdSetId();
 
   @JsonProperty("idSetId")
-  void setIdSetId(int idSetId);
+  void setIdSetId(long idSetId);
 
   @JsonProperty("collectionId")
-  int getCollectionId();
+  long getCollectionId();
 
   @JsonProperty("collectionId")
-  void setCollectionId(int collectionId);
+  void setCollectionId(long collectionId);
 
   @JsonProperty("template")
   String getTemplate();
@@ -52,8 +52,8 @@ public interface IdSetResponse {
   void setCreatedOn(Date createdOn);
 
   @JsonProperty("createdBy")
-  int getCreatedBy();
+  long getCreatedBy();
 
   @JsonProperty("createdBy")
-  void setCreatedBy(int createdBy);
+  void setCreatedBy(long createdBy);
 }

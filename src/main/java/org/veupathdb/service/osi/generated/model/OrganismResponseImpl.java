@@ -21,7 +21,7 @@ import java.util.Date;
 })
 public class OrganismResponseImpl implements OrganismResponse {
   @JsonProperty("organismId")
-  private int organismId;
+  private long organismId;
 
   @JsonProperty("organismName")
   private String organismName;
@@ -52,15 +52,15 @@ public class OrganismResponseImpl implements OrganismResponse {
   private Date createdOn;
 
   @JsonProperty("createdBy")
-  private int createdBy;
+  private long createdBy;
 
   @JsonProperty("organismId")
-  public int getOrganismId() {
+  public long getOrganismId() {
     return this.organismId;
   }
 
   @JsonProperty("organismId")
-  public void setOrganismId(int organismId) {
+  public void setOrganismId(long organismId) {
     this.organismId = organismId;
   }
 
@@ -135,12 +135,12 @@ public class OrganismResponseImpl implements OrganismResponse {
   }
 
   @JsonProperty("createdBy")
-  public int getCreatedBy() {
+  public long getCreatedBy() {
     return this.createdBy;
   }
 
   @JsonProperty("createdBy")
-  public void setCreatedBy(int createdBy) {
+  public void setCreatedBy(long createdBy) {
     this.createdBy = createdBy;
   }
 }

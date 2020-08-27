@@ -21,10 +21,10 @@ import java.util.List;
 })
 public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("idSetId")
-  private int idSetId;
+  private long idSetId;
 
   @JsonProperty("collectionId")
-  private int collectionId;
+  private long collectionId;
 
   @JsonProperty("template")
   private String template;
@@ -49,25 +49,25 @@ public class IdSetResponseImpl implements IdSetResponse {
   private Date createdOn;
 
   @JsonProperty("createdBy")
-  private int createdBy;
+  private long createdBy;
 
   @JsonProperty("idSetId")
-  public int getIdSetId() {
+  public long getIdSetId() {
     return this.idSetId;
   }
 
   @JsonProperty("idSetId")
-  public void setIdSetId(int idSetId) {
+  public void setIdSetId(long idSetId) {
     this.idSetId = idSetId;
   }
 
   @JsonProperty("collectionId")
-  public int getCollectionId() {
+  public long getCollectionId() {
     return this.collectionId;
   }
 
   @JsonProperty("collectionId")
-  public void setCollectionId(int collectionId) {
+  public void setCollectionId(long collectionId) {
     this.collectionId = collectionId;
   }
 
@@ -122,12 +122,12 @@ public class IdSetResponseImpl implements IdSetResponse {
   }
 
   @JsonProperty("createdBy")
-  public int getCreatedBy() {
+  public long getCreatedBy() {
     return this.createdBy;
   }
 
   @JsonProperty("createdBy")
-  public void setCreatedBy(int createdBy) {
+  public void setCreatedBy(long createdBy) {
     this.createdBy = createdBy;
   }
 }

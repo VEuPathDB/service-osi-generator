@@ -18,13 +18,13 @@ import java.util.List;
 })
 public class IdSetCollectionImpl implements IdSetCollection {
   @JsonProperty("collectionId")
-  private int collectionId;
+  private long collectionId;
 
   @JsonProperty("name")
   private String name;
 
   @JsonProperty("createdBy")
-  private int createdBy;
+  private long createdBy;
 
   @JsonProperty("createdOn")
   @JsonFormat(
@@ -40,12 +40,12 @@ public class IdSetCollectionImpl implements IdSetCollection {
   private List<IdSetResponse> idSets;
 
   @JsonProperty("collectionId")
-  public int getCollectionId() {
+  public long getCollectionId() {
     return this.collectionId;
   }
 
   @JsonProperty("collectionId")
-  public void setCollectionId(int collectionId) {
+  public void setCollectionId(long collectionId) {
     this.collectionId = collectionId;
   }
 
@@ -60,12 +60,12 @@ public class IdSetCollectionImpl implements IdSetCollection {
   }
 
   @JsonProperty("createdBy")
-  public int getCreatedBy() {
+  public long getCreatedBy() {
     return this.createdBy;
   }
 
   @JsonProperty("createdBy")
-  public void setCreatedBy(int createdBy) {
+  public void setCreatedBy(long createdBy) {
     this.createdBy = createdBy;
   }
 
