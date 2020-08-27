@@ -8,7 +8,7 @@ import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.model.db.raw.GeneRow;
-import org.veupathdb.service.osi.repo.SQL;
+import org.veupathdb.service.osi.repo.SQL.Select.Osi.Genes;
 import org.veupathdb.service.osi.service.DbMan;
 import org.veupathdb.service.osi.util.QueryUtil;
 
@@ -17,56 +17,25 @@ public class GeneRepo
   public static Map < Long, GeneRow > selectBySetIds(long[] ids)
   throws Exception {
     return new BasicPreparedMapReadQuery <>(
-      SQL.Select.Osi.Genes.BY_ID_SETS,
-      DbMan.connection(),
+      Genes.BY_ID_SETS,
+      DbMan::connection,
       GeneUtil.getInstance()::parseId,
-      GeneUtil::newGeneRow,
+      GeneUtil.getInstance()::createGeneRow,
       QueryUtil.idSet(ids)
     ).execute().getValue();
   }
 
-  public static Map < Long, Gene > selectGenesByIdSet(IdSet set)
-  throws Exception {
-    var out = new HashMap < Integer, Gene >();
-
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.Genes.BY_ID_SET)
-    ) {
-      ps.setInt(1, set.getId());
-
-      try (var rs = ps.executeQuery()) {
-        while (rs.next()) {
-          var row = GeneUtil.newGene(rs, set);
-          out.put(row.getGeneId(), row);
-        }
-      }
-    }
-
-    return out;
-  }
-
-  public static Map < Integer, Gene > selectGenesByIdSets(
-    final int[] setIds,
-    final Map < Integer, IdSet > idSets
+  public static Map < Long, Gene > selectByIdSets(
+    final long[] setIds,
+    final Map < Long, IdSet > idSets
   ) throws Exception {
-    var out = new HashMap < Integer, Gene >();
-
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.Genes.BY_ID_SETS)
-    ) {
-      ps.setObject(1, setIds);
-
-      try (var rs = ps.executeQuery()) {
-        while (rs.next()) {
-          var row = GeneUtil.newGene(rs, idSets);
-          out.put(row.getGeneId(), row);
-        }
-      }
-    }
-
-    return out;
+    return new BasicPreparedMapReadQuery<>(
+      Genes.BY_ID_SETS,
+      DbMan::connection,
+      GeneUtil.getInstance()::parseId,
+      rs -> GeneUtil.newGene(rs, idSets),
+      QueryUtil.idSet(setIds)
+    ).execute().getValue();
   }
 
   public static Map < Integer, Gene > selectGenesByCollections(
@@ -78,7 +47,7 @@ public class GeneRepo
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.Genes.BY_COLLECTIONS)
+      var ps = cn.prepareStatement(Genes.BY_COLLECTIONS)
     ) {
       ps.setObject(1, collectionIds);
 
@@ -102,7 +71,7 @@ public class GeneRepo
 
     try (
       var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.Genes.BY_COLLECTION)
+      var ps = cn.prepareStatement(Genes.BY_COLLECTION)
     ) {
       ps.setInt(1, collection);
 
