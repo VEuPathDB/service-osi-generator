@@ -3,12 +3,14 @@ package org.veupathdb.service.osi.service.transcript;
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.Logger;
 import org.glassfish.grizzly.utils.Pair;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
+import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntry;
 import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.Transcript;
 import org.veupathdb.service.osi.model.db.User;
@@ -73,6 +75,14 @@ public class TranscriptUtils
     final TranscriptRow tran
   ) {
     return getInstance().expandTranscriptIds(gene, tran);
+  }
+
+  public static void assign(
+    final Collection < TranscriptRow > rows,
+    final Map < Long, GeneRow > genes,
+    final Map < Long, GeneratedTranscriptEntry > entries
+  ) {
+    getInstance().assignTranscripts(rows, genes, entries);
   }
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
@@ -164,5 +174,21 @@ public class TranscriptUtils
     }
 
     return out;
+  }
+
+  public void assignTranscripts(
+    final Collection < TranscriptRow > rows,
+    final Map < Long, GeneRow > genes,
+    final Map < Long, GeneratedTranscriptEntry > entries
+  ) {
+    for (var t : rows) {
+      var gene = genes.get(t.getGeneId());
+      var exp  = TranscriptUtils.expandTranscript(gene, t);
+      var out  = entries.get(t.getGeneId());
+      for (var p : exp) {
+        out.getTranscripts().add(p.getFirst());
+        out.getProteins().add(p.getSecond());
+      }
+    }
   }
 }

@@ -91,6 +91,7 @@ public interface SQL
         String
           BY_ID          = select(Table.ID_SETS, "by-id"),
           BY_QUERY       = select(Table.ID_SETS, "by-query"),
+          BY_COLLECTION  = select(Table.ID_SETS, "by-collection"),
           BY_COLLECTIONS = select(Table.ID_SETS, "by-collections");
       }
 

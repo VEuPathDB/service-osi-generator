@@ -3,6 +3,7 @@ package org.veupathdb.service.osi.repo;
 import java.sql.Types;
 import java.util.*;
 
+import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedMapReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import org.veupathdb.service.osi.model.RecordQuery;
@@ -58,7 +59,12 @@ public class IdSetRepo
 
   public static List < IdSetRow > selectByCollectionId(long collectionId)
   throws Exception {
-
+    return new BasicPreparedListReadQuery<>(
+      SQL.Select.Osi.IdSets.BY_COLLECTION,
+      DbMan::connection,
+      IdSetUtils::newIdSetRow,
+      QueryUtil.singleId(collectionId)
+    ).execute().getValue();
   }
 
   public static Optional < IdSetRow > select(long id) throws Exception {

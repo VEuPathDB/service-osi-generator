@@ -2,10 +2,17 @@ package org.veupathdb.service.osi.service.genes;
 
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
+import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntry;
+import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntryImpl;
+import org.veupathdb.service.osi.generated.model.IdSetResponse;
 import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.User;
@@ -57,6 +64,17 @@ public class GeneUtil
     final IdSet idSet
   ) throws Exception {
     return getInstance().createGene(rs, idSet);
+  }
+
+  public static GeneratedTranscriptEntry toEntry(GeneRow row) {
+    return getInstance().geneToEntry(row);
+  }
+
+  public static Map < Long, GeneratedTranscriptEntry > toEntries(
+    final Collection < GeneRow > rows,
+    final Map < Long, IdSetResponse > sets
+  ) {
+    return getInstance().genesToEntries(rows, sets);
   }
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
@@ -121,5 +139,30 @@ public class GeneUtil
       UserUtil.newUser(rs),
       rs.getObject(Genes.CREATED_ON, OffsetDateTime.class)
     );
+  }
+
+  public Map < Long, GeneratedTranscriptEntry > genesToEntries(
+    final Collection < GeneRow > rows,
+    final Map < Long, IdSetResponse > idSets
+  ) {
+    var out = new HashMap< Long, GeneratedTranscriptEntry >(rows.size());
+
+    for (var g : rows) {
+      var tmp = geneToEntry(g);
+      out.put(g.getId(), tmp);
+      idSets.get(g.getIdSetId()).getGeneratedIds().add(tmp);
+    }
+
+    return out;
+  }
+
+  public GeneratedTranscriptEntry geneToEntry(final GeneRow row) {
+    var out = new GeneratedTranscriptEntryImpl();
+
+    out.setGeneId(row.getGeneIdentifier());
+    out.setProteins(new ArrayList <>());
+    out.setTranscripts(new ArrayList <>());
+
+    return out;
   }
 }

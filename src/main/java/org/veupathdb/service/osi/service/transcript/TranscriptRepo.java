@@ -50,6 +50,17 @@ public class TranscriptRepo
     ).execute().getValue();
   }
 
+  public static List < TranscriptRow > selectByCollectionId(long collectionId)
+  throws Exception {
+    return new BasicPreparedListReadQuery<>(
+      Transcripts.BY_COLLECTION,
+      DbMan::connection,
+      TranscriptUtils::newTranscriptRow,
+      QueryUtil.singleId(collectionId)
+    ).execute().getValue();
+  }
+
+
   public static List < Transcript > selectTranscriptsByCollection(
     final int collectionId,
     final Map < Long, User > users,

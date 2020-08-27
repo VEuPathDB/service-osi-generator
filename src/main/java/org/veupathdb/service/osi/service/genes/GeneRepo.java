@@ -57,6 +57,12 @@ public class GeneRepo
     return getInstance().getByCollectionId(collection, users, idSets);
   }
 
+  public static Map < Long, GeneRow > selectByCollectionId(
+    final long collection
+  ) throws Exception {
+    return getInstance().getByCollectionId(collection);
+  }
+
   // ╔════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                    ║ //
   // ║    Mockable Instance Methods                                       ║ //
@@ -118,4 +124,18 @@ public class GeneRepo
       QueryUtil.singleId(collection)
     ).execute().getValue();
   }
+
+  public Map < Long, GeneRow > getByCollectionId(
+    final long collection
+  ) throws Exception {
+    log.trace("GeneRepo#getByCollectionId(long)");
+    return new BasicPreparedMapReadQuery<>(
+      Genes.BY_COLLECTION,
+      DbMan::connection,
+      GeneUtil.getInstance()::parseId,
+      GeneUtil::newGeneRow,
+      QueryUtil.singleId(collection)
+    ).execute().getValue();
+  }
+
 }

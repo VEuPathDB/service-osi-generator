@@ -4,10 +4,7 @@ import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntry;
-import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntryImpl;
-import org.veupathdb.service.osi.generated.model.IdSetResponse;
-import org.veupathdb.service.osi.generated.model.IdSetResponseImpl;
+import org.veupathdb.service.osi.generated.model.*;
 import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.Organism;
@@ -64,6 +61,21 @@ public class IdSetUtils
     );
   }
 
+  public static Map < Long, IdSetResponse > setsToResponses(
+    final Collection < IdSetRow > rows,
+    final Map < Long, CollectionResponse > colls
+  ) {
+    var out = new HashMap< Long, IdSetResponse >(rows.size());
+
+    for (var s : rows) {
+      var tmp = setToRes(s);
+      out.put(s.getId(), tmp);
+      colls.get(s.getCollectionId()).getIdSets().add(tmp);
+    }
+
+    return out;
+  }
+
   public static IdSetResponse setToRes(IdSetRow set) {
     var out = new IdSetResponseImpl();
 
@@ -76,38 +88,6 @@ public class IdSetUtils
     out.setCreatedOn(Date.from(set.getCreatedOn().toInstant()));
     out.setGeneratedIds(new ArrayList <>());
 
-    return out;
-  }
-
-  public static void assignTranscripts(
-    Map < Long, IdSetResponse > idSets,
-    Map < Long, GeneRow > genes,
-    List < TranscriptRow > transcripts
-  ) {
-    var out = new HashMap<Integer, GeneratedTranscriptEntry>(genes.size());
-    genes.forEach((k, gene) -> {
-      var entry = gene2Entry(gene);
-      out.put(k, entry);
-      idSets.get(gene.getIdSetId()).getGeneratedIds().add(entry);
-    });
-    transcripts.forEach(t -> {
-      var ids =
-      out.get(t.getGeneId())
-    });
-
-    return out;
-  }
-
-  private static Map < Integer, GeneratedTranscriptEntry > genesToEntries(
-    Map < Integer, GeneRow > rows
-  ) {
-  }
-
-  private static GeneratedTranscriptEntry gene2Entry(GeneRow row) {
-    var out = new GeneratedTranscriptEntryImpl();
-    out.setGeneId(row.getGeneIdentifier());
-    out.setTranscripts(new ArrayList <>());
-    out.setProteins(new ArrayList <>());
     return out;
   }
 }

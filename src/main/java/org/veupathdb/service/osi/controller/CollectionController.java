@@ -19,6 +19,7 @@ import org.veupathdb.service.osi.generated.resources.IdSetCollections;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.service.collections.CollectionManager;
+import org.veupathdb.service.osi.service.collections.CollectionService;
 
 public class CollectionController implements IdSetCollections
 {
@@ -77,10 +78,10 @@ public class CollectionController implements IdSetCollections
   }
 
   @Override
-  public GetIdSetCollectionsByCollectionIdResponse getIdSetCollectionsByCollectionId(
-    long collectionId
-  ) {
+  public GetIdSetCollectionsByCollectionIdResponse
+  getIdSetCollectionsByCollectionId(final Long collectionId) {
     return GetIdSetCollectionsByCollectionIdResponse.
-      respond200WithApplicationJson(CollectionManager.getCollection(collectionId));
+      respond200WithApplicationJson(
+        CollectionService.lookupCollection(collectionId, request));
   }
 }
