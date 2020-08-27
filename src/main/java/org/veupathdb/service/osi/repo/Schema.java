@@ -85,7 +85,8 @@ public interface Schema
         COUNTER_START = "counter_start",
         NUM_ISSUED    = "num_issued",
         CREATED_ON    = "created",
-        CREATED_BY    = "created_by";
+        CREATED_BY    = "created_by",
+        TRANSCRIPT_ID = "transcript_id";
     }
   }
 

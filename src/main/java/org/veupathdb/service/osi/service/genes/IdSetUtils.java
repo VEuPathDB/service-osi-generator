@@ -43,7 +43,7 @@ public class IdSetUtils
     final Map < Long, IdSetCollection > collections
   ) throws Exception {
     return newIdSet(rs, users, organisms,
-      collections.get(rs.getInt(IdSets.COLLECTION_ID)));
+      collections.get(rs.getLong(IdSets.COLLECTION_ID)));
   }
 
   public static IdSet newIdSet(
@@ -55,9 +55,9 @@ public class IdSetUtils
     return new IdSet(
       rs.getInt(IdSets.ID_SET_ID),
       collection,
-      organisms.get(rs.getInt(IdSets.ORGANISM_ID)),
+      organisms.get(rs.getLong(IdSets.ORGANISM_ID)),
       rs.getString(IdSets.TEMPLATE),
-      users.get(rs.getInt(IdSets.CREATED_BY)),
+      users.get(rs.getLong(IdSets.CREATED_BY)),
       rs.getLong(IdSets.COUNTER_START),
       rs.getInt(IdSets.NUM_ISSUED),
       rs.getObject(IdSets.CREATED_ON, OffsetDateTime.class)

@@ -27,11 +27,12 @@ public class TranscriptUtils
 
   static TranscriptRow newTranscriptRow(ResultSet rs) throws Exception {
     return new TranscriptRow(
-      rs.getInt(Transcripts.GENE_ID),
+      rs.getLong(Transcripts.TRANSCRIPT_ID),
+      rs.getLong(Transcripts.GENE_ID),
       rs.getLong(Transcripts.COUNTER_START),
       rs.getInt(Transcripts.NUM_ISSUED),
       rs.getObject(Transcripts.CREATED_ON, OffsetDateTime.class),
-      rs.getInt(Transcripts.CREATED_BY)
+      rs.getLong(Transcripts.CREATED_BY)
     );
   }
 
@@ -41,6 +42,7 @@ public class TranscriptUtils
     final Map < Integer, Gene > genes
   ) throws Exception {
     return new Transcript(
+      rs.getLong(Transcripts.TRANSCRIPT_ID),
       genes.get(rs.getInt(Transcripts.GENE_ID)),
       rs.getLong(Transcripts.COUNTER_START),
       rs.getInt(Transcripts.NUM_ISSUED),
@@ -54,6 +56,7 @@ public class TranscriptUtils
     final Map < Integer, Gene > genes
   ) throws Exception {
     return new Transcript(
+      rs.getLong(Transcripts.TRANSCRIPT_ID),
       genes.get(rs.getInt(Transcripts.GENE_ID)),
       rs.getLong(Transcripts.COUNTER_START),
       rs.getInt(Transcripts.NUM_ISSUED),
