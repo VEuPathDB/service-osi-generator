@@ -24,7 +24,6 @@ public class NewUserResponseImpl implements NewUserResponse {
   @JsonProperty("apiKey")
   private String apiKey;
 
-  @JsonProperty("issued")
   @JsonFormat(
       shape = JsonFormat.Shape.STRING,
       pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
@@ -32,6 +31,7 @@ public class NewUserResponseImpl implements NewUserResponse {
   @JsonDeserialize(
       using = TimestampDeserializer.class
   )
+  @JsonProperty("issued")
   private Date issued;
 
   @JsonProperty("userId")

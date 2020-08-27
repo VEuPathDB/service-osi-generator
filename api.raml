@@ -347,13 +347,15 @@ securedBy: basic
           body: error.ServerError
 
 /auth:
+  displayName: User Management
   post:
+    displayName: Create User
     description: |
       Register a new user/application and issue an API key for that user to
       access this service.
 
       This endpoint may only be used by a user or application with access to the
-      singular set of admin credentials.
+      admin credentials.
     body:
       type: UserPostRequest
       example:
@@ -371,6 +373,26 @@ securedBy: basic
         body: error.UnprocessableEntityError
       500:
         body: error.ServerError
+  /{user-identifier}:
+    uriParameters:
+      user-identifier:
+        type: string
+        description: |
+          Either the primary key id or the exact username of the user to lookup.
+    get:
+      displayName: Lookup User
+      description: |
+        Look up a user by name or ID.
+
+        This endpoint may only be used by a user or application with access to
+        the admin credentials.
+      responses:
+        200:
+          body: NewUserResponse
+        401:
+          body: error.UnauthorizedError
+        500:
+          body: error.ServerError
 
 types:
   TemplatePattern:
