@@ -56,6 +56,11 @@ public class IdSetRepo
     return out;
   }
 
+  public static List < IdSetRow > selectByCollectionId(long collectionId)
+  throws Exception {
+
+  }
+
   public static Optional < IdSetRow > select(long id) throws Exception {
     return new BasicPreparedReadQuery<>(
       IdSets.BY_ID,

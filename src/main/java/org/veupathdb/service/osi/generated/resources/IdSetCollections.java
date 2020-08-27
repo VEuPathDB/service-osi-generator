@@ -11,11 +11,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import org.veupathdb.service.osi.generated.model.BadRequestError;
+import org.veupathdb.service.osi.generated.model.CollectionResponse;
 import org.veupathdb.service.osi.generated.model.ForbiddenError;
-import org.veupathdb.service.osi.generated.model.IdSetCollection;
 import org.veupathdb.service.osi.generated.model.IdSetCollectionPostRequest;
 import org.veupathdb.service.osi.generated.model.NotFoundError;
 import org.veupathdb.service.osi.generated.model.ServerError;
+import org.veupathdb.service.osi.generated.model.SimpleCollectionResponse;
 import org.veupathdb.service.osi.generated.model.UnauthorizedError;
 import org.veupathdb.service.osi.generated.model.UnprocessableEntityError;
 import org.veupathdb.service.osi.generated.support.ResponseDelegate;
@@ -49,7 +50,7 @@ public interface IdSetCollections {
     }
 
     public static PostIdSetCollectionsResponse respond200WithApplicationJson(
-        IdSetCollection entity) {
+        CollectionResponse entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
       return new PostIdSetCollectionsResponse(responseBuilder.build(), entity);
@@ -100,9 +101,9 @@ public interface IdSetCollections {
     }
 
     public static GetIdSetCollectionsResponse respond200WithApplicationJson(
-        List<IdSetCollection> entity) {
+        List<SimpleCollectionResponse> entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
-      GenericEntity<List<IdSetCollection>> wrappedEntity = new GenericEntity<List<IdSetCollection>>(entity){};
+      GenericEntity<List<SimpleCollectionResponse>> wrappedEntity = new GenericEntity<List<SimpleCollectionResponse>>(entity){};
       responseBuilder.entity(wrappedEntity);
       return new GetIdSetCollectionsResponse(responseBuilder.build(), wrappedEntity);
     }
@@ -137,7 +138,7 @@ public interface IdSetCollections {
     }
 
     public static GetIdSetCollectionsByCollectionIdResponse respond200WithApplicationJson(
-        IdSetCollection entity) {
+        CollectionResponse entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
       return new GetIdSetCollectionsByCollectionIdResponse(responseBuilder.build(), entity);

@@ -22,6 +22,9 @@ public class UserUtil
     return getInstance().createUser(rs);
   }
 
+  /**
+   * @see #userToNewUserResponse(User)
+   */
   public static NewUserResponse userToNewRes(final User user) {
     return getInstance().userToNewUserResponse(user);
   }
@@ -35,11 +38,19 @@ public class UserUtil
     );
   }
 
+  /**
+   * Converts the given {@code User} instance into an instance of
+   * {@code NewUserResponse} suitable for returning to an HTTP client.
+   *
+   * @param user user record to convert
+   *
+   * @return client safe response
+   */
   public NewUserResponse userToNewUserResponse(final User user) {
     var out = new NewUserResponseImpl();
 
     out.setUserId(user.getUserId());
-    out.setUserName(user.getUserName());
+    out.setUsername(user.getUserName());
     out.setApiKey(user.getApiKey());
     out.setIssued(Date.from(user.getIssued().toInstant()));
 

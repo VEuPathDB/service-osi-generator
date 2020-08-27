@@ -41,7 +41,7 @@ public class CollectionManager
     }
   }
 
-  public static IdSetCollection getCollection(final int collectionId) {
+  public static IdSetCollection getCollection(final long collectionId) {
     try {
       var collection = CollectionRepo.select(collectionId)
         .orElseThrow(NotFoundException::new);

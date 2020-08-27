@@ -78,7 +78,7 @@ public class CollectionController implements IdSetCollections
 
   @Override
   public GetIdSetCollectionsByCollectionIdResponse getIdSetCollectionsByCollectionId(
-    int collectionId
+    long collectionId
   ) {
     return GetIdSetCollectionsByCollectionIdResponse.
       respond200WithApplicationJson(CollectionManager.getCollection(collectionId));

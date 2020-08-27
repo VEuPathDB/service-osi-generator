@@ -167,7 +167,7 @@ securedBy: basic
           asterisk (`*`) character.
     responses:
       200:
-        body: IdSetCollection[]
+        body: SimpleCollectionResponse[]
       401:
         body: error.UnauthorizedError
       403:
@@ -178,7 +178,7 @@ securedBy: basic
     body: IdSetCollectionPostRequest
     responses:
       200:
-        body: IdSetCollection
+        body: CollectionResponse
       400:
         body: error.BadRequestError
       401:
@@ -196,7 +196,7 @@ securedBy: basic
     get:
       responses:
         200:
-          body: IdSetCollection
+          body: CollectionResponse
         401:
           body: error.UnauthorizedError
         404:
@@ -440,6 +440,26 @@ types:
     minimum: 1
     maximum: 9223372036854775807
 
+  SimpleCollectionResponse:
+    type: object
+    properties:
+      collectionId: OneBasedLong
+      name: string
+      idSets: SimpleIdSetResponse[]
+      createdOn: datetime
+      createdBy: OneBasedLong
+    additionalProperties: false
+
+  SimpleIdSetResponse:
+    type: object
+    properties:
+      idSetId: OneBasedLong
+      organismId: OneBasedLong
+      template: TemplatePattern
+      createdOn: datetime
+      createdBy: OneBasedLong
+    additionalProperties: false
+
   IdSetPostRequest:
     type: object
     properties:
@@ -608,7 +628,7 @@ types:
       apiKey: "d831d10e47de4154912ea7a8f1c633c3"
       issued: "2020-05-25T13:18:26Z"
 
-  IdSetCollection:
+  CollectionResponse:
     type: object
     properties:
       collectionId: OneBasedLong
