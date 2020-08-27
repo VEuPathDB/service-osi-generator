@@ -11,38 +11,30 @@ import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.model.db.raw.TranscriptRow;
 import org.veupathdb.service.osi.repo.SQL.Select.Osi.Transcripts;
 import org.veupathdb.service.osi.service.DbMan;
+import org.veupathdb.service.osi.util.QueryUtil;
 
 public class TranscriptRepo
 {
-  public static List < TranscriptRow > selectByGeneIds(int[] ids)
+  public static List < TranscriptRow > selectByGeneIds(long[] ids)
   throws Exception {
     return new BasicPreparedListReadQuery <>(
       Transcripts.BY_GENES,
-      DbMan.connection(),
+      DbMan::connection,
       TranscriptUtils::newTranscriptRow,
-      ps -> ps.setObject(1, ids)
+      QueryUtil.idSet(ids)
     ).execute().getValue();
   }
 
-  public static List < Transcript > selectTranscriptsByGenes(
-    final int[] geneIds,
+  public static List < Transcript > selectByGenes(
+    final long[] geneIds,
     final Map < Integer, Gene > genes
   ) throws Exception {
-    var out = new ArrayList<Transcript>();
-
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(Transcripts.BY_GENES)
-    ) {
-      ps.setObject(1, geneIds);
-
-      try (var rs = ps.executeQuery()) {
-        while (rs.next())
-          out.add(TranscriptUtils.newTranscript(rs, genes));
-      }
-    }
-
-    return out;
+    return new BasicPreparedListReadQuery<>(
+      Transcripts.BY_GENES,
+      DbMan::connection,
+      rs -> TranscriptUtils.newTranscript(rs, genes),
+      QueryUtil.idSet(geneIds)
+    ).execute().getValue();
   }
 
   public static List < Transcript > selectTranscriptsByCollections(

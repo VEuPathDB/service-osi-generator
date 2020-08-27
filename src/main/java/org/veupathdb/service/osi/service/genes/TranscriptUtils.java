@@ -25,6 +25,10 @@ public class TranscriptUtils
     ERR_GENE_TRAN_MISMATCH = "Attempted to expand a transcript record against"
     + " an incorrect gene record.";
 
+  static long getId(final ResultSet rs) throws Exception {
+    return rs.getLong(Transcripts.TRANSCRIPT_ID);
+  }
+
   static TranscriptRow newTranscriptRow(ResultSet rs) throws Exception {
     return new TranscriptRow(
       rs.getLong(Transcripts.TRANSCRIPT_ID),
