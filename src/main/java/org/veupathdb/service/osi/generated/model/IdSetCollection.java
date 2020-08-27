@@ -2,6 +2,7 @@ package org.veupathdb.service.osi.generated.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.Date;
 import java.util.List;
 
 @JsonDeserialize(
@@ -21,16 +22,16 @@ public interface IdSetCollection {
   void setName(String name);
 
   @JsonProperty("createdBy")
-  String getCreatedBy();
+  int getCreatedBy();
 
   @JsonProperty("createdBy")
-  void setCreatedBy(String createdBy);
+  void setCreatedBy(int createdBy);
 
-  @JsonProperty("created")
-  long getCreated();
+  @JsonProperty("createdOn")
+  Date getCreatedOn();
 
-  @JsonProperty("created")
-  void setCreated(long created);
+  @JsonProperty("createdOn")
+  void setCreatedOn(Date createdOn);
 
   @JsonProperty("idSets")
   List<IdSetResponse> getIdSets();

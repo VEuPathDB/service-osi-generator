@@ -1,6 +1,6 @@
 package org.veupathdb.service.osi.util;
 
-public class InputValidationException extends RuntimeException
+public class InputValidationException extends IllegalArgumentException
 {
   private final Object value;
 

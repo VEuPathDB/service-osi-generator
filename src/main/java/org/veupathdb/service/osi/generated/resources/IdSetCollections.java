@@ -24,8 +24,8 @@ import org.veupathdb.service.osi.generated.support.ResponseDelegate;
 public interface IdSetCollections {
   @GET
   @Produces("application/json")
-  GetIdSetCollectionsResponse getIdSetCollections(@QueryParam("createdAfter") long createdAfter,
-      @QueryParam("createdBefore") long createdBefore, @QueryParam("createdBy") String createdBy,
+  GetIdSetCollectionsResponse getIdSetCollections(@QueryParam("createdAfter") Long createdAfter,
+      @QueryParam("createdBefore") Long createdBefore, @QueryParam("createdBy") String createdBy,
       @QueryParam("name") String name);
 
   @POST

@@ -8,11 +8,11 @@ import org.veupathdb.service.osi.util.Validation;
 
 public class IdSetCollection extends NewIdSetCollection
 {
-  private final int collectionId;
+  private final long collectionId;
   private final OffsetDateTime createdOn;
 
   public IdSetCollection(
-    int collectionId,
+    long collectionId,
     String name,
     User createdBy,
     OffsetDateTime createdOn
@@ -23,7 +23,7 @@ public class IdSetCollection extends NewIdSetCollection
   }
 
   public IdSetCollection(
-    int collectionId,
+    long collectionId,
     OffsetDateTime createdOn,
     NewIdSetCollection from
   ) {
@@ -42,7 +42,7 @@ public class IdSetCollection extends NewIdSetCollection
     );
   }
 
-  public int getCollectionId() {
+  public long getCollectionId() {
     return collectionId;
   }
 

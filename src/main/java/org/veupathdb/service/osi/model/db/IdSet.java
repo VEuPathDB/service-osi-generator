@@ -6,12 +6,12 @@ import org.veupathdb.service.osi.util.Validation;
 
 public class IdSet extends NewIdSet
 {
-  private final int idSetId;
+  private final long idSetId;
 
   private final OffsetDateTime createdOn;
 
   public IdSet(
-    int idSetId,
+    long idSetId,
     IdSetCollection collection,
     Organism organism,
     String template,
@@ -25,7 +25,7 @@ public class IdSet extends NewIdSet
     this.createdOn = Validation.nonNull(createdOn);
   }
 
-  public IdSet(int idSetId, OffsetDateTime createdOn, NewIdSet from) {
+  public IdSet(long idSetId, OffsetDateTime createdOn, NewIdSet from) {
     this(
       idSetId,
       from.getCollection(),
@@ -38,7 +38,7 @@ public class IdSet extends NewIdSet
     );
   }
 
-  public int getIdSetId() {
+  public long getId() {
     return idSetId;
   }
 

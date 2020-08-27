@@ -1,21 +1,12 @@
 WITH
-  coll AS (
-    SELECT
-      id_set_coll_id
-    , created_by
-    FROM
-      osi.id_set_collections
-    WHERE
-      id_set_coll_id IN (unnest(?::INT[]))
-  )
-, sets AS (
+  sets AS (
     SELECT
       id_set_id
     , created_by
     FROM
       osi.id_sets
     WHERE
-      id_set_coll_id IN (SELECT id_set_coll_id FROM coll)
+      id_set_coll_id IN (unnest(?::BIGINT[]))
   )
 , genes AS (
     SELECT
@@ -35,8 +26,6 @@ WITH
       gene_id IN (SELECT DISTINCT gene_id FROM genes)
   )
 , all_users AS (
-    SELECT created_by FROM coll
-    UNION
     SELECT created_by FROM sets
     UNION
     SELECT created_by FROM genes

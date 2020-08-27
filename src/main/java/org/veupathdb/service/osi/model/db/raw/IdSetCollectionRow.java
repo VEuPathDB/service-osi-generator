@@ -6,15 +6,15 @@ import org.veupathdb.service.osi.util.Validation;
 
 public class IdSetCollectionRow
 {
-  private final int collectionId;
+  private final long collectionId;
   private final String name;
-  private final int createdBy;
+  private final long createdBy;
   private final OffsetDateTime createdOn;
 
   public IdSetCollectionRow(
-    int collectionId,
+    long collectionId,
     String name,
-    int createdBy,
+    long createdBy,
     OffsetDateTime createdOn
   ) {
     this.collectionId = collectionId;
@@ -23,7 +23,7 @@ public class IdSetCollectionRow
     this.createdOn    = createdOn;
   }
 
-  public int getCollectionId() {
+  public long getCollectionId() {
     return collectionId;
   }
 
@@ -31,7 +31,7 @@ public class IdSetCollectionRow
     return name;
   }
 
-  public int getCreatedBy() {
+  public long getCreatedBy() {
     return createdBy;
   }
 

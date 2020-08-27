@@ -6,9 +6,12 @@ import org.veupathdb.service.osi.util.Validation;
 
 public class Transcript extends NewTranscript
 {
+  private final long transcriptId;
+
   private final OffsetDateTime createdOn;
 
   public Transcript(
+    long transcriptId,
     Gene gene,
     long counterStart,
     int numIssued,
@@ -16,17 +19,27 @@ public class Transcript extends NewTranscript
     OffsetDateTime createdOn
   ) {
     super(gene, counterStart, numIssued, createdBy);
-    this.createdOn = Validation.nonNull(createdOn);
+    this.transcriptId = transcriptId;
+    this.createdOn    = Validation.nonNull(createdOn);
   }
 
-  public Transcript(OffsetDateTime createdOn, NewTranscript from) {
+  public Transcript(
+    long transcriptId,
+    OffsetDateTime createdOn,
+    NewTranscript from
+  ) {
     this(
+      transcriptId,
       from.getGene(),
       from.getCounterStart(),
       from.getNumIssued(),
       from.getCreatedBy(),
       createdOn
     );
+  }
+
+  public long getTranscriptId() {
+    return transcriptId;
   }
 
   public OffsetDateTime getCreatedOn() {

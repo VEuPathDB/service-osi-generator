@@ -61,9 +61,9 @@ public interface SQL
           BY_TOKEN       = select(Table.USERS, "by-token"),
           BY_EMAIL       = select(Table.USERS, "by-name"),
           BY_COLLECTION  = select(Table.USERS, "by-collection"),
-          BY_IDS         = select(Table.USERS, "bulk-by-id"),
-          BY_COLLECTIONS = select(Table.USERS, "bulk-by-collection"),
-          BY_ID_SETS     = select(Table.USERS, "bulk-by-id-set");
+          BY_IDS         = select(Table.USERS, "by-ids"),
+          BY_COLLECTIONS = select(Table.USERS, "by-collections"),
+          BY_ID_SETS     = select(Table.USERS, "by-id-sets");
       }
     }
 

@@ -21,7 +21,7 @@ public class UserManager
 
   //////////////////////////////////////////////////////////////////////////////
 
-  public Optional < User > getLocalUser(int userId) {
+  public Optional < User > getLocalUser(long userId) {
     synchronized (byId) {
       return Optional.ofNullable(byId.get(userId));
     }
@@ -45,7 +45,7 @@ public class UserManager
     return tmp;
   }
 
-  public Map < Integer, User > lookupUsers(int[] ids) throws Exception {
+  public Map < Integer, User > lookupUsers(long[] ids) throws Exception {
     var out = new HashMap<Integer, User>(ids.length);
 
     synchronized (byId) {
@@ -70,7 +70,7 @@ public class UserManager
     return out;
   }
 
-  public Optional < User > lookupUser(int id) throws Exception {
+  public Optional < User > lookupUser(long id) throws Exception {
     User tmp;
 
     synchronized (byId) {
@@ -146,7 +146,7 @@ public class UserManager
     ));
   }
 
-  public static Optional < User > lookup(int userId) throws Exception {
+  public static Optional < User > lookup(long userId) throws Exception {
     return getInstance().lookupUser(userId);
   }
 

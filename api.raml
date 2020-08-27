@@ -240,8 +240,8 @@ securedBy: basic
                     - PF3D7_150002.R79
                   proteins:
                     - PF3D7_150002.P79
-              created: 1597244587
-              createdBy: some user
+              createdOn: 2020-08-25T11:43:16Z
+              createdBy: 215
 
       401:
         body: error.UnauthorizedError
@@ -268,8 +268,8 @@ securedBy: basic
               - geneId: PF3D7_150002
                 transcripts: []
                 proteins: []
-            created: 1597244587
-            createdBy: some user
+            createdOn: 2020-08-25T11:43:16Z
+            createdBy: 123
       400:
         body: error.BadRequestError
       401:
@@ -280,9 +280,9 @@ securedBy: basic
         body: error.UnprocessableEntityError
       500:
         body: error.ServerError
-  /{gene-set-id}:
+  /{id-set-id}:
     uriParameters:
-      gene-set-id:
+      id-set-id: integer
     get:
       responses:
         200:
@@ -314,8 +314,8 @@ securedBy: basic
                 - PF3D7_150002.R79
                 proteins:
                 - PF3D7_150002.P79
-              created: 1597244587
-              createdBy: some user
+              createdOn: 2020-08-25T11:43:16Z
+              createdBy: 546
         401:
           body: error.UnauthorizedError
         403:
@@ -452,14 +452,14 @@ types:
         description: |
           Internal storage primary key for an ID set.  Used to make requests
           that operate on or retrieve one specific ID set.
-        type: OneBasedLong
+        type: OneBasedInt
       collectionId: OneBasedInt
       template: TemplatePattern
       geneIntStart: OneBasedLong
       generatedGeneCount: ZeroBasedInt
       generatedIds: GeneratedTranscriptEntry[]
-      created: ZeroBasedLong
-      createdBy:
+      createdOn: datetime
+      createdBy: OneBasedInt
     additionalProperties: false
 
   GeneratedTranscriptEntry:
@@ -598,8 +598,8 @@ types:
     properties:
       collectionId: OneBasedInt
       name:
-      createdBy:
-      created: ZeroBasedLong
+      createdBy: OneBasedInt
+      createdOn: datetime
       idSets: IdSetResponse[]
     additionalProperties: false
 

@@ -26,8 +26,8 @@ import org.veupathdb.service.osi.generated.support.ResponseDelegate;
 public interface IdSets {
   @GET
   @Produces("application/json")
-  GetIdSetsResponse getIdSets(@QueryParam("createdAfter") long createdAfter,
-      @QueryParam("createdBefore") long createdBefore, @QueryParam("createdBy") String createdBy);
+  GetIdSetsResponse getIdSets(@QueryParam("createdAfter") Long createdAfter,
+      @QueryParam("createdBefore") Long createdBefore, @QueryParam("createdBy") String createdBy);
 
   @POST
   @Produces("application/json")
@@ -35,15 +35,15 @@ public interface IdSets {
   PostIdSetsResponse postIdSets(IdSetPostRequest entity);
 
   @GET
-  @Path("/{gene-set-id}")
+  @Path("/{id-set-id}")
   @Produces("application/json")
-  GetIdSetsByGeneSetIdResponse getIdSetsByGeneSetId(@PathParam("gene-set-id") String geneSetId);
+  GetIdSetsByIdSetIdResponse getIdSetsByIdSetId(@PathParam("id-set-id") int idSetId);
 
   @PATCH
-  @Path("/{gene-set-id}")
+  @Path("/{id-set-id}")
   @Produces("application/json")
   @Consumes("application/json")
-  PatchIdSetsByGeneSetIdResponse patchIdSetsByGeneSetId(@PathParam("gene-set-id") String geneSetId,
+  PatchIdSetsByIdSetIdResponse patchIdSetsByIdSetId(@PathParam("id-set-id") int idSetId,
       List<IdSetPatchEntry> entity);
 
   class PostIdSetsResponse extends ResponseDelegate {
@@ -128,96 +128,93 @@ public interface IdSets {
     }
   }
 
-  class PatchIdSetsByGeneSetIdResponse extends ResponseDelegate {
-    private PatchIdSetsByGeneSetIdResponse(Response response, Object entity) {
+  class PatchIdSetsByIdSetIdResponse extends ResponseDelegate {
+    private PatchIdSetsByIdSetIdResponse(Response response, Object entity) {
       super(response, entity);
     }
 
-    private PatchIdSetsByGeneSetIdResponse(Response response) {
+    private PatchIdSetsByIdSetIdResponse(Response response) {
       super(response);
     }
 
-    public static PatchIdSetsByGeneSetIdResponse respond200WithApplicationJson(
-        IdSetResponse entity) {
+    public static PatchIdSetsByIdSetIdResponse respond200WithApplicationJson(IdSetResponse entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new PatchIdSetsByGeneSetIdResponse(responseBuilder.build(), entity);
+      return new PatchIdSetsByIdSetIdResponse(responseBuilder.build(), entity);
     }
 
-    public static PatchIdSetsByGeneSetIdResponse respond400WithApplicationJson(
+    public static PatchIdSetsByIdSetIdResponse respond400WithApplicationJson(
         BadRequestError entity) {
       Response.ResponseBuilder responseBuilder = Response.status(400).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new PatchIdSetsByGeneSetIdResponse(responseBuilder.build(), entity);
+      return new PatchIdSetsByIdSetIdResponse(responseBuilder.build(), entity);
     }
 
-    public static PatchIdSetsByGeneSetIdResponse respond401WithApplicationJson(
+    public static PatchIdSetsByIdSetIdResponse respond401WithApplicationJson(
         UnauthorizedError entity) {
       Response.ResponseBuilder responseBuilder = Response.status(401).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new PatchIdSetsByGeneSetIdResponse(responseBuilder.build(), entity);
+      return new PatchIdSetsByIdSetIdResponse(responseBuilder.build(), entity);
     }
 
-    public static PatchIdSetsByGeneSetIdResponse respond403WithApplicationJson(
+    public static PatchIdSetsByIdSetIdResponse respond403WithApplicationJson(
         ForbiddenError entity) {
       Response.ResponseBuilder responseBuilder = Response.status(403).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new PatchIdSetsByGeneSetIdResponse(responseBuilder.build(), entity);
+      return new PatchIdSetsByIdSetIdResponse(responseBuilder.build(), entity);
     }
 
-    public static PatchIdSetsByGeneSetIdResponse respond404WithApplicationJson(
-        NotFoundError entity) {
+    public static PatchIdSetsByIdSetIdResponse respond404WithApplicationJson(NotFoundError entity) {
       Response.ResponseBuilder responseBuilder = Response.status(404).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new PatchIdSetsByGeneSetIdResponse(responseBuilder.build(), entity);
+      return new PatchIdSetsByIdSetIdResponse(responseBuilder.build(), entity);
     }
 
-    public static PatchIdSetsByGeneSetIdResponse respond500WithApplicationJson(ServerError entity) {
+    public static PatchIdSetsByIdSetIdResponse respond500WithApplicationJson(ServerError entity) {
       Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new PatchIdSetsByGeneSetIdResponse(responseBuilder.build(), entity);
+      return new PatchIdSetsByIdSetIdResponse(responseBuilder.build(), entity);
     }
   }
 
-  class GetIdSetsByGeneSetIdResponse extends ResponseDelegate {
-    private GetIdSetsByGeneSetIdResponse(Response response, Object entity) {
+  class GetIdSetsByIdSetIdResponse extends ResponseDelegate {
+    private GetIdSetsByIdSetIdResponse(Response response, Object entity) {
       super(response, entity);
     }
 
-    private GetIdSetsByGeneSetIdResponse(Response response) {
+    private GetIdSetsByIdSetIdResponse(Response response) {
       super(response);
     }
 
-    public static GetIdSetsByGeneSetIdResponse respond200WithApplicationJson(IdSetResponse entity) {
+    public static GetIdSetsByIdSetIdResponse respond200WithApplicationJson(IdSetResponse entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new GetIdSetsByGeneSetIdResponse(responseBuilder.build(), entity);
+      return new GetIdSetsByIdSetIdResponse(responseBuilder.build(), entity);
     }
 
-    public static GetIdSetsByGeneSetIdResponse respond401WithApplicationJson(
+    public static GetIdSetsByIdSetIdResponse respond401WithApplicationJson(
         UnauthorizedError entity) {
       Response.ResponseBuilder responseBuilder = Response.status(401).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new GetIdSetsByGeneSetIdResponse(responseBuilder.build(), entity);
+      return new GetIdSetsByIdSetIdResponse(responseBuilder.build(), entity);
     }
 
-    public static GetIdSetsByGeneSetIdResponse respond403WithApplicationJson(
-        ForbiddenError entity) {
+    public static GetIdSetsByIdSetIdResponse respond403WithApplicationJson(ForbiddenError entity) {
       Response.ResponseBuilder responseBuilder = Response.status(403).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new GetIdSetsByGeneSetIdResponse(responseBuilder.build(), entity);
+      return new GetIdSetsByIdSetIdResponse(responseBuilder.build(), entity);
     }
 
-    public static GetIdSetsByGeneSetIdResponse respond404WithApplicationJson(NotFoundError entity) {
+    public static GetIdSetsByIdSetIdResponse respond404WithApplicationJson(NotFoundError entity) {
       Response.ResponseBuilder responseBuilder = Response.status(404).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new GetIdSetsByGeneSetIdResponse(responseBuilder.build(), entity);
+      return new GetIdSetsByIdSetIdResponse(responseBuilder.build(), entity);
     }
 
-    public static GetIdSetsByGeneSetIdResponse respond500WithApplicationJson(ServerError entity) {
+    public static GetIdSetsByIdSetIdResponse respond500WithApplicationJson(ServerError entity) {
       Response.ResponseBuilder responseBuilder = Response.status(500).header("Content-Type", "application/json");
       responseBuilder.entity(entity);
-      return new GetIdSetsByGeneSetIdResponse(responseBuilder.build(), entity);
+      return new GetIdSetsByIdSetIdResponse(responseBuilder.build(), entity);
     }
   }
 }

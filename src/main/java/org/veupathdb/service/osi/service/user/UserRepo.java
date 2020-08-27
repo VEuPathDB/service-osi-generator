@@ -53,7 +53,7 @@ public class UserRepo
     }
   }
 
-  public static Map <Integer, User> selectUsers(int[] ids)
+  public static Map <Integer, User> selectUsers(long[] ids)
   throws Exception {
     log.trace("UserRepo#selectUsers({})", ids);
     final var out = new HashMap<Integer, User>(ids.length);
@@ -75,7 +75,7 @@ public class UserRepo
     return out;
   }
 
-  public static Map < Integer, User > selectUsersByIdSets(int[] ids)
+  public static Map < Integer, User > selectUsersByIdSets(long[] ids)
   throws Exception {
     log.trace("UserRepo#selectUsersByIdSets({})", Arrays.toString(ids));
     final var out = new HashMap<Integer, User>();
@@ -98,7 +98,7 @@ public class UserRepo
   }
 
 
-  public static Map < Integer, User > selectUsersByCollections(int[] ids)
+  public static Map < Integer, User > selectUsersByCollections(long[] ids)
   throws Exception {
     log.trace("UserRepo#selectUsersByCollections({})", Arrays.toString(ids));
     final var out = new HashMap<Integer, User>();
@@ -120,7 +120,7 @@ public class UserRepo
     return out;
   }
 
-  public static Map < Integer, User > selectUsersByCollection(int collectionId)
+  public static Map < Integer, User > selectUsersByCollection(long collectionId)
   throws Exception {
     log.trace("UserRepo#selectUsersByCollection({})", collectionId);
     final var out = new HashMap<Integer, User>();
@@ -129,7 +129,7 @@ public class UserRepo
       var cn = DbMan.connection();
       var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_COLLECTION)
     ) {
-      ps.setInt(1, collectionId);
+      ps.setLong(1, collectionId);
 
       try (var rs = ps.executeQuery()) {
         while (rs.next()) {
@@ -202,13 +202,13 @@ public class UserRepo
     }
   }
 
-  public static Optional < User > selectUser(int userId) throws Exception {
+  public static Optional < User > selectUser(long userId) throws Exception {
     log.trace("UserRepo#selectUser({})", userId);
     try (
       var cn = DbMan.connection();
       var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_ID)
     ) {
-      ps.setInt(1, userId);
+      ps.setLong(1, userId);
 
       try (var rs = ps.executeQuery()) {
         if (!rs.next())

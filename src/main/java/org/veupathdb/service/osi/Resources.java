@@ -4,6 +4,7 @@ import org.veupathdb.lib.container.jaxrs.config.Options;
 import org.veupathdb.lib.container.jaxrs.server.ContainerResources;
 import org.veupathdb.service.osi.controller.AuthController;
 import org.veupathdb.service.osi.controller.CollectionController;
+import org.veupathdb.service.osi.controller.IdSetController;
 import org.veupathdb.service.osi.controller.OrganismController;
 
 /**
@@ -27,7 +28,8 @@ public class Resources extends ContainerResources {
     return new Object[] {
       AuthController.class,
       CollectionController.class,
-      OrganismController.class
+      OrganismController.class,
+      IdSetController.class
     };
   }
 }

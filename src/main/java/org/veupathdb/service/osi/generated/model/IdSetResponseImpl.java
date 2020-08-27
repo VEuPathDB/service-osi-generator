@@ -1,8 +1,11 @@
 package org.veupathdb.service.osi.generated.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.Date;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -13,12 +16,12 @@ import java.util.List;
     "geneIntStart",
     "generatedGeneCount",
     "generatedIds",
-    "created",
+    "createdOn",
     "createdBy"
 })
 public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("idSetId")
-  private long idSetId;
+  private int idSetId;
 
   @JsonProperty("collectionId")
   private int collectionId;
@@ -35,19 +38,26 @@ public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("generatedIds")
   private List<GeneratedTranscriptEntry> generatedIds;
 
-  @JsonProperty("created")
-  private long created;
+  @JsonProperty("createdOn")
+  @JsonFormat(
+      shape = JsonFormat.Shape.STRING,
+      pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+  )
+  @JsonDeserialize(
+      using = TimestampDeserializer.class
+  )
+  private Date createdOn;
 
   @JsonProperty("createdBy")
-  private String createdBy;
+  private int createdBy;
 
   @JsonProperty("idSetId")
-  public long getIdSetId() {
+  public int getIdSetId() {
     return this.idSetId;
   }
 
   @JsonProperty("idSetId")
-  public void setIdSetId(long idSetId) {
+  public void setIdSetId(int idSetId) {
     this.idSetId = idSetId;
   }
 
@@ -101,23 +111,23 @@ public class IdSetResponseImpl implements IdSetResponse {
     this.generatedIds = generatedIds;
   }
 
-  @JsonProperty("created")
-  public long getCreated() {
-    return this.created;
+  @JsonProperty("createdOn")
+  public Date getCreatedOn() {
+    return this.createdOn;
   }
 
-  @JsonProperty("created")
-  public void setCreated(long created) {
-    this.created = created;
+  @JsonProperty("createdOn")
+  public void setCreatedOn(Date createdOn) {
+    this.createdOn = createdOn;
   }
 
   @JsonProperty("createdBy")
-  public String getCreatedBy() {
+  public int getCreatedBy() {
     return this.createdBy;
   }
 
   @JsonProperty("createdBy")
-  public void setCreatedBy(String createdBy) {
+  public void setCreatedBy(int createdBy) {
     this.createdBy = createdBy;
   }
 }

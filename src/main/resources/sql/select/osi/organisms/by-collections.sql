@@ -5,7 +5,7 @@ WITH
     FROM
       osi.id_sets
     WHERE
-      id_set_coll_id IN (unnest(?::INT[]))
+      id_set_coll_id IN (unnest(?::BIGINT[]))
   )
 SELECT
   o.organism_id

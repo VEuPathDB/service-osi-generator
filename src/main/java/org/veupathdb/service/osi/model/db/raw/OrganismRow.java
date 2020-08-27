@@ -7,7 +7,7 @@ import org.veupathdb.service.osi.service.user.UserManager;
 
 public class OrganismRow
 {
-  private final int id;
+  private final long id;
 
   private final String name;
 
@@ -21,21 +21,21 @@ public class OrganismRow
 
   private final long transcriptCounterCurrent;
 
-  private final int createdBy;
+  private final long createdBy;
 
   private final OffsetDateTime created;
 
   private final OffsetDateTime modified;
 
   public OrganismRow(
-    int id,
+    long id,
     String name,
     String template,
     long geneCounterStart,
     long geneCounterCurrent,
     long transcriptCounterStart,
     long transcriptCounterCurrent,
-    int createdBy,
+    long createdBy,
     OffsetDateTime created,
     OffsetDateTime modified
   ) {
@@ -51,7 +51,7 @@ public class OrganismRow
     this.modified                 = modified;
   }
 
-  public int getId() {
+  public long getId() {
     return id;
   }
 
@@ -79,7 +79,7 @@ public class OrganismRow
     return transcriptCounterCurrent;
   }
 
-  public int getCreatedBy() {
+  public long getCreatedBy() {
     return createdBy;
   }
 

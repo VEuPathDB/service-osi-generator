@@ -1,3 +1,11 @@
+-- Find IdSetCollections by query params
+--
+-- Expected inputs:
+--   1. string    Name (with wildcard support)
+--   2. timestamp Created on or after
+--   3. timestamp Created on or before
+--   4. int64     Created by user id
+--   5. string    Created by user name
 SELECT
   id_set_coll_id
 , name

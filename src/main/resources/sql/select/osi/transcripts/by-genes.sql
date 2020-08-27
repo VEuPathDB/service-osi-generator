@@ -13,5 +13,5 @@ FROM
   INNER JOIN auth.users AS u
     ON t.created_by = u.user_id
 WHERE
-  gene_id IN (unnest(?::INT[]))
+  gene_id IN (unnest(?::BIGINT[]))
 ;

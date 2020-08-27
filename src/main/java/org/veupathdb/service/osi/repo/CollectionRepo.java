@@ -20,7 +20,7 @@ public class CollectionRepo
       var ps = cn.prepareStatement(SQL.Insert.Osi.COLLECTION)
     ) {
       ps.setString(1, coll.getName());
-      ps.setInt(2, coll.getCreatedBy().getUserId());
+      ps.setLong(2, coll.getCreatedBy().getUserId());
 
       try (var rs = ps.executeQuery()) {
         rs.next();
@@ -33,7 +33,7 @@ public class CollectionRepo
     }
   }
 
-  public static Map < Integer, IdSetCollection > selectCollections(int[] ids)
+  public static Map < Integer, IdSetCollection > select(long[] ids)
   throws Exception {
     var out = new HashMap<Integer, IdSetCollection>(ids.length);
 
@@ -54,7 +54,7 @@ public class CollectionRepo
     return out;
   }
 
-  public static Optional < IdSetCollection > selectCollection(int id)
+  public static Optional < IdSetCollection > select(long id)
   throws Exception {
     try (
       var cn = DbMan.connection();
@@ -71,7 +71,7 @@ public class CollectionRepo
     }
   }
 
-  public static List < IdSetCollection > findCollectionRows(
+  public static List < IdSetCollection > select(
     final RecordQuery query
   ) throws Exception {
     try (

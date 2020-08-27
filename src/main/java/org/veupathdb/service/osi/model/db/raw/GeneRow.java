@@ -1,26 +1,25 @@
 package org.veupathdb.service.osi.model.db.raw;
 
-import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 
 public class GeneRow
 {
-  private final int geneId;
+  private final long geneId;
 
-  private final int idSetId;
+  private final long idSetId;
 
   private final String geneIdentifier;
 
   private final OffsetDateTime createdOn;
 
-  private final int createdBy;
+  private final long createdBy;
 
   public GeneRow(
-    int geneId,
-    int idSetId,
+    long geneId,
+    long idSetId,
     String geneIdentifier,
     OffsetDateTime createdOn,
-    int createdBy
+    long createdBy
   ) {
     this.geneId         = geneId;
     this.idSetId        = idSetId;
@@ -29,11 +28,11 @@ public class GeneRow
     this.createdBy      = createdBy;
   }
 
-  public int getGeneId() {
+  public long getId() {
     return geneId;
   }
 
-  public int getIdSetId() {
+  public long getIdSetId() {
     return idSetId;
   }
 
@@ -45,7 +44,7 @@ public class GeneRow
     return createdOn;
   }
 
-  public int getCreatedBy() {
+  public long getCreatedBy() {
     return createdBy;
   }
 }

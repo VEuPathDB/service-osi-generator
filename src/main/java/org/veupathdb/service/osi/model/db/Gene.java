@@ -6,12 +6,12 @@ import org.veupathdb.service.osi.util.Validation;
 
 public class Gene extends NewGene
 {
-  private final int geneId;
+  private final long geneId;
 
   private final OffsetDateTime createdOn;
 
   public Gene(
-    int geneId,
+    long geneId,
     IdSet idSet,
     String identifier,
     User createdBy,
@@ -19,12 +19,12 @@ public class Gene extends NewGene
   ) {
     super(idSet, identifier, createdBy);
 
-    this.geneId = Validation.oneMinimum(geneId);
+    this.geneId    = Validation.oneMinimum(geneId);
     this.createdOn = Validation.nonNull(createdOn);
   }
 
   public Gene(
-    int geneId,
+    long geneId,
     OffsetDateTime createdOn,
     NewGene from
   ) {
@@ -37,7 +37,7 @@ public class Gene extends NewGene
     );
   }
 
-  public int getGeneId() {
+  public long getGeneId() {
     return geneId;
   }
 

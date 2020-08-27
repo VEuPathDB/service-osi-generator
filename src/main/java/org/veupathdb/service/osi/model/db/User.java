@@ -6,12 +6,12 @@ import org.veupathdb.service.osi.util.Validation;
 
 public class User extends NewUser
 {
-  private final int userId;
+  private final long userId;
 
   private final OffsetDateTime issued;
 
   public User(
-    int userId,
+    long userId,
     String userEmail,
     String apiKey,
     OffsetDateTime issued
@@ -22,7 +22,7 @@ public class User extends NewUser
   }
 
   public User(
-    int userId,
+    long userId,
     OffsetDateTime issued,
     NewUser from
   ) {
@@ -34,7 +34,7 @@ public class User extends NewUser
     );
   }
 
-  public int getUserId() {
+  public long getUserId() {
     return userId;
   }
 

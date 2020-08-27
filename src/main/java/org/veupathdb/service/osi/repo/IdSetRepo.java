@@ -11,7 +11,7 @@ import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.model.db.raw.IdSetRow;
 import org.veupathdb.service.osi.repo.SQL.Select.Osi.IdSets;
 import org.veupathdb.service.osi.service.DbMan;
-import org.veupathdb.service.osi.service.idsets.IdSetUtils;
+import org.veupathdb.service.osi.service.genes.IdSetUtils;
 
 public class IdSetRepo
 {
@@ -86,7 +86,7 @@ public class IdSetRepo
       try (var rs = ps.executeQuery()) {
         while (rs.next()) {
           var row = IdSetUtils.newIdSet(rs, users, organisms, collections);
-          out.put(row.getIdSetId(), row);
+          out.put(row.getId(), row);
         }
       }
     }
@@ -110,7 +110,7 @@ public class IdSetRepo
       try (var rs = ps.executeQuery()) {
         while (rs.next()) {
           var row = IdSetUtils.newIdSet(rs, users, organisms, collection);
-          out.put(row.getIdSetId(), row);
+          out.put(row.getId(), row);
         }
       }
     }

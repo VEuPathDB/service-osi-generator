@@ -6,5 +6,5 @@ SELECT
 FROM
   auth.users
 WHERE
-  user_id IN (unnest(?::INT[]))
+  user_id IN (unnest(?::BIGINT[]))
 ;

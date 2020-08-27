@@ -1,11 +1,11 @@
 SELECT
   user_id
-, user_email
+, user_name
 , api_key
 , issued
 FROM
   auth.users
 WHERE
-  user_email = ?
+  user_name = ?
   AND api_key = ?
 ;

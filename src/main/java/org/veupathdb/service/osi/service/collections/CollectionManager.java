@@ -14,7 +14,9 @@ import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.NewIdSetCollection;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.repo.*;
-import org.veupathdb.service.osi.service.idsets.IdSetManager;
+import org.veupathdb.service.osi.service.genes.GeneRepo;
+import org.veupathdb.service.osi.service.genes.IdSetManager;
+import org.veupathdb.service.osi.service.genes.TranscriptRepo;
 import org.veupathdb.service.osi.service.organism.OrganismRepo;
 import org.veupathdb.service.osi.service.user.UserRepo;
 
@@ -41,7 +43,7 @@ public class CollectionManager
 
   public static IdSetCollection getCollection(final int collectionId) {
     try {
-      var collection = CollectionRepo.selectCollection(collectionId)
+      var collection = CollectionRepo.select(collectionId)
         .orElseThrow(NotFoundException::new);
 
       var users = UserRepo.selectUsersByCollection(collectionId);
@@ -70,7 +72,7 @@ public class CollectionManager
 
   public static List < IdSetCollection > findCollections(RecordQuery query) {
     try {
-      var collections = CollectionRepo.findCollectionRows(query);
+      var collections = CollectionRepo.select(query);
 
       var collIds = collections.stream()
         .mapToInt(org.veupathdb.service.osi.model.db.IdSetCollection::getCollectionId)

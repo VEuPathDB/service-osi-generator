@@ -6,9 +6,13 @@ import org.veupathdb.service.osi.util.Errors;
 import org.veupathdb.service.osi.util.Format;
 import org.veupathdb.service.osi.util.Validation;
 
+/**
+ * Immutable representation of an expanded Organism record containing references
+ * to immutable representations of all parent/depended records.
+ */
 public class Organism extends NewOrganism
 {
-  private final int id;
+  private final long id;
 
   private final long geneCountCur;
 
@@ -19,7 +23,7 @@ public class Organism extends NewOrganism
   private final OffsetDateTime modified;
 
   public Organism(
-    int id,
+    long id,
     String name,
     String template,
     long geneCountStart,
@@ -64,7 +68,7 @@ public class Organism extends NewOrganism
     );
   }
 
-  public int getId() {
+  public long getId() {
     return id;
   }
 
@@ -82,11 +86,6 @@ public class Organism extends NewOrganism
 
   public OffsetDateTime getModified() {
     return modified;
-  }
-
-  @Override
-  public String toString() {
-    return Errors.toRuntime(this, Format.Json()::writeValueAsString);
   }
 
   public Organism incrementGeneCounter(int by) {
@@ -119,4 +118,8 @@ public class Organism extends NewOrganism
     );
   }
 
+  @Override
+  public String toString() {
+    return Errors.toRuntime(this, Format.Json()::writeValueAsString);
+  }
 }
