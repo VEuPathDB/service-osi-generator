@@ -14,11 +14,24 @@ import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.repo.Schema.Osi.Organisms;
 import org.veupathdb.service.osi.service.user.UserUtil;
 
-class OrganismUtils
+public class OrganismUtil
 {
+  public static long parseId(final ResultSet rs) throws Exception {
+    return rs.getLong(Organisms.ORGANISM_ID);
+  }
+
+  public static long parseGeneCounter(final ResultSet rs) throws Exception {
+    return rs.getLong(Organisms.GENE_COUNTER_CURRENT);
+  }
+
+  public static long parseTranscriptCounter(final ResultSet rs)
+  throws Exception {
+    return rs.getLong(Organisms.TRANSCRIPT_COUNTER_CURRENT);
+  }
+
   static Organism newOrganism(
     final ResultSet rs,
-    final Map < Integer, User > users
+    final Map < Long, User > users
   ) throws Exception {
     return new Organism(
       rs.getInt(Organisms.ORGANISM_ID),

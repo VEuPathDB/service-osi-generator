@@ -38,9 +38,9 @@ public class OrganismService
 
   public static List < OrganismResponse > handleSearch(RecordQuery query) {
     try {
-      return OrganismRepo.findOrganisms(Objects.requireNonNull(query))
+      return OrganismRepo.search(Objects.requireNonNull(query))
         .stream()
-        .map(OrganismUtils::org2OrgRes)
+        .map(OrganismUtil::org2OrgRes)
         .collect(Collectors.toList());
     } catch (Exception e) {
       throw new InternalServerErrorException(e);
@@ -60,7 +60,7 @@ public class OrganismService
       return (either.isLeft()
         ? OrganismRepo.selectByName(either.getLeft())
         : OrganismRepo.selectById(either.getRight()))
-        .map(OrganismUtils::org2OrgRes)
+        .map(OrganismUtil::org2OrgRes)
         .orElseThrow(NotFoundException::new);
     } catch (Exception e) {
       throw Errors.wrapErr(e);
@@ -80,7 +80,7 @@ public class OrganismService
     validateOrgCreateRequest(req);
 
     try {
-      var org = OrganismRepo.insert(OrganismUtils.orgReq2NewOrg(
+      var org = OrganismRepo.insert(OrganismUtil.orgReq2NewOrg(
         Objects.requireNonNull(req), Objects.requireNonNull(user)));
       return org.getId();
     } catch (Exception e) {
