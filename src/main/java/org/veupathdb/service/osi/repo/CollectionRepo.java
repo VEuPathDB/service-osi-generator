@@ -36,7 +36,7 @@ public class CollectionRepo
   public static Map < Long, IdSetCollection > select(long[] ids)
   throws Exception {
     return new BasicPreparedMapReadQuery <>(
-      SQL.Insert.Osi.COLLECTION,
+      SQL.Select.Osi.Collections.BY_IDS,
       DbMan.connection(),
       CollectionUtils::getCollectionId,
       CollectionUtils::newCollection,
@@ -46,19 +46,12 @@ public class CollectionRepo
 
   public static Optional < IdSetCollection > select(long id)
   throws Exception {
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Osi.Collections.BY_ID)
-    ) {
-      ps.setInt(1, id);
-
-      try (var rs = ps.executeQuery()) {
-        if (!rs.next())
-          return Optional.empty();
-
-        return Optional.of(CollectionUtils.newCollection(rs));
-      }
-    }
+    return new BasicPreparedReadQuery<>(
+      SQL.Select.Osi.Collections.BY_ID,
+      DbMan.connection(),
+      QueryUtil.option(CollectionUtils::newCollection),
+      QueryUtil.singleId(id)
+    ).execute().getValue();
   }
 
   public static List < IdSetCollection > select(
