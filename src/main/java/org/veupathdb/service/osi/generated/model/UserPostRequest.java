@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(
-    as = AuthPostApplicationJsonImpl.class
+    as = UserPostRequestImpl.class
 )
-public interface AuthPostApplicationJson {
+public interface UserPostRequest {
   @JsonProperty("username")
   String getUsername();
 

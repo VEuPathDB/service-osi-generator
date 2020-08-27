@@ -355,12 +355,7 @@ securedBy: basic
       This endpoint may only be used by a user or application with access to the
       singular set of admin credentials.
     body:
-      type: object
-      properties:
-        username:
-          type: string
-          minLength: 3
-      additionalProperties: false
+      type: UserPostRequest
       example:
         username: someApplicationName
     responses:
@@ -600,4 +595,12 @@ types:
     type: object
     properties:
       name:
+    additionalProperties: false
+
+  UserPostRequest:
+    type: object
+    properties:
+      username:
+        type: string
+        minLength: 3
     additionalProperties: false

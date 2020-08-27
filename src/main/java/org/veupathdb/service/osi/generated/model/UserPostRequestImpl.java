@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder("username")
-public class AuthPostApplicationJsonImpl implements AuthPostApplicationJson {
+public class UserPostRequestImpl implements UserPostRequest {
   @JsonProperty("username")
   private String username;
 

@@ -11,6 +11,14 @@ import org.veupathdb.service.osi.model.db.User;
 
 public class UserService
 {
+  private static final UserService instance = new UserService();
+
+  public static UserService getInstance() {
+    return instance;
+  }
+
+  public static User createUser(AuthP)
+
   public static User requireRequestUser(Request req) {
     if (!(Objects.requireNonNull(req) instanceof ContainerRequest))
       throw new InternalServerErrorException("Invalid request type");
