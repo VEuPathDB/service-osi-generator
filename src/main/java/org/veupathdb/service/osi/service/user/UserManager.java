@@ -118,7 +118,7 @@ public class UserManager
     if (tmp != null)
       return tmp;
 
-    return putLocalUser(UserUtils.newUser(rs));
+    return putLocalUser(UserUtil.newUser(rs));
   }
 
   //////////////////////////////////////////////////////////////////////////////

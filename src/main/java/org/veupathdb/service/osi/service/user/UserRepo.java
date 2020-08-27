@@ -66,7 +66,7 @@ public class UserRepo
 
       try (var rs = ps.executeQuery()) {
         while (rs.next()) {
-          final var user = UserUtils.newUser(rs);
+          final var user = UserUtil.newUser(rs);
           out.put(user.getUserId(), user);
         }
       }
@@ -88,7 +88,7 @@ public class UserRepo
 
       try (var rs = ps.executeQuery()) {
         while (rs.next()) {
-          var row = UserUtils.newUser(rs);
+          var row = UserUtil.newUser(rs);
           out.put(row.getUserId(), row);
         }
       }
@@ -111,7 +111,7 @@ public class UserRepo
 
       try (var rs = ps.executeQuery()) {
         while (rs.next()) {
-          var row = UserUtils.newUser(rs);
+          var row = UserUtil.newUser(rs);
           out.put(row.getUserId(), row);
         }
       }
@@ -133,7 +133,7 @@ public class UserRepo
 
       try (var rs = ps.executeQuery()) {
         while (rs.next()) {
-          var row = UserUtils.newUser(rs);
+          var row = UserUtil.newUser(rs);
           out.put(row.getUserId(), row);
         }
       }
@@ -165,7 +165,7 @@ public class UserRepo
         if (!rs.next())
           return Optional.empty();
 
-        return Optional.of(UserUtils.newUser(rs));
+        return Optional.of(UserUtil.newUser(rs));
       }
     }
   }
@@ -197,7 +197,7 @@ public class UserRepo
         if (!rs.next())
           return Optional.empty();
 
-        return Optional.of(UserUtils.newUser(rs));
+        return Optional.of(UserUtil.newUser(rs));
       }
     }
   }
@@ -214,7 +214,7 @@ public class UserRepo
         if (!rs.next())
           return Optional.empty();
 
-        return Optional.of(UserUtils.newUser(rs));
+        return Optional.of(UserUtil.newUser(rs));
       }
     }
   }

@@ -12,7 +12,7 @@ import org.veupathdb.service.osi.model.db.NewOrganism;
 import org.veupathdb.service.osi.model.db.Organism;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.repo.Schema.Osi.Organisms;
-import org.veupathdb.service.osi.service.user.UserUtils;
+import org.veupathdb.service.osi.service.user.UserUtil;
 
 class OrganismUtils
 {
@@ -43,7 +43,7 @@ class OrganismUtils
       rs.getLong(Organisms.GENE_COUNTER_CURRENT),
       rs.getLong(Organisms.TRANSCRIPT_COUNTER_START),
       rs.getLong(Organisms.TRANSCRIPT_COUNTER_CURRENT),
-      UserUtils.newUser(rs),
+      UserUtil.newUser(rs),
       rs.getObject(Organisms.CREATED_ON, OffsetDateTime.class),
       rs.getObject(Organisms.LAST_MODIFIED, OffsetDateTime.class)
     );
