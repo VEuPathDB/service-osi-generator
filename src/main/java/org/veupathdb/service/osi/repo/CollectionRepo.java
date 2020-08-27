@@ -12,6 +12,7 @@ import org.veupathdb.service.osi.model.db.NewIdSetCollection;
 import org.veupathdb.service.osi.repo.Schema.Osi.Collections;
 import org.veupathdb.service.osi.service.collections.CollectionUtils;
 import org.veupathdb.service.osi.service.DbMan;
+import org.veupathdb.service.osi.util.QueryUtil;
 
 public class CollectionRepo
 {
@@ -20,11 +21,11 @@ public class CollectionRepo
     return new BasicPreparedReadQuery <>(
       SQL.Insert.Osi.COLLECTION,
       DbMan.connection(),
-      rs -> new IdSetCollection(
+      QueryUtil.must(rs -> new IdSetCollection(
         rs.getInt(Collections.COLLECTION_ID),
         rs.getObject(Collections.CREATED_ON, OffsetDateTime.class),
         coll
-      ),
+      )),
       ps -> {
         ps.setString(1, coll.getName());
         ps.setLong(2, coll.getCreatedBy().getUserId());
@@ -39,7 +40,7 @@ public class CollectionRepo
       DbMan.connection(),
       CollectionUtils::getCollectionId,
       CollectionUtils::newCollection,
-      ps -> ps.setObject(1, ids)
+      QueryUtil.idSet(ids)
     ).execute().getValue();
   }
 
