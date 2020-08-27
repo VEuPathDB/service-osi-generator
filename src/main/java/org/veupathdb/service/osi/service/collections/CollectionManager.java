@@ -110,7 +110,7 @@ public class CollectionManager
       IdSetManager.buildTrees(
         idSets,
         genes,
-        TranscriptRepo.selectTranscriptsByCollections(
+        TranscriptRepo.selectByCollectionIds(
           collIds,
           users,
           genes))

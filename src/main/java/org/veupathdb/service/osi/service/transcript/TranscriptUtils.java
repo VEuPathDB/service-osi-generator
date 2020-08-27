@@ -45,21 +45,22 @@ public class TranscriptUtils
     return getInstance().parseId(rs);
   }
 
-  public static TranscriptRow newTranscriptRow(ResultSet rs) throws Exception {
+  public static TranscriptRow newTranscriptRow(final ResultSet rs)
+  throws Exception {
     return getInstance().createTranscriptRow(rs);
   }
 
   public static Transcript newTranscript(
     final ResultSet rs,
-    final Map < Integer, User > users,
-    final Map < Integer, Gene > genes
+    final Map < Long, User > users,
+    final Map < Long, Gene > genes
   ) throws Exception {
     return getInstance().createTranscript(rs, users, genes);
   }
 
   public static Transcript newTranscript(
     final ResultSet rs,
-    final Map < Integer, Gene > genes
+    final Map < Long, Gene > genes
   ) throws Exception {
     return getInstance().createTranscript(rs, genes);
   }
@@ -99,28 +100,28 @@ public class TranscriptUtils
 
   public Transcript createTranscript(
     final ResultSet rs,
-    final Map < Integer, User > users,
-    final Map < Integer, Gene > genes
+    final Map < Long, User > users,
+    final Map < Long, Gene > genes
   ) throws Exception {
     log.trace("TranscriptUtils#createTranscript(ResultSet, Map, Map)");
     return new Transcript(
       rs.getLong(Transcripts.TRANSCRIPT_ID),
-      genes.get(rs.getInt(Transcripts.GENE_ID)),
+      genes.get(rs.getLong(Transcripts.GENE_ID)),
       rs.getLong(Transcripts.COUNTER_START),
       rs.getInt(Transcripts.NUM_ISSUED),
-      users.get(rs.getInt(Transcripts.CREATED_BY)),
+      users.get(rs.getLong(Transcripts.CREATED_BY)),
       rs.getObject(Transcripts.CREATED_ON, OffsetDateTime.class)
     );
   }
 
   public Transcript createTranscript(
     final ResultSet rs,
-    final Map < Integer, Gene > genes
+    final Map < Long, Gene > genes
   ) throws Exception {
     log.trace("TranscriptUtils#createTranscript(ResultSet, Map)");
     return new Transcript(
       rs.getLong(Transcripts.TRANSCRIPT_ID),
-      genes.get(rs.getInt(Transcripts.GENE_ID)),
+      genes.get(rs.getLong(Transcripts.GENE_ID)),
       rs.getLong(Transcripts.COUNTER_START),
       rs.getInt(Transcripts.NUM_ISSUED),
       UserManager.getLocal(rs.getInt(Transcripts.CREATED_BY)).orElseThrow(),

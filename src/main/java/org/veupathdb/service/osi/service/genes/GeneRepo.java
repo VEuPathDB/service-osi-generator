@@ -1,11 +1,8 @@
 package org.veupathdb.service.osi.service.genes;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedMapReadQuery;
 import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.IdSet;
@@ -14,17 +11,18 @@ import org.veupathdb.service.osi.model.db.raw.GeneRow;
 import org.veupathdb.service.osi.repo.SQL;
 import org.veupathdb.service.osi.repo.Schema;
 import org.veupathdb.service.osi.service.DbMan;
+import org.veupathdb.service.osi.util.QueryUtil;
 
 public class GeneRepo
 {
-  public static Map < Integer, GeneRow > selectBySetIds(int[] ids)
+  public static Map < Integer, GeneRow > selectBySetIds(long[] ids)
   throws Exception {
     return new BasicPreparedMapReadQuery <>(
       SQL.Select.Osi.Genes.BY_ID_SETS,
       DbMan.connection(),
       rs -> rs.getInt(Schema.Osi.Transcripts.GENE_ID),
       GeneUtils::newGeneRow,
-      ps -> ps.setObject(1, ids)
+      QueryUtil.idSet(ids)
     ).execute().getValue();
   }
 

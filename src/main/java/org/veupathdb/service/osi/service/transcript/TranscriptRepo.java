@@ -25,9 +25,9 @@ public class TranscriptRepo
     ).execute().getValue();
   }
 
-  public static List < Transcript > selectByGenes(
+  public static List < Transcript > selectByGeneIds(
     final long[] geneIds,
-    final Map < Integer, Gene > genes
+    final Map < Long, Gene > genes
   ) throws Exception {
     return new BasicPreparedListReadQuery<>(
       Transcripts.BY_GENES,
@@ -37,32 +37,23 @@ public class TranscriptRepo
     ).execute().getValue();
   }
 
-  public static List < Transcript > selectTranscriptsByCollections(
-    final int[] collectionIds,
-    final Map < Integer, User > users,
-    final Map < Integer, Gene > genes
+  public static List < Transcript > selectByCollectionIds(
+    final long[] collectionIds,
+    final Map < Long, User > users,
+    final Map < Long, Gene > genes
   ) throws Exception {
-    var out = new ArrayList<Transcript>();
-
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(Transcripts.BY_COLLECTIONS)
-    ) {
-      ps.setObject(1, collectionIds);
-
-      try (var rs = ps.executeQuery()) {
-        while (rs.next())
-          out.add(TranscriptUtils.newTranscript(rs, users, genes));
-      }
-    }
-
-    return out;
+    return new BasicPreparedListReadQuery<>(
+      Transcripts.BY_COLLECTIONS,
+      DbMan::connection,
+      rs -> TranscriptUtils.newTranscript(rs, users, genes),
+      QueryUtil.idSet(collectionIds)
+    ).execute().getValue();
   }
 
   public static List < Transcript > selectTranscriptsByCollection(
     final int collectionId,
-    final Map < Integer, User > users,
-    final Map < Integer, Gene > genes
+    final Map < Long, User > users,
+    final Map < Long, Gene > genes
   ) throws Exception {
     var out = new ArrayList<Transcript>();
 

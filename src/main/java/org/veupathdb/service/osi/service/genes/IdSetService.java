@@ -84,15 +84,15 @@ public class IdSetService
 
       var genes = GeneRepo.selectBySetIds(sets.values()
         .stream()
-        .mapToInt(IdSetResponse::getIdSetId)
+        .mapToLong(IdSetResponse::getIdSetId)
         .toArray());
 
       var transcripts = TranscriptRepo.selectByGeneIds(genes.keySet()
         .stream()
-        .mapToInt(Integer::intValue)
-        .toArray())
-        .stream()
-        .map(t -> );
+        .mapToLong(Integer::intValue)
+        .toArray());
+
+
 
     } catch (Exception e) {
       throw Errors.wrapErr(e);
