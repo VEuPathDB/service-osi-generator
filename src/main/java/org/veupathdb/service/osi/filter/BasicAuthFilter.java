@@ -13,11 +13,25 @@ import javax.ws.rs.ext.Provider;
 
 import org.veupathdb.lib.container.jaxrs.Globals;
 import org.veupathdb.service.osi.service.user.UserManager;
+import org.veupathdb.service.osi.util.InputValidationException;
+import org.veupathdb.service.osi.util.Validation;
 
 @Provider
 @Priority(4)
 public class BasicAuthFilter implements ContainerRequestFilter
 {
+  /**
+   * Minimum number of characters an admin username must contain.
+   */
+  private static final int MIN_USER_LENGTH = 8;
+
+  /**
+   * Minimum number of characters an admin password must contain.
+   */
+  private static final int MIN_PASS_LENGTH = 32;
+
+  public static final String ADMIN_FLAG = "userIsAdmin";
+
   private static final String
     authHeader = "Authorization",
     authPrefix = "Basic ";
@@ -25,9 +39,34 @@ public class BasicAuthFilter implements ContainerRequestFilter
   private final String user;
   private final String pass;
 
+  /**
+   * Creates a new instance of the {@code BasicAuthFilter} class with the given
+   * user admin credentials.
+   * <p>
+   * The user admin credentials are to support an auth exception for the
+   * {@code /auth} endpoints.  Those endpoints are only accessible to requests
+   * made with these admin credentials.  Additionally, these credentials grant
+   * no access to any other services or endpoints.
+   * <p>
+   * To enforce some level of security on these credentials, the {@code pass}
+   * value must be at least {@link #MIN_PASS_LENGTH} characters in length.
+   *
+   * @param user User creation admin credentials username.
+   * @param pass User creation admin credentials password.
+   *
+   * @throws InputValidationException if any of the following are true:
+   * <ul>
+   *   <li>{@code user} is {@code null}</li>
+   *   <li>{@code user} contains only space characters</li>
+   *   <li>{@code user.length()} is less than {@link #MIN_USER_LENGTH} characters</li>
+   *   <li>{@code pass} is {@code null}</li>
+   *   <li>{@code pass} contains only space characters</li>
+   *   <li>{@code pass.length()} is less than {@link #MIN_PASS_LENGTH} characters</li>
+   * </ul>
+   */
   public BasicAuthFilter(String user, String pass) {
-    this.user = user;
-    this.pass = pass;
+    this.user = Validation.minLength(8, user);
+    this.pass = Validation.minLength(32, pass);
   }
 
   @Override
@@ -53,8 +92,10 @@ public class BasicAuthFilter implements ContainerRequestFilter
         && split[1].equals(pass)
         && ctx.getUriInfo().getPath().equals("/auth")
         && ctx.getMethod().equals("POST")
-      )
+      ) {
+        ctx.setProperty(ADMIN_FLAG, true);
         return;
+      }
 
       final var opt = UserManager.lookup(split[0], split[1]);
 

@@ -1,40 +1,23 @@
 package org.veupathdb.service.osi.controller;
 
-import java.util.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
 
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.InternalServerErrorException;
-
-import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
-import org.veupathdb.service.osi.generated.model.AuthPostApplicationJson;
-import org.veupathdb.service.osi.generated.model.NewUserResponseImpl;
+import org.veupathdb.service.osi.generated.model.UserPostRequest;
 import org.veupathdb.service.osi.generated.resources.Auth;
-import org.veupathdb.service.osi.service.user.UserManager;
+import org.veupathdb.service.osi.service.user.UserService;
 
 public class AuthController implements Auth
 {
+  private final Request req;
+
+  public AuthController(@Context Request req) {
+    this.req = req;
+  }
+
   @Override
-  public PostAuthResponse postAuth(AuthPostApplicationJson entity) {
-    try {
-      if (entity == null)
-        throw new BadRequestException();
-
-      if (entity.getUsername() == null || entity.getUsername().isBlank())
-        throw new UnprocessableEntityException(new HashMap <String, List <String> >(){{
-          put("username", new ArrayList <>(){{add("username is required");}});
-        }});
-
-      var user = UserManager.create(entity.getUsername());
-
-      var out = new NewUserResponseImpl();
-      out.setUserId(user.getUserId());
-      out.setApiKey(user.getApiKey());
-      out.setUserName(user.getUserName());
-      out.setIssued(Date.from(user.getIssued().toInstant()));
-
-      return PostAuthResponse.respond200WithApplicationJson(out);
-    } catch (Exception e) {
-      throw new InternalServerErrorException(e);
-    }
+  public PostAuthResponse postAuth(UserPostRequest entity) {
+    return PostAuthResponse.respond200WithApplicationJson(
+      UserService.createUser(entity, req));
   }
 }
