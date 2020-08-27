@@ -7,7 +7,7 @@ public class RecordQuery
   private String name;
   private OffsetDateTime start;
   private OffsetDateTime end;
-  private Integer createdById;
+  private Long createdById;
   private String createdByName;
 
   public String getName() {
@@ -49,11 +49,11 @@ public class RecordQuery
     return end != null;
   }
 
-  public Integer getCreatedById() {
+  public Long getCreatedById() {
     return createdById;
   }
 
-  public void setCreatedById(Integer createdById) {
+  public void setCreatedById(Long createdById) {
     this.createdById = createdById;
   }
 

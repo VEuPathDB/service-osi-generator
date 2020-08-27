@@ -21,4 +21,10 @@ public final class Field
       CREATED_BY     = Common.CREATED_BY,
       CREATED_ON     = Common.CREATED_ON;
   }
+
+  public static final class Collection
+  {
+    public static final String
+      NAME = "name";
+  }
 }

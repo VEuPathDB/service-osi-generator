@@ -167,7 +167,7 @@ securedBy: basic
           asterisk (`*`) character.
     responses:
       200:
-        body: SimpleCollectionResponse[]
+        body: CollectionResponse[]
       401:
         body: error.UnauthorizedError
       403:
@@ -439,26 +439,6 @@ types:
     format: int64
     minimum: 1
     maximum: 9223372036854775807
-
-  SimpleCollectionResponse:
-    type: object
-    properties:
-      collectionId: OneBasedLong
-      name: string
-      idSets: SimpleIdSetResponse[]
-      createdOn: datetime
-      createdBy: OneBasedLong
-    additionalProperties: false
-
-  SimpleIdSetResponse:
-    type: object
-    properties:
-      idSetId: OneBasedLong
-      organismId: OneBasedLong
-      template: TemplatePattern
-      createdOn: datetime
-      createdBy: OneBasedLong
-    additionalProperties: false
 
   IdSetPostRequest:
     type: object

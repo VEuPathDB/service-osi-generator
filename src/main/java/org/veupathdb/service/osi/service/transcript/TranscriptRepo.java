@@ -37,15 +37,13 @@ public class TranscriptRepo
     ).execute().getValue();
   }
 
-  public static List < Transcript > selectByCollectionIds(
-    final long[] collectionIds,
-    final Map < Long, User > users,
-    final Map < Long, Gene > genes
+  public static List < TranscriptRow > selectByCollectionIds(
+    final long[] collectionIds
   ) throws Exception {
     return new BasicPreparedListReadQuery<>(
       Transcripts.BY_COLLECTIONS,
       DbMan::connection,
-      rs -> TranscriptUtils.newTranscript(rs, users, genes),
+      TranscriptUtils::newTranscriptRow,
       QueryUtil.idSet(collectionIds)
     ).execute().getValue();
   }

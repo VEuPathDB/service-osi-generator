@@ -16,7 +16,6 @@ import org.veupathdb.service.osi.generated.model.ForbiddenError;
 import org.veupathdb.service.osi.generated.model.IdSetCollectionPostRequest;
 import org.veupathdb.service.osi.generated.model.NotFoundError;
 import org.veupathdb.service.osi.generated.model.ServerError;
-import org.veupathdb.service.osi.generated.model.SimpleCollectionResponse;
 import org.veupathdb.service.osi.generated.model.UnauthorizedError;
 import org.veupathdb.service.osi.generated.model.UnprocessableEntityError;
 import org.veupathdb.service.osi.generated.support.ResponseDelegate;
@@ -101,9 +100,9 @@ public interface IdSetCollections {
     }
 
     public static GetIdSetCollectionsResponse respond200WithApplicationJson(
-        List<SimpleCollectionResponse> entity) {
+        List<CollectionResponse> entity) {
       Response.ResponseBuilder responseBuilder = Response.status(200).header("Content-Type", "application/json");
-      GenericEntity<List<SimpleCollectionResponse>> wrappedEntity = new GenericEntity<List<SimpleCollectionResponse>>(entity){};
+      GenericEntity<List<CollectionResponse>> wrappedEntity = new GenericEntity<List<CollectionResponse>>(entity){};
       responseBuilder.entity(wrappedEntity);
       return new GetIdSetCollectionsResponse(responseBuilder.build(), wrappedEntity);
     }

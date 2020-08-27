@@ -49,6 +49,13 @@ public class GeneRepo
     return getInstance().getByCollectionIds(collectionIds, users, idSets);
   }
 
+  public static Map < Long, GeneRow > selectByCollectionIds(
+    final long[] collectionIds
+  ) throws Exception {
+    return getInstance().getByCollectionIds(collectionIds);
+  }
+
+
   public static Map < Long, Gene > selectByCollectionId(
     final long collection,
     final Map < Long, User > users,
@@ -106,6 +113,19 @@ public class GeneRepo
       DbMan::connection,
       GeneUtil.getInstance()::parseId,
       rs -> GeneUtil.newGene(rs, users, idSets),
+      QueryUtil.idSet(collectionIds)
+    ).execute().getValue();
+  }
+
+  public Map < Long, GeneRow > getByCollectionIds(
+    final long[] collectionIds
+  ) throws Exception {
+    log.trace("GeneRepo#getByCollectionIds(long[], Map, Map)");
+    return new BasicPreparedMapReadQuery<>(
+      Genes.BY_COLLECTIONS,
+      DbMan::connection,
+      GeneUtil.getInstance()::parseId,
+      GeneUtil::newGeneRow,
       QueryUtil.idSet(collectionIds)
     ).execute().getValue();
   }

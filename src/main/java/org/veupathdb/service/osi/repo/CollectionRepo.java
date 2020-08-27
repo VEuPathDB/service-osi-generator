@@ -9,6 +9,7 @@ import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.NewIdSetCollection;
+import org.veupathdb.service.osi.model.db.raw.IdSetCollectionRow;
 import org.veupathdb.service.osi.repo.Schema.Osi.Collections;
 import org.veupathdb.service.osi.service.collections.CollectionUtils;
 import org.veupathdb.service.osi.service.DbMan;
@@ -54,7 +55,7 @@ public class CollectionRepo
     ).execute().getValue();
   }
 
-  public static List < IdSetCollection > select(
+  public static List < IdSetCollectionRow > select(
     final RecordQuery query
   ) throws Exception {
     try (
@@ -77,7 +78,7 @@ public class CollectionRepo
         ps.setNull(3, Types.TIMESTAMP_WITH_TIMEZONE);
 
       if (query.hasCreatedById())
-        ps.setInt(4, query.getCreatedById());
+        ps.setLong(4, query.getCreatedById());
       else
         ps.setNull(4, Types.INTEGER);
 
@@ -87,10 +88,10 @@ public class CollectionRepo
         ps.setNull(5, Types.VARCHAR);
 
       try (var rs = ps.executeQuery()) {
-        var out = new ArrayList <IdSetCollection>();
+        var out = new ArrayList <IdSetCollectionRow>();
 
         while (rs.next())
-          out.add(CollectionUtils.newCollection(rs));
+          out.add(CollectionUtils.newCollectionRow(rs));
 
         return out;
       }

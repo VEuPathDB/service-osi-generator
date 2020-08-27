@@ -38,7 +38,7 @@ public class IdSetRepo
         ps.setNull(2, Types.TIMESTAMP_WITH_TIMEZONE);
 
       if (query.hasCreatedById())
-        ps.setInt(3, query.getCreatedById());
+        ps.setLong(3, query.getCreatedById());
       else
         ps.setNull(3, Types.INTEGER);
 
@@ -64,6 +64,16 @@ public class IdSetRepo
       DbMan::connection,
       IdSetUtils::newIdSetRow,
       QueryUtil.singleId(collectionId)
+    ).execute().getValue();
+  }
+
+  public static List < IdSetRow > selectByCollectionIds(long[] collectionIds)
+  throws Exception {
+    return new BasicPreparedListReadQuery<>(
+      SQL.Select.Osi.IdSets.BY_COLLECTIONS,
+      DbMan::connection,
+      IdSetUtils::newIdSetRow,
+      QueryUtil.idSet(collectionIds)
     ).execute().getValue();
   }
 
