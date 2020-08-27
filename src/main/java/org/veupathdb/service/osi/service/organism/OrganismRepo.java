@@ -13,7 +13,7 @@ import org.veupathdb.service.osi.model.db.NewOrganism;
 import org.veupathdb.service.osi.model.db.Organism;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.repo.SQL;
-import org.veupathdb.service.osi.repo.SQL.Select;
+import org.veupathdb.service.osi.repo.SQL.Select.Osi.Organisms;
 import org.veupathdb.service.osi.service.DbMan;
 import org.veupathdb.service.osi.util.QueryUtil;
 
@@ -166,7 +166,7 @@ public class OrganismRepo
     final Map < Long, User > users
   ) throws Exception {
     return new BasicPreparedMapReadQuery <>(
-      Select.Osi.Organisms.BY_COLLECTIONS,
+      Organisms.BY_COLLECTIONS,
       DbMan::connection,
       OrganismUtil::parseId,
       rs -> OrganismUtil.newOrganism(rs, users),
@@ -179,7 +179,7 @@ public class OrganismRepo
     final Map < Long, User > users
   ) throws Exception {
     return new BasicPreparedMapReadQuery <>(
-      Select.Osi.Organisms.BY_COLLECTIONS,
+      Organisms.BY_COLLECTIONS,
       DbMan::connection,
       OrganismUtil::parseId,
       rs -> OrganismUtil.newOrganism(rs, users),
@@ -216,9 +216,9 @@ public class OrganismRepo
   public Optional < Organism > getById(long orgId, Connection con)
   throws Exception {
     return new BasicPreparedReadQuery <>(
-      Select.Osi.Organisms.BY_ID,
+      Organisms.BY_ID,
       con,
-      OrganismRepo::rsToOptOrg,
+      QueryUtil.option(OrganismUtil::newOrganism),
       QueryUtil.singleId(orgId)
     ).execute().getValue();
   }
@@ -226,11 +226,11 @@ public class OrganismRepo
   public Map < Long, Organism > getByIds(long[] organismIds)
   throws Exception {
     return new BasicPreparedMapReadQuery<>(
-      Select.Osi.Organisms.BY_IDS,
+      Organisms.BY_IDS,
       DbMan::connection,
-      OrganismRepo::getOrgId,
+      OrganismUtil::parseId,
       OrganismUtil::newOrganism,
-      ps -> ps.setObject(1, organismIds)
+      QueryUtil.idSet(organismIds)
     ).execute().getValue();
   }
 
@@ -244,10 +244,10 @@ public class OrganismRepo
   public Optional < Organism > getByName(String name, Connection con)
   throws Exception {
     return new BasicPreparedReadQuery<>(
-      Select.Osi.Organisms.BY_NAME,
+      Organisms.BY_NAME,
       con,
-      OrganismRepo::rsToOptOrg,
-      ps -> ps.setString(1, name)
+      QueryUtil.option(OrganismUtil::newOrganism),
+      QueryUtil.singleString(name)
     ).execute().getValue();
   }
 
@@ -262,7 +262,7 @@ public class OrganismRepo
   public List < Organism > getByQuery(RecordQuery query)
   throws Exception {
     return new BasicPreparedListReadQuery<>(
-      Select.Osi.Organisms.BY_QUERY,
+      Organisms.BY_QUERY,
       DbMan::connection,
       OrganismUtil::newOrganism,
       ps -> {
@@ -303,7 +303,7 @@ public class OrganismRepo
       SQL.Update.Osi.Organisms.TEMPLATE,
       con,
       ps -> {
-        ps.setInt(1, orgId);
+        ps.setLong(1, orgId);
         ps.setString(2, template);
       }
     ).execute();
@@ -320,7 +320,7 @@ public class OrganismRepo
       SQL.Update.Osi.Organisms.FULL_RECORD,
       con,
       ps -> {
-        ps.setInt(1, orgId);
+        ps.setLong(1, orgId);
         ps.setString(2, template);
         ps.setLong(3, geneCounter);
         ps.setLong(4, tranCounter);

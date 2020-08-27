@@ -11,6 +11,10 @@ public class QueryUtil
     return ps -> ps.setLong(1, id);
   }
 
+  public static StatementPreparer singleString(String id) {
+    return ps -> ps.setString(1, id);
+  }
+
   public static StatementPreparer idSet(long[] ids) {
     return ps -> ps.setObject(1, ids);
   }

@@ -73,7 +73,7 @@ public class OrganismService
   // ║                                                                    ║ //
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
-  public static int handleCreate(OrganismPostRequest req, User user) {
+  public static long handleCreate(OrganismPostRequest req, User user) {
     if (req == null)
       throw new BadRequestException();
 
