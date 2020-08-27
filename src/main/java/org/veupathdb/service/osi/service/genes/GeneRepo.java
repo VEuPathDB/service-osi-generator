@@ -13,7 +13,53 @@ import org.veupathdb.service.osi.util.QueryUtil;
 
 public class GeneRepo
 {
+  private static final GeneRepo instance = new GeneRepo();
+
+  // ╔════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                    ║ //
+  // ║    Static Access Methods                                           ║ //
+  // ║                                                                    ║ //
+  // ╚════════════════════════════════════════════════════════════════════╝ //
+
+  public static GeneRepo getInstance() {
+    return instance;
+  }
+
   public static Map < Long, GeneRow > selectBySetIds(long[] ids)
+  throws Exception {
+    return getInstance().getBySetIds(ids);
+  }
+
+  public static Map < Long, Gene > selectByIdSets(
+    final long[] setIds,
+    final Map < Long, IdSet > idSets
+  ) throws Exception {
+    return getInstance().getByIdSets(setIds, idSets);
+  }
+
+  public static Map < Long, Gene > selectByCollectionIds(
+    final long[] collectionIds,
+    final Map < Long, User > users,
+    final Map < Long, IdSet > idSets
+  ) throws Exception {
+    return getInstance().getByCollectionIds(collectionIds, users, idSets);
+  }
+
+  public static Map < Long, Gene > selectByCollectionId(
+    final long collection,
+    final Map < Long, User > users,
+    final Map < Long, IdSet > idSets
+  ) throws Exception {
+    return getInstance().getByCollectionId(collection, users, idSets);
+  }
+
+  // ╔════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                    ║ //
+  // ║    Mockable Instance Methods                                       ║ //
+  // ║                                                                    ║ //
+  // ╚════════════════════════════════════════════════════════════════════╝ //
+
+  public Map < Long, GeneRow > getBySetIds(long[] ids)
   throws Exception {
     return new BasicPreparedMapReadQuery <>(
       Genes.BY_ID_SETS,
@@ -24,7 +70,7 @@ public class GeneRepo
     ).execute().getValue();
   }
 
-  public static Map < Long, Gene > selectByIdSets(
+  public Map < Long, Gene > getByIdSets(
     final long[] setIds,
     final Map < Long, IdSet > idSets
   ) throws Exception {
@@ -37,7 +83,7 @@ public class GeneRepo
     ).execute().getValue();
   }
 
-  public static Map < Long, Gene > selectByCollectionIds(
+  public Map < Long, Gene > getByCollectionIds(
     final long[] collectionIds,
     final Map < Long, User > users,
     final Map < Long, IdSet > idSets
@@ -51,7 +97,7 @@ public class GeneRepo
     ).execute().getValue();
   }
 
-  public static Map < Long, Gene > selectByCollectionId(
+  public Map < Long, Gene > getByCollectionId(
     final long collection,
     final Map < Long, User > users,
     final Map < Long, IdSet > idSets
@@ -64,4 +110,5 @@ public class GeneRepo
       QueryUtil.singleId(collection)
     ).execute().getValue();
   }
+
 }
