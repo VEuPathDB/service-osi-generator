@@ -12,6 +12,7 @@ import org.veupathdb.service.osi.generated.model.IdSetResponse;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.repo.IdSetRepo;
+import org.veupathdb.service.osi.service.transcript.TranscriptRepo;
 import org.veupathdb.service.osi.util.Errors;
 import org.veupathdb.service.osi.util.Params;
 

@@ -16,7 +16,7 @@ import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.repo.*;
 import org.veupathdb.service.osi.service.genes.GeneRepo;
 import org.veupathdb.service.osi.service.genes.IdSetManager;
-import org.veupathdb.service.osi.service.genes.TranscriptRepo;
+import org.veupathdb.service.osi.service.transcript.TranscriptRepo;
 import org.veupathdb.service.osi.service.organism.OrganismRepo;
 import org.veupathdb.service.osi.service.user.UserRepo;
 

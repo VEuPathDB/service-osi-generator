@@ -1,4 +1,4 @@
-package org.veupathdb.service.osi.service.genes;
+package org.veupathdb.service.osi.service.transcript;
 
 import java.util.ArrayList;
 import java.util.List;
