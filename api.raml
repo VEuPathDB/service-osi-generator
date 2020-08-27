@@ -598,10 +598,15 @@ types:
     type: object
     properties:
       userId: OneBasedLong
-      userName:
+      username:
       apiKey:
       issued: datetime
     additionalProperties: false
+    example:
+      userId: 123456
+      username: "some user name"
+      apiKey: "d831d10e47de4154912ea7a8f1c633c3"
+      issued: "2020-05-25T13:18:26Z"
 
   IdSetCollection:
     type: object
@@ -626,3 +631,5 @@ types:
         type: string
         minLength: 3
     additionalProperties: false
+    example:
+      username: "some user name"

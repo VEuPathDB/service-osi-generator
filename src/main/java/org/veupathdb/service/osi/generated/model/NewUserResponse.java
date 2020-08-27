@@ -14,11 +14,11 @@ public interface NewUserResponse {
   @JsonProperty("userId")
   void setUserId(long userId);
 
-  @JsonProperty("userName")
-  String getUserName();
+  @JsonProperty("username")
+  String getUsername();
 
-  @JsonProperty("userName")
-  void setUserName(String userName);
+  @JsonProperty("username")
+  void setUsername(String username);
 
   @JsonProperty("apiKey")
   String getApiKey();

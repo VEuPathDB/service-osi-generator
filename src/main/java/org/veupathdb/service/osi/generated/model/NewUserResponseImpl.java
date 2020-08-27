@@ -10,7 +10,7 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "userId",
-    "userName",
+    "username",
     "apiKey",
     "issued"
 })
@@ -18,12 +18,13 @@ public class NewUserResponseImpl implements NewUserResponse {
   @JsonProperty("userId")
   private long userId;
 
-  @JsonProperty("userName")
-  private String userName;
+  @JsonProperty("username")
+  private String username;
 
   @JsonProperty("apiKey")
   private String apiKey;
 
+  @JsonProperty("issued")
   @JsonFormat(
       shape = JsonFormat.Shape.STRING,
       pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
@@ -31,7 +32,6 @@ public class NewUserResponseImpl implements NewUserResponse {
   @JsonDeserialize(
       using = TimestampDeserializer.class
   )
-  @JsonProperty("issued")
   private Date issued;
 
   @JsonProperty("userId")
@@ -44,14 +44,14 @@ public class NewUserResponseImpl implements NewUserResponse {
     this.userId = userId;
   }
 
-  @JsonProperty("userName")
-  public String getUserName() {
-    return this.userName;
+  @JsonProperty("username")
+  public String getUsername() {
+    return this.username;
   }
 
-  @JsonProperty("userName")
-  public void setUserName(String userName) {
-    this.userName = userName;
+  @JsonProperty("username")
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   @JsonProperty("apiKey")
