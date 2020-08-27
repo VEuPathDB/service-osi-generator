@@ -3,6 +3,7 @@ package org.veupathdb.service.osi.repo;
 import java.sql.Types;
 import java.util.*;
 
+import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.IdSetCollection;
@@ -12,10 +13,11 @@ import org.veupathdb.service.osi.model.db.raw.IdSetRow;
 import org.veupathdb.service.osi.repo.SQL.Select.Osi.IdSets;
 import org.veupathdb.service.osi.service.DbMan;
 import org.veupathdb.service.osi.service.genes.IdSetUtils;
+import org.veupathdb.service.osi.util.QueryUtil;
 
 public class IdSetRepo
 {
-  public static List < IdSetRow > findIdSets(RecordQuery query)
+  public static List < IdSetRow > select(RecordQuery query)
   throws Exception {
     var out = new ArrayList < IdSetRow >();
 
@@ -53,20 +55,13 @@ public class IdSetRepo
     return out;
   }
 
-  public static Optional < IdSetRow > selectIdSetById(int id) throws Exception {
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(IdSets.BY_ID)
-    ) {
-      ps.setInt(1, id);
-
-      try (var rs = ps.executeQuery()) {
-        if (!rs.next())
-          return Optional.empty();
-
-        return Optional.of(IdSetUtils.newIdSetRow(rs));
-      }
-    }
+  public static Optional < IdSetRow > select(long id) throws Exception {
+    return new BasicPreparedReadQuery<>(
+      IdSets.BY_ID,
+      DbMan::connection,
+      QueryUtil.option(IdSetUtils::newIdSetRow),
+      QueryUtil.singleId(id)
+    ).execute().getValue();
   }
 
   public static Map < Integer, IdSet > selectIdSetsByCollections(

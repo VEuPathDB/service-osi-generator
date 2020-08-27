@@ -11,7 +11,6 @@ import org.veupathdb.service.osi.generated.model.IdSetPostRequest;
 import org.veupathdb.service.osi.generated.model.IdSetResponse;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.User;
-import org.veupathdb.service.osi.model.db.raw.GeneRow;
 import org.veupathdb.service.osi.repo.IdSetRepo;
 import org.veupathdb.service.osi.util.Errors;
 import org.veupathdb.service.osi.util.Params;
@@ -74,7 +73,7 @@ public class IdSetService
       .ifRight(query::setCreatedById);
 
     try {
-      var sets = IdSetRepo.findIdSets(query)
+      var sets = IdSetRepo.select(query)
         .stream()
         .map(IdSetUtils::setToRes)
         .collect(Collectors.toMap(

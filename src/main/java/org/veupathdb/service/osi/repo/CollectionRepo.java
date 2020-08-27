@@ -20,7 +20,7 @@ public class CollectionRepo
   throws Exception {
     return new BasicPreparedReadQuery <>(
       SQL.Insert.Osi.COLLECTION,
-      DbMan.connection(),
+      DbMan::connection,
       QueryUtil.must(rs -> new IdSetCollection(
         rs.getInt(Collections.COLLECTION_ID),
         rs.getObject(Collections.CREATED_ON, OffsetDateTime.class),
@@ -37,7 +37,7 @@ public class CollectionRepo
   throws Exception {
     return new BasicPreparedMapReadQuery <>(
       SQL.Select.Osi.Collections.BY_IDS,
-      DbMan.connection(),
+      DbMan::connection,
       CollectionUtils::getCollectionId,
       CollectionUtils::newCollection,
       QueryUtil.idSet(ids)
@@ -48,7 +48,7 @@ public class CollectionRepo
   throws Exception {
     return new BasicPreparedReadQuery<>(
       SQL.Select.Osi.Collections.BY_ID,
-      DbMan.connection(),
+      DbMan::connection,
       QueryUtil.option(CollectionUtils::newCollection),
       QueryUtil.singleId(id)
     ).execute().getValue();
