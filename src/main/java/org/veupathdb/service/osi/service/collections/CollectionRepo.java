@@ -58,7 +58,7 @@ public class CollectionRepo
     return new BasicPreparedReadQuery <>(
       SQL.Insert.Osi.COLLECTION,
       DbMan::connection,
-      QueryUtil.must(rs -> CollectionUtils.newCollectionRow(rs, coll)),
+      QueryUtil.must(rs -> CollectionUtil.newCollectionRow(rs, coll)),
       ps -> {
         ps.setString(1, coll.getName());
         ps.setLong(2, coll.getCreatedBy().getUserId());
@@ -72,7 +72,7 @@ public class CollectionRepo
     return new BasicPreparedReadQuery<>(
       SQL.Select.Osi.Collections.BY_ID,
       DbMan::connection,
-      QueryUtil.option(CollectionUtils::newCollectionRow),
+      QueryUtil.option(CollectionUtil::newCollectionRow),
       QueryUtil.singleId(id)
     ).execute().getValue();
   }
@@ -113,7 +113,7 @@ public class CollectionRepo
         var out = new ArrayList < IdSetCollection >();
 
         while (rs.next())
-          out.add(CollectionUtils.newCollectionRow(rs));
+          out.add(CollectionUtil.newCollectionRow(rs));
 
         return out;
       }

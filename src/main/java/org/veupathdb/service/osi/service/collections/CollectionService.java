@@ -69,7 +69,7 @@ public class CollectionService
     UserService.requireRequestUser(req);
 
     try {
-      var res = CollectionUtils.toCollectionResponse(CollectionRepo.select(id)
+      var res = CollectionUtil.toCollectionResponse(CollectionRepo.select(id)
         .orElseThrow(NotFoundException::new));
       var genes = GeneRepo.selectByCollectionId(id);
       var outGenes = GeneUtil.toEntries(
@@ -109,7 +109,7 @@ public class CollectionService
       .ifRight(query::setCreatedById);
 
     try {
-      var res = CollectionUtils.toCollectionResponse(
+      var res = CollectionUtil.toCollectionResponse(
         CollectionRepo.select(query));
       var out = new ArrayList< CollectionResponse >(res.size());
       var ids = new long[res.size()];
@@ -151,7 +151,7 @@ public class CollectionService
     RequestValidation.notEmpty(Field.Collection.NAME, body.getName());
 
     try {
-      return CollectionUtils.toCollectionResponse(
+      return CollectionUtil.toCollectionResponse(
         CollectionRepo.insert(new NewIdSetCollection(
           body.getName(),
           user)));

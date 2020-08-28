@@ -10,9 +10,9 @@ import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.NewIdSetCollection;
 import org.veupathdb.service.osi.db.Schema.Osi.Collections;
 
-public class CollectionUtils
+public class CollectionUtil
 {
-  private static final CollectionUtils instance = new CollectionUtils();
+  private static final CollectionUtil instance = new CollectionUtil();
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                    ║ //
@@ -20,7 +20,7 @@ public class CollectionUtils
   // ║                                                                    ║ //
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
-  public static CollectionUtils getInstance() {
+  public static CollectionUtil getInstance() {
     return instance;
   }
 
