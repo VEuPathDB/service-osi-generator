@@ -269,7 +269,6 @@ public class IdSetService
         genes.values().stream().collect(Collectors.toMap(
           Gene::getId,
           Function.identity())),
-        new long[] {idSetId},
         singletonList(out)
       );
 
@@ -287,6 +286,7 @@ public class IdSetService
     final long startPos,
     final User user
   ) throws Exception {
+    log.trace("IdSetService#doGeneInsert(IdSet, List, String[] Map, long, User)");
     try (final var con = DbMan.connection()) {
       if (genes.size() != entries.size()) {
         log.debug("Unrecognized gene ids in patch.  Inserting new genes.");
@@ -312,7 +312,7 @@ public class IdSetService
 
         newTranscripts[i] = new NewTranscript(
           genes.get(entry.getGeneId()),
-          startPos,
+          pos,
           entry.getTranscripts(),
           user
         );
@@ -325,6 +325,7 @@ public class IdSetService
   }
 
   void validatePatchEntries(final List < IdSetPatchEntry > entries) {
+    log.trace("IdSetService#validatePatchEntries(List)");
     for (var i = 0; i < entries.size(); i++) {
       try {
         validatePatchEntry(entries.get(i));
@@ -336,7 +337,8 @@ public class IdSetService
     }
   }
 
-  void validatePatchEntry(IdSetPatchEntry entry) {
+  void validatePatchEntry(final IdSetPatchEntry entry) {
+    log.trace("IdSetService#validatePatchEntry(IdSetPatchEntry)");
     final var errs = new HashMap< String, List < String > >();
 
     if (entry.getGeneId() == null || entry.getGeneId().isBlank())
@@ -357,6 +359,8 @@ public class IdSetService
   public List < IdSetResponse > populateIdSets(
     final Map < Long, IdSetResponse > sets
   ) throws Exception {
+    log.trace("IdSetService#populateIdSets(Map)");
+
     final var ids = new long[sets.size()];
     final var out = new ArrayList < IdSetResponse >(sets.size());
 
@@ -368,15 +372,16 @@ public class IdSetService
 
     final var genes = GeneRepo.selectBySetIds(ids);
 
-    return populateIdSets(sets, genes, ids, out);
+    return populateIdSets(sets, genes, out);
   }
 
   public List < IdSetResponse > populateIdSets(
     final Map < Long, IdSetResponse > sets,
     final Map < Long, Gene > genes,
-    final long[] ids,
     final List < IdSetResponse > out
   ) throws Exception {
+    log.trace("IdSetService#populateIdSets(Map, Map, long[], List)");
+
     var outGenes = GeneUtil.toEntries(genes.values(), sets);
 
     TranscriptUtils.assign(
