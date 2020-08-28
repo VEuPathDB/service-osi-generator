@@ -6,6 +6,8 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Request;
 
+import org.apache.logging.log4j.Logger;
+import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.osi.generated.model.CollectionResponse;
 import org.veupathdb.service.osi.generated.model.IdSetCollectionPostRequest;
 import org.veupathdb.service.osi.model.RecordQuery;
@@ -27,6 +29,8 @@ import static java.util.Collections.singletonMap;
 public class CollectionService
 {
   private static final CollectionService instance = new CollectionService();
+
+  private final Logger log = LogProvider.logger(getClass());
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                    ║ //
@@ -66,6 +70,8 @@ public class CollectionService
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
   public CollectionResponse getCollection(final long id, final Request req) {
+    log.trace("CollectionService#getCollection(long, Request)");
+
     UserService.requireRequestUser(req);
 
     try {
@@ -97,6 +103,8 @@ public class CollectionService
     final String  user,
     final Request req
   ) {
+    log.trace("CollectionService#getCollection(String, Long, Long, String, Request)");
+
     UserService.requireRequestUser(req);
 
     var query = new RecordQuery()
@@ -143,6 +151,8 @@ public class CollectionService
     final IdSetCollectionPostRequest body,
     final Request req
   ) {
+    log.trace("CollectionService#getCollection(IdSetCollectionPostRequest, Request)");
+
     if (body == null)
       throw new BadRequestException();
 

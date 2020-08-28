@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 import java.util.*;
 
+import org.apache.logging.log4j.Logger;
+import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.osi.generated.model.CollectionResponse;
 import org.veupathdb.service.osi.generated.model.CollectionResponseImpl;
 import org.veupathdb.service.osi.model.db.IdSetCollection;
@@ -13,6 +15,8 @@ import org.veupathdb.service.osi.db.Schema.Osi.Collections;
 public class CollectionUtil
 {
   private static final CollectionUtil instance = new CollectionUtil();
+
+  private final Logger log = LogProvider.logger(getClass());
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                    ║ //
@@ -58,6 +62,7 @@ public class CollectionUtil
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
   public long parseCollectionId(final ResultSet rs) throws Exception {
+    log.trace("CollectionUtil#parseCollectionId(ResultSet)");
     return rs.getLong(Collections.COLLECTION_ID);
   }
 
@@ -65,6 +70,7 @@ public class CollectionUtil
     final ResultSet rs,
     final NewIdSetCollection base
   ) throws Exception {
+    log.trace("CollectionUtil#parseCollectionId(ResultSet, NewIdSetCollection)");
     return new IdSetCollection(
       rs.getLong(Collections.COLLECTION_ID),
       base.getName(),
@@ -75,6 +81,7 @@ public class CollectionUtil
 
   public IdSetCollection createCollectionRow(final ResultSet rs)
   throws Exception {
+    log.trace("CollectionUtil#createCollectionRow(ResultSet)");
     return new IdSetCollection(
       rs.getLong(Collections.COLLECTION_ID),
       rs.getString(Collections.NAME),
@@ -83,7 +90,8 @@ public class CollectionUtil
     );
   }
 
-  public CollectionResponse collectionToResponse(IdSetCollection col) {
+  public CollectionResponse collectionToResponse(final IdSetCollection col) {
+    log.trace("CollectionUtil#collectionsToResponse(IdSetCollection)");
     var out = new CollectionResponseImpl();
 
     out.setCollectionId(col.getId());
@@ -98,6 +106,8 @@ public class CollectionUtil
   public Map < Long, CollectionResponse > collectionsToResponse(
     final Collection < IdSetCollection > rows
   ) {
+    log.trace("CollectionUtil#collectionsToResponse(Collection)");
+
     var out = new HashMap< Long, CollectionResponse >(rows.size());
 
     for (var r : rows)
