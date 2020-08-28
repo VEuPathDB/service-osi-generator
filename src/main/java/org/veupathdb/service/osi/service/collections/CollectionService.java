@@ -6,7 +6,6 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Request;
 
-import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
 import org.veupathdb.service.osi.generated.model.CollectionResponse;
 import org.veupathdb.service.osi.generated.model.IdSetCollectionPostRequest;
 import org.veupathdb.service.osi.model.RecordQuery;
@@ -21,25 +20,25 @@ import org.veupathdb.service.osi.service.user.UserService;
 import org.veupathdb.service.osi.util.Errors;
 import org.veupathdb.service.osi.util.Field;
 import org.veupathdb.service.osi.util.Params;
+import org.veupathdb.service.osi.util.RequestValidation;
 
-import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 
 public class CollectionService
 {
   private static final CollectionService instance = new CollectionService();
 
-  private static final String
-    ERR_NO_NAME = "The '" + Field.Collection.NAME + "' field cannot be empty.";
+  // ╔════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                    ║ //
+  // ║    Static Access Methods                                           ║ //
+  // ║                                                                    ║ //
+  // ╚════════════════════════════════════════════════════════════════════╝ //
 
   public static CollectionService getInstance() {
     return instance;
   }
 
-  public static CollectionResponse lookup(
-    final long id,
-    final Request req
-  ) {
+  public static CollectionResponse lookup(final long id, final Request req) {
     return getInstance().getCollection(id, req);
   }
 
@@ -59,6 +58,12 @@ public class CollectionService
   ) {
     return getInstance().newCollection(body, res);
   }
+
+  // ╔════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                    ║ //
+  // ║    Mockable Instance Methods                                       ║ //
+  // ║                                                                    ║ //
+  // ╚════════════════════════════════════════════════════════════════════╝ //
 
   public CollectionResponse getCollection(final long id, final Request req) {
     UserService.requireRequestUser(req);
@@ -106,7 +111,7 @@ public class CollectionService
     try {
       var res = CollectionUtils.toCollectionResponse(
         CollectionRepo.select(query));
-      var out = new ArrayList<CollectionResponse>(res.size());
+      var out = new ArrayList< CollectionResponse >(res.size());
       var ids = new long[res.size()];
 
       int i = 0;
@@ -128,7 +133,7 @@ public class CollectionService
         outGenes
       );
 
-      return new ArrayList <>(res.values());
+      return out;
     } catch (Exception e) {
       throw Errors.wrapErr(e);
     }
@@ -143,9 +148,7 @@ public class CollectionService
 
     final var user = UserService.requireRequestUser(req);
 
-    if (body.getName() == null || body.getName().isBlank())
-      throw new UnprocessableEntityException(singletonMap(
-        Field.Collection.NAME, singletonList(ERR_NO_NAME)));
+    RequestValidation.notEmpty(Field.Collection.NAME, body.getName());
 
     try {
       return CollectionUtils.toCollectionResponse(

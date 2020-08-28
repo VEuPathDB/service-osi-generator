@@ -354,7 +354,7 @@ public class IdSetService
   // ║                                                                    ║ //
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
-  List < IdSetResponse > populateIdSets(
+  public List < IdSetResponse > populateIdSets(
     final Map < Long, IdSetResponse > sets
   ) throws Exception {
     final var ids = new long[sets.size()];
@@ -371,7 +371,7 @@ public class IdSetService
     return populateIdSets(sets, genes, ids, out);
   }
 
-  List < IdSetResponse > populateIdSets(
+  public List < IdSetResponse > populateIdSets(
     final Map < Long, IdSetResponse > sets,
     final Map < Long, Gene > genes,
     final long[] ids,
