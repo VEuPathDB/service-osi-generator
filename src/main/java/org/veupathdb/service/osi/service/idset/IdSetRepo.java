@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
+import org.apache.logging.log4j.Logger;
+import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.NewIdSet;
@@ -18,8 +20,53 @@ import org.veupathdb.service.osi.util.QueryUtil;
 
 public class IdSetRepo
 {
-  public static List < IdSet > select(RecordQuery query)
+  private static final IdSetRepo instance = new IdSetRepo();
+
+  private final Logger log = LogProvider.logger(getClass());
+
+  // ╔════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                    ║ //
+  // ║    Static Access Methods                                           ║ //
+  // ║                                                                    ║ //
+  // ╚════════════════════════════════════════════════════════════════════╝ //
+
+  public static IdSetRepo getInstance() {
+    return instance;
+  }
+
+  public static List < IdSet > select(final RecordQuery query)
   throws Exception {
+    return getInstance().selectByQuery(query);
+  }
+
+  public static List < IdSet > selectByCollection(final long collectionId)
+  throws Exception {
+    return getInstance().selectByCollectionId(collectionId);
+  }
+
+  public static List < IdSet > selectByCollections(final long[] collectionIds)
+  throws Exception {
+    return getInstance().selectByCollectionIds(collectionIds);
+  }
+
+  public static Optional < IdSet > select(final long id) throws Exception {
+    return getInstance().selectById(id);
+  }
+
+  public static IdSet insert(final NewIdSet set, final Connection con)
+  throws Exception {
+    return getInstance().insertRow(set, con);
+  }
+
+  // ╔════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                    ║ //
+  // ║    Mockable Instance Methods                                       ║ //
+  // ║                                                                    ║ //
+  // ╚════════════════════════════════════════════════════════════════════╝ //
+
+  public List < IdSet > selectByQuery(final RecordQuery query)
+  throws Exception {
+    log.trace("IdSetRepo#selectByQuery(RecordQuery)");
     var out = new ArrayList < IdSet >();
 
     try (
@@ -56,7 +103,7 @@ public class IdSetRepo
     return out;
   }
 
-  public static List < IdSet > selectByCollectionId(long collectionId)
+  public List < IdSet > selectByCollectionId(final long collectionId)
   throws Exception {
     return new BasicPreparedListReadQuery<>(
       SQL.Select.Osi.IdSets.BY_COLLECTION,
@@ -66,7 +113,7 @@ public class IdSetRepo
     ).execute().getValue();
   }
 
-  public static List < IdSet > selectByCollectionIds(long[] collectionIds)
+  public List < IdSet > selectByCollectionIds(final long[] collectionIds)
   throws Exception {
     return new BasicPreparedListReadQuery<>(
       SQL.Select.Osi.IdSets.BY_COLLECTIONS,
@@ -76,7 +123,7 @@ public class IdSetRepo
     ).execute().getValue();
   }
 
-  public static Optional < IdSet > select(long id) throws Exception {
+  public Optional < IdSet > selectById(long id) throws Exception {
     return new BasicPreparedReadQuery<>(
       IdSets.BY_ID,
       DbMan::connection,
@@ -85,13 +132,13 @@ public class IdSetRepo
     ).execute().getValue();
   }
 
-  public static IdSet insert(
+  public IdSet insertRow(
     final NewIdSet set,
     final Connection con
   ) throws Exception {
     return new BasicPreparedReadQuery<>(
       SQL.Insert.Osi.ID_SET,
-      DbMan::connection,
+      con,
       QueryUtil.must(rs -> IdSetUtil.newIdSetRow(rs, set)),
       ps -> {
         ps.setLong(1, set.getCollection().getId());

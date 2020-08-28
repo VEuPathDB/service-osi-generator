@@ -81,7 +81,7 @@ public class CollectionService
       var outGenes = GeneUtil.toEntries(
         genes.values(),
         IdSetUtil.setsToResponses(
-          IdSetRepo.selectByCollectionId(id),
+          IdSetRepo.selectByCollection(id),
           singletonMap(id, res)));
 
       TranscriptUtils.assign(
@@ -132,7 +132,7 @@ public class CollectionService
       var outGenes = GeneUtil.toEntries(
         genes.values(),
         IdSetUtil.setsToResponses(
-          IdSetRepo.selectByCollectionIds(ids),
+          IdSetRepo.selectByCollections(ids),
           res));
 
       TranscriptUtils.assign(
