@@ -9,18 +9,18 @@ import java.util.Optional;
 import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import org.veupathdb.service.osi.model.RecordQuery;
+import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.NewIdSet;
-import org.veupathdb.service.osi.model.db.raw.IdSetRow;
 import org.veupathdb.service.osi.repo.SQL.Select.Osi.IdSets;
 import org.veupathdb.service.osi.service.DbMan;
-import org.veupathdb.service.osi.service.idset.IdSetUtils;
+import org.veupathdb.service.osi.service.idset.IdSetUtil;
 import org.veupathdb.service.osi.util.QueryUtil;
 
 public class IdSetRepo
 {
-  public static List < IdSetRow > select(RecordQuery query)
+  public static List < IdSet > select(RecordQuery query)
   throws Exception {
-    var out = new ArrayList < IdSetRow >();
+    var out = new ArrayList < IdSet >();
 
     try (
       var cn = DbMan.connection();
@@ -48,7 +48,7 @@ public class IdSetRepo
 
       try (var rs = ps.executeQuery()) {
         while (rs.next()) {
-          out.add(IdSetUtils.newIdSetRow(rs));
+          out.add(IdSetUtil.newIdSetRow(rs));
         }
       }
     }
@@ -56,43 +56,43 @@ public class IdSetRepo
     return out;
   }
 
-  public static List < IdSetRow > selectByCollectionId(long collectionId)
+  public static List < IdSet > selectByCollectionId(long collectionId)
   throws Exception {
     return new BasicPreparedListReadQuery<>(
       SQL.Select.Osi.IdSets.BY_COLLECTION,
       DbMan::connection,
-      IdSetUtils::newIdSetRow,
+      IdSetUtil::newIdSetRow,
       QueryUtil.singleId(collectionId)
     ).execute().getValue();
   }
 
-  public static List < IdSetRow > selectByCollectionIds(long[] collectionIds)
+  public static List < IdSet > selectByCollectionIds(long[] collectionIds)
   throws Exception {
     return new BasicPreparedListReadQuery<>(
       SQL.Select.Osi.IdSets.BY_COLLECTIONS,
       DbMan::connection,
-      IdSetUtils::newIdSetRow,
+      IdSetUtil::newIdSetRow,
       QueryUtil.idSet(collectionIds)
     ).execute().getValue();
   }
 
-  public static Optional < IdSetRow > select(long id) throws Exception {
+  public static Optional < IdSet > select(long id) throws Exception {
     return new BasicPreparedReadQuery<>(
       IdSets.BY_ID,
       DbMan::connection,
-      QueryUtil.option(IdSetUtils::newIdSetRow),
+      QueryUtil.option(IdSetUtil::newIdSetRow),
       QueryUtil.singleId(id)
     ).execute().getValue();
   }
 
-  public static IdSetRow insert(
+  public static IdSet insert(
     final NewIdSet set,
     final Connection con
   ) throws Exception {
     return new BasicPreparedReadQuery<>(
       SQL.Insert.Osi.ID_SET,
       DbMan::connection,
-      QueryUtil.must(rs -> IdSetUtils.newIdSetRow(rs, set)),
+      QueryUtil.must(rs -> IdSetUtil.newIdSetRow(rs, set)),
       ps -> {
         ps.setLong(1, set.getCollection().getId());
         ps.setLong(2, set.getOrganism().getId());

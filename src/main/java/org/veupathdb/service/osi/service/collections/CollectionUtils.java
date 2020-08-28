@@ -8,7 +8,6 @@ import org.veupathdb.service.osi.generated.model.CollectionResponse;
 import org.veupathdb.service.osi.generated.model.CollectionResponseImpl;
 import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.NewIdSetCollection;
-import org.veupathdb.service.osi.model.db.raw.IdSetCollectionRow;
 import org.veupathdb.service.osi.repo.Schema.Osi.Collections;
 
 public class CollectionUtils
@@ -19,11 +18,11 @@ public class CollectionUtils
     return instance;
   }
 
-  public static IdSetCollectionRow newCollectionRow(
+  public static IdSetCollection newCollectionRow(
     final ResultSet rs,
     final NewIdSetCollection base
   ) throws Exception {
-    return new IdSetCollectionRow(
+    return new IdSetCollection(
       rs.getLong(Collections.COLLECTION_ID),
       base.getName(),
       base.getCreatedBy().getUserId(),
@@ -31,9 +30,9 @@ public class CollectionUtils
     );
   }
 
-  public static IdSetCollectionRow newCollectionRow(final ResultSet rs)
+  public static IdSetCollection newCollectionRow(final ResultSet rs)
   throws Exception {
-    return new IdSetCollectionRow(
+    return new IdSetCollection(
       rs.getLong(Collections.COLLECTION_ID),
       rs.getString(Collections.NAME),
       rs.getLong(Collections.CREATED_BY),
@@ -45,29 +44,17 @@ public class CollectionUtils
     return rs.getLong(Collections.COLLECTION_ID);
   }
 
-  public static CollectionResponse toCollectionResponse(IdSetCollectionRow col) {
+  public static CollectionResponse toCollectionResponse(IdSetCollection col) {
     return getInstance().collectionToResponse(col);
   }
 
   public static Map < Long, CollectionResponse > toCollectionResponse(
-    final Collection < IdSetCollectionRow > rows
+    final Collection < IdSetCollection > rows
   ) {
     return getInstance().collectionsToResponse(rows);
   }
 
   public CollectionResponse collectionToResponse(IdSetCollection col) {
-    var out = new CollectionResponseImpl();
-
-    out.setCollectionId(col.getCollectionId());
-    out.setName(col.getName());
-    out.setIdSets(new ArrayList <>());
-    out.setCreatedOn(Date.from(col.getCreatedOn().toInstant()));
-    out.setCreatedBy(col.getCreatedBy().getUserId());
-
-    return out;
-  }
-
-  public CollectionResponse collectionToResponse(IdSetCollectionRow col) {
     var out = new CollectionResponseImpl();
 
     out.setCollectionId(col.getId());
@@ -80,7 +67,7 @@ public class CollectionUtils
   }
 
   public Map < Long, CollectionResponse > collectionsToResponse(
-    final Collection < IdSetCollectionRow > rows
+    final Collection < IdSetCollection > rows
   ) {
     var out = new HashMap< Long, CollectionResponse >(rows.size());
 

@@ -1,23 +1,21 @@
 package org.veupathdb.service.osi.model.db;
 
-import org.veupathdb.service.osi.model.db.raw.IdSetCollectionRow;
-import org.veupathdb.service.osi.model.db.raw.OrganismRow;
 import org.veupathdb.service.osi.util.Errors;
 import org.veupathdb.service.osi.util.Format;
 import org.veupathdb.service.osi.util.Validation;
 
 public class NewIdSet
 {
-  private final IdSetCollectionRow collection;
-  private final OrganismRow organism;
-  private final String template;
+  private final IdSetCollection collection;
+  private final Organism        organism;
+  private final String          template;
   private final User createdBy;
   private final long counterStart;
   private final int numIssued;
 
   public NewIdSet(
-    IdSetCollectionRow collection,
-    OrganismRow organism,
+    IdSetCollection collection,
+    Organism organism,
     String template,
     User createdBy,
     long counterStart,
@@ -31,11 +29,11 @@ public class NewIdSet
     this.numIssued  = Validation.zeroMinimum(numIssued);
   }
 
-  public IdSetCollectionRow getCollection() {
+  public IdSetCollection getCollection() {
     return collection;
   }
 
-  public OrganismRow getOrganism() {
+  public Organism getOrganism() {
     return organism;
   }
 

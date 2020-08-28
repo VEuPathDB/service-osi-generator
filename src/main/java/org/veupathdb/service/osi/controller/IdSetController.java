@@ -1,7 +1,6 @@
 package org.veupathdb.service.osi.controller;
 
 import java.util.List;
-
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
@@ -38,17 +37,18 @@ public class IdSetController implements IdSets
   }
 
   @Override
-  public GetIdSetsByIdSetIdResponse getIdSetsByIdSetId(int setId) {
+  public GetIdSetsByIdSetIdResponse getIdSetsByIdSetId(final Long setId) {
     UserService.requireRequestUser(req);
-    return GetIdSetsByIdSetIdResponse.respond200WithApplicationJson(get(setId));
+    return GetIdSetsByIdSetIdResponse.respond200WithApplicationJson(
+      get(setId, req));
   }
 
   @Override
   public PatchIdSetsByIdSetIdResponse patchIdSetsByIdSetId(
-    int setId,
-    List < IdSetPatchEntry > entity
+    final Long setId,
+    final List < IdSetPatchEntry > entity
   ) {
     return PatchIdSetsByIdSetIdResponse.respond200WithApplicationJson(
-      update(entity, UserService.requireRequestUser(req)));
+      update(setId, entity, req));
   }
 }

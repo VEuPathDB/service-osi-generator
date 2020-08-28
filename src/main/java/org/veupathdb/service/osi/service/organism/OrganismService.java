@@ -128,7 +128,7 @@ public class OrganismService
       .ifRight(i -> handleIntPutRequest(i, req));
   }
 
-  private static void handleIntPutRequest(int orgId, OrganismPutRequest req) {
+  private static void handleIntPutRequest(long orgId, OrganismPutRequest req) {
     try {
       if (req.getGeneIntStart() == null && req.getTranscriptIntStart() == null)
         handleOrgTemplateUpdate(orgId, req.getTemplate());
@@ -160,7 +160,7 @@ public class OrganismService
     }
   }
 
-  private static void handleOrgTemplateUpdate(int id, String template)
+  private static void handleOrgTemplateUpdate(long id, String template)
   throws Exception {
     try (
       var load = OrganismUpdater.begin();
@@ -183,7 +183,7 @@ public class OrganismService
     }
   }
 
-  private static void handleOrgFullUpdate(int id, OrganismPutRequest req)
+  private static void handleOrgFullUpdate(long id, OrganismPutRequest req)
   throws Exception {
     try (
       var load = OrganismUpdater.begin();

@@ -1,15 +1,16 @@
 package org.veupathdb.service.osi.service.genes;
 
 import java.sql.Connection;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import io.vulpine.lib.query.util.basic.*;
+import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
+import io.vulpine.lib.query.util.basic.BasicPreparedMapReadQuery;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
-import org.veupathdb.service.osi.model.db.raw.GeneRow;
-import org.veupathdb.service.osi.model.db.raw.IdSetRow;
+import org.veupathdb.service.osi.model.db.Gene;
+import org.veupathdb.service.osi.model.db.IdSet;
+import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.repo.SQL;
 import org.veupathdb.service.osi.repo.SQL.Select.Osi.Genes;
 import org.veupathdb.service.osi.service.DbMan;
@@ -31,37 +32,50 @@ public class GeneRepo
     return instance;
   }
 
-  public static Map < Long, GeneRow > selectBySetIds(long[] ids)
+  public static Map < Long, Gene > selectBySetIds(long[] ids)
   throws Exception {
     return getInstance().getBySetIds(ids);
   }
 
-  public static List < GeneRow > selectBySetId(
+  public static Map < String, Gene > select(final String[] ids)
+  throws Exception {
+    return getInstance().getByIds(ids);
+  }
+
+  public static Map < String, Gene > select(
+    final String[] ids,
+    final Connection con
+  ) throws Exception {
+    return getInstance().getByIds(ids, con);
+  }
+
+  public static List < Gene > selectBySetId(
     final long id,
     final Connection con
   ) throws Exception {
     return getInstance().getBySetId(id, con);
   }
 
-  public static Map < Long, GeneRow > selectByCollectionIds(
+  public static Map < Long, Gene > selectByCollectionIds(
     final long[] collectionIds
   ) throws Exception {
     return getInstance().getByCollectionIds(collectionIds);
   }
 
 
-  public static Map < Long, GeneRow > selectByCollectionId(
+  public static Map < Long, Gene > selectByCollectionId(
     final long collection
   ) throws Exception {
     return getInstance().getByCollectionId(collection);
   }
 
   public static void insert(
-    final IdSetRow set,
+    final IdSet set,
     final String[] ids,
-    final Connection con
+    final Connection con,
+    final User user
   ) throws Exception {
-    getInstance().insertGenes(set, ids, con);
+    getInstance().insertGenes(set, ids, con, user);
   }
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
@@ -70,7 +84,7 @@ public class GeneRepo
   // ║                                                                    ║ //
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
-  public Map < Long, GeneRow > getBySetIds(long[] ids)
+  public Map < Long, Gene > getBySetIds(final long[] ids)
   throws Exception {
     log.trace("GeneRepo#getBySetIds(long[])");
     return new BasicPreparedMapReadQuery <>(
@@ -82,7 +96,29 @@ public class GeneRepo
     ).execute().getValue();
   }
 
-  public List < GeneRow > getBySetId(final long id, final Connection con)
+  public Map < String, Gene > getByIds(final String[] ids)
+  throws Exception {
+    log.trace("GeneRepo#getByIds(String[])");
+    try (final var con = DbMan.connection()) {
+      return getByIds(ids, con);
+    }
+  }
+
+  public Map < String, Gene > getByIds(
+    final String[] ids,
+    final Connection con
+  ) throws Exception {
+    log.trace("GeneRepo#getByIds(String[], Connection)");
+    return new BasicPreparedMapReadQuery <>(
+      Genes.BY_ID_SETS,
+      con,
+      GeneUtil::getIdentifier,
+      GeneUtil.getInstance()::createGeneRow,
+      QueryUtil.stringSet(ids)
+    ).execute().getValue();
+  }
+
+  public List < Gene > getBySetId(final long id, final Connection con)
   throws Exception {
     log.trace("GeneRepo#getBySetIds(long)");
     return new BasicPreparedListReadQuery <>(
@@ -94,7 +130,7 @@ public class GeneRepo
   }
 
 
-  public Map < Long, GeneRow > getByCollectionIds(
+  public Map < Long, Gene > getByCollectionIds(
     final long[] collectionIds
   ) throws Exception {
     log.trace("GeneRepo#getByCollectionIds(long[])");
@@ -107,7 +143,7 @@ public class GeneRepo
     ).execute().getValue();
   }
 
-  public Map < Long, GeneRow > getByCollectionId(
+  public Map < Long, Gene > getByCollectionId(
     final long collection
   ) throws Exception {
     log.trace("GeneRepo#getByCollectionId(long)");
@@ -121,13 +157,14 @@ public class GeneRepo
   }
 
   public void insertGenes(
-    final IdSetRow set,
+    final IdSet set,
     final String[] ids,
-    final Connection con
+    final Connection con,
+    final User user
   ) throws Exception {
     log.trace("GeneRepo#insertGenes(IdSetRow, String[], Connection)");
 
-    final var si = set.getId();
+    final var si = user.getUserId();
     final var ui = set.getCreatedBy();
 
     try (final var ps = con.prepareStatement(SQL.Insert.Osi.GENE)) {

@@ -3,7 +3,6 @@ package org.veupathdb.service.osi.service.organism;
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 import java.util.Date;
-import java.util.Map;
 
 import org.veupathdb.service.osi.generated.model.OrganismPostRequest;
 import org.veupathdb.service.osi.generated.model.OrganismResponse;
@@ -11,9 +10,7 @@ import org.veupathdb.service.osi.generated.model.OrganismResponseImpl;
 import org.veupathdb.service.osi.model.db.NewOrganism;
 import org.veupathdb.service.osi.model.db.Organism;
 import org.veupathdb.service.osi.model.db.User;
-import org.veupathdb.service.osi.model.db.raw.OrganismRow;
 import org.veupathdb.service.osi.repo.Schema.Osi.Organisms;
-import org.veupathdb.service.osi.service.user.UserUtil;
 
 public class OrganismUtil
 {
@@ -30,8 +27,8 @@ public class OrganismUtil
     return rs.getLong(Organisms.TRANSCRIPT_COUNTER_CURRENT);
   }
 
-  static OrganismRow newOrganismRow(final ResultSet rs) throws Exception {
-    return new OrganismRow(
+  static Organism newOrganismRow(final ResultSet rs) throws Exception {
+    return new Organism(
       rs.getLong(Organisms.ORGANISM_ID),
       rs.getString(Organisms.NAME),
       rs.getString(Organisms.TEMPLATE),
@@ -45,48 +42,21 @@ public class OrganismUtil
     );
   }
 
-  static Organism newOrganism(
+  static Organism newOrganismRow(
     final ResultSet rs,
-    final Map < Long, User > users
+    final NewOrganism org
   ) throws Exception {
     return new Organism(
-      rs.getInt(Organisms.ORGANISM_ID),
-      rs.getString(Organisms.NAME),
-      rs.getString(Organisms.TEMPLATE),
-      rs.getLong(Organisms.GENE_COUNTER_START),
-      rs.getLong(Organisms.GENE_COUNTER_CURRENT),
-      rs.getLong(Organisms.TRANSCRIPT_COUNTER_START),
-      rs.getLong(Organisms.TRANSCRIPT_COUNTER_CURRENT),
-      users.get(rs.getInt(Organisms.CREATED_BY)),
+      rs.getLong(Organisms.ORGANISM_ID),
+      org.getName(),
+      org.getTemplate(),
+      org.getGeneCounterStart(),
+      org.getGeneCounterStart(),
+      org.getTranscriptCounterStart(),
+      org.getTranscriptCounterStart(),
+      org.getCreatedBy().getUserId(),
       rs.getObject(Organisms.CREATED_ON, OffsetDateTime.class),
       rs.getObject(Organisms.LAST_MODIFIED, OffsetDateTime.class)
-    );
-  }
-
-  static Organism newOrganism(ResultSet rs) throws Exception {
-    return new Organism(
-      rs.getInt(Organisms.ORGANISM_ID),
-      rs.getString(Organisms.NAME),
-      rs.getString(Organisms.TEMPLATE),
-      rs.getLong(Organisms.GENE_COUNTER_START),
-      rs.getLong(Organisms.GENE_COUNTER_CURRENT),
-      rs.getLong(Organisms.TRANSCRIPT_COUNTER_START),
-      rs.getLong(Organisms.TRANSCRIPT_COUNTER_CURRENT),
-      UserUtil.newUser(rs),
-      rs.getObject(Organisms.CREATED_ON, OffsetDateTime.class),
-      rs.getObject(Organisms.LAST_MODIFIED, OffsetDateTime.class)
-    );
-  }
-
-  static Organism newOrganism(ResultSet rs, NewOrganism row)
-  throws Exception {
-    return new Organism(
-      rs.getInt(Organisms.ORGANISM_ID),
-      rs.getLong(Organisms.GENE_COUNTER_CURRENT),
-      rs.getLong(Organisms.TRANSCRIPT_COUNTER_CURRENT),
-      rs.getObject(Organisms.CREATED_ON, OffsetDateTime.class),
-      rs.getObject(Organisms.LAST_MODIFIED, OffsetDateTime.class),
-      row
     );
   }
 
@@ -101,7 +71,7 @@ public class OrganismUtil
     tmp.setTranscriptIntStart(org.getTranscriptCounterStart());
     tmp.setTranscriptIntCurrent(org.getTranscriptCounterCurrent());
     tmp.setCreatedOn(Date.from(org.getCreatedOn().toInstant()));
-    tmp.setCreatedBy(org.getCreatedBy().getUserId());
+    tmp.setCreatedBy(org.getCreatedBy());
 
     return tmp;
   }

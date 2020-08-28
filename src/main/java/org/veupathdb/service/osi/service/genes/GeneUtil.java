@@ -2,15 +2,18 @@ package org.veupathdb.service.osi.service.genes;
 
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntry;
 import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntryImpl;
 import org.veupathdb.service.osi.generated.model.IdSetResponse;
-import org.veupathdb.service.osi.model.db.raw.GeneRow;
-import org.veupathdb.service.osi.model.db.raw.OrganismRow;
+import org.veupathdb.service.osi.model.db.Gene;
+import org.veupathdb.service.osi.model.db.Organism;
 import org.veupathdb.service.osi.repo.Schema.Osi.Genes;
 
 public class GeneUtil
@@ -33,26 +36,30 @@ public class GeneUtil
     return getInstance().parseId(rs);
   }
 
-  public static GeneRow newGeneRow(final ResultSet rs) throws Exception {
+  public static String getIdentifier(final ResultSet rs) throws Exception {
+    return getInstance().parseIdentifier(rs);
+  }
+
+  public static Gene newGeneRow(final ResultSet rs) throws Exception {
     return getInstance().createGeneRow(rs);
   }
 
   public static GeneratedTranscriptEntry toEntry(
-    final GeneRow row
+    final Gene row
   ) {
     return getInstance().geneToEntry(row);
   }
 
 
   public static Map < Long, GeneratedTranscriptEntry > toEntries(
-    final Collection < GeneRow > rows,
+    final Collection < Gene > rows,
     final Map < Long, IdSetResponse > sets
   ) {
     return getInstance().genesToEntries(rows, sets);
   }
 
   public static String[] expandGenes(
-    final OrganismRow org,
+    final Organism org,
     final long        start,
     final int         count
   ) {
@@ -70,8 +77,13 @@ public class GeneUtil
     return rs.getLong(Genes.GENE_ID);
   }
 
-  public GeneRow createGeneRow(final ResultSet rs) throws Exception {
-    return new GeneRow(
+  public String parseIdentifier(final ResultSet rs) throws Exception {
+    log.trace("GeneUtil#parseIdentifier(ResultSet)");
+    return rs.getString(Genes.GENE_NAME);
+  }
+
+  public Gene createGeneRow(final ResultSet rs) throws Exception {
+    return new Gene(
       rs.getLong(Genes.GENE_ID),
       rs.getLong(Genes.ID_SET_ID),
       rs.getString(Genes.GENE_NAME),
@@ -81,7 +93,7 @@ public class GeneUtil
   }
 
   public Map < Long, GeneratedTranscriptEntry > genesToEntries(
-    final Collection < GeneRow > rows,
+    final Collection < Gene > rows,
     final Map < Long, IdSetResponse > idSets
   ) {
     var out = new HashMap< Long, GeneratedTranscriptEntry >(rows.size());
@@ -95,7 +107,7 @@ public class GeneUtil
     return out;
   }
 
-  public GeneratedTranscriptEntry geneToEntry(final GeneRow row) {
+  public GeneratedTranscriptEntry geneToEntry(final Gene row) {
     var out = new GeneratedTranscriptEntryImpl();
 
     out.setGeneId(row.getGeneIdentifier());
@@ -106,7 +118,7 @@ public class GeneUtil
   }
 
   public String[] expandGeneIds(
-    final OrganismRow org,
+    final Organism org,
     final long        start,
     final int         count
   ) {

@@ -8,7 +8,8 @@ import org.veupathdb.service.osi.model.db.Organism;
 import org.veupathdb.service.osi.repo.SQL;
 import org.veupathdb.service.osi.service.DbMan;
 
-import static org.veupathdb.service.osi.service.organism.OrganismRepo.*;
+import static org.veupathdb.service.osi.service.organism.OrganismRepo.selectById;
+import static org.veupathdb.service.osi.service.organism.OrganismRepo.selectByName;
 
 class OrganismUpdater implements AutoCloseable
 {
@@ -35,7 +36,7 @@ class OrganismUpdater implements AutoCloseable
   }
 
   public void update(String template) throws Exception {
-    OrganismRepo.updateTemplate(org.getId(), template, con);
+    OrganismRepo.update(org.getId(), template, con);
     con.commit();
   }
 
@@ -44,7 +45,7 @@ class OrganismUpdater implements AutoCloseable
     if (!canUpdateCounters())
       throw new IllegalStateException();
 
-    updateOrganism(org.getId(), template, geneCounter, tranCounter, con);
+    OrganismRepo.update(org.getId(), template, geneCounter, tranCounter, con);
     con.commit();
   }
 
@@ -72,7 +73,7 @@ class OrganismUpdater implements AutoCloseable
       con.close();
     }
 
-    public OrganismUpdater loadOrganism(final int id, ErrProvider err)
+    public OrganismUpdater loadOrganism(final long id, ErrProvider err)
     throws Exception {
       return new OrganismUpdater(con,
         selectById(id, con).orElseThrow(err));

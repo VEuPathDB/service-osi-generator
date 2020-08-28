@@ -19,6 +19,10 @@ public class QueryUtil
     return ps -> ps.setObject(1, ids);
   }
 
+  public static StatementPreparer stringSet(String[] vals) {
+    return ps -> ps.setObject(1, vals);
+  }
+
   public static < R > RowParser < Optional < R > > option(RowParser < R > ps) {
     return rs -> {
       if (!rs.next())

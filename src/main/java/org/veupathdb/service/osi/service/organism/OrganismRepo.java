@@ -2,17 +2,15 @@ package org.veupathdb.service.osi.service.organism;
 
 import java.sql.Connection;
 import java.sql.Types;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
-import io.vulpine.lib.query.util.basic.BasicPreparedMapReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedWriteQuery;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.NewOrganism;
 import org.veupathdb.service.osi.model.db.Organism;
-import org.veupathdb.service.osi.model.db.User;
-import org.veupathdb.service.osi.model.db.raw.OrganismRow;
 import org.veupathdb.service.osi.repo.SQL;
 import org.veupathdb.service.osi.repo.SQL.Select.Osi.Organisms;
 import org.veupathdb.service.osi.service.DbMan;
@@ -33,7 +31,7 @@ public class OrganismRepo
   }
 
   /**
-   * @see #incrementGeneCounter(long, int)
+   * @see #incrementGeneCounter(long, int, Connection)
    */
   public static long allocateGeneIds(
     final long organismId,
@@ -51,37 +49,18 @@ public class OrganismRepo
     return getInstance().incrementTranscriptCounter(id, count);
   }
 
-  public static Map < Long, Organism > selectByCollectionIds(
-    final long[] collectionIds,
-    final Map < Long, User > users
-  ) throws Exception {
-    return getInstance().getByCollectionIds(collectionIds, users);
-  }
-
-  public static Map < Long, Organism > selectByCollectionId(
-    final long collectionId,
-    final Map < Long, User > users
-  ) throws Exception {
-    return getInstance().getByCollectionId(collectionId, users);
-  }
-
   public static Organism insert(NewOrganism organism) throws Exception {
     return getInstance().create(organism);
   }
 
-  public static Optional < OrganismRow > selectById(long organismId)
+  public static Optional < Organism > selectById(long organismId)
   throws Exception {
     return getInstance().getById(organismId);
   }
 
-  public static Optional < OrganismRow > selectById(long orgId, Connection con)
+  public static Optional < Organism > selectById(long orgId, Connection con)
   throws Exception {
     return getInstance().getById(orgId, con);
-  }
-
-  public static Map < Long, Organism > selectByIds(long[] organismIds)
-  throws Exception {
-    return getInstance().getByIds(organismIds);
   }
 
   public static Optional < Organism > selectByName(String name)
@@ -177,40 +156,11 @@ public class OrganismRepo
     ).execute().getValue();
   }
 
-  public Map < Long, Organism > getByCollectionIds(
-    final long[] collectionIds,
-    final Map < Long, User > users
-  ) throws Exception {
-    return new BasicPreparedMapReadQuery <>(
-      Organisms.BY_COLLECTIONS,
-      DbMan::connection,
-      OrganismUtil::parseId,
-      rs -> OrganismUtil.newOrganism(rs, users),
-      QueryUtil.idSet(collectionIds)
-    ).execute().getValue();
-  }
-
-  public Map < Long, Organism > getByCollectionId(
-    final long collectionId,
-    final Map < Long, User > users
-  ) throws Exception {
-    return new BasicPreparedMapReadQuery <>(
-      Organisms.BY_COLLECTIONS,
-      DbMan::connection,
-      OrganismUtil::parseId,
-      rs -> OrganismUtil.newOrganism(rs, users),
-      QueryUtil.singleId(collectionId)
-    ).execute().getValue();
-  }
-
   public Organism create(NewOrganism organism) throws Exception {
     return new BasicPreparedReadQuery <>(
       SQL.Insert.Osi.ORGANISM,
       DbMan::connection,
-      rs -> {
-        rs.next();
-        return OrganismUtil.newOrganism(rs, organism);
-      },
+      QueryUtil.must(rs -> OrganismUtil.newOrganismRow(rs, organism)),
       ps -> {
         ps.setString(1, organism.getTemplate());
         ps.setLong(2, organism.getGeneCounterStart());
@@ -222,31 +172,20 @@ public class OrganismRepo
     ).execute().getValue();
   }
 
-  public Optional < OrganismRow > getById(long organismId)
+  public Optional < Organism > getById(long organismId)
   throws Exception {
     try (var con = DbMan.connection()) {
       return getById(organismId, con);
     }
   }
 
-  public Optional < OrganismRow > getById(long orgId, Connection con)
+  public Optional < Organism > getById(long orgId, Connection con)
   throws Exception {
     return new BasicPreparedReadQuery <>(
       Organisms.BY_ID,
       con,
       QueryUtil.option(OrganismUtil::newOrganismRow),
       QueryUtil.singleId(orgId)
-    ).execute().getValue();
-  }
-
-  public Map < Long, Organism > getByIds(long[] organismIds)
-  throws Exception {
-    return new BasicPreparedMapReadQuery <>(
-      Organisms.BY_IDS,
-      DbMan::connection,
-      OrganismUtil::parseId,
-      OrganismUtil::newOrganism,
-      QueryUtil.idSet(organismIds)
     ).execute().getValue();
   }
 
@@ -262,7 +201,7 @@ public class OrganismRepo
     return new BasicPreparedReadQuery <>(
       Organisms.BY_NAME,
       con,
-      QueryUtil.option(OrganismUtil::newOrganism),
+      QueryUtil.option(OrganismUtil::newOrganismRow),
       QueryUtil.singleString(name)
     ).execute().getValue();
   }
@@ -280,7 +219,7 @@ public class OrganismRepo
     return new BasicPreparedListReadQuery <>(
       Organisms.BY_QUERY,
       DbMan::connection,
-      OrganismUtil::newOrganism,
+      OrganismUtil::newOrganismRow,
       ps -> {
         if (query.getName() == null)
           ps.setNull(1, Types.VARCHAR);

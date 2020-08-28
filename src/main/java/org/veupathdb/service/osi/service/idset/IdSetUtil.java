@@ -4,19 +4,21 @@ import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-import org.veupathdb.service.osi.generated.model.*;
+import org.veupathdb.service.osi.generated.model.CollectionResponse;
+import org.veupathdb.service.osi.generated.model.IdSetResponse;
+import org.veupathdb.service.osi.generated.model.IdSetResponseImpl;
+import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.NewIdSet;
-import org.veupathdb.service.osi.model.db.raw.IdSetRow;
 import org.veupathdb.service.osi.repo.Schema.Osi.IdSets;
 
-public class IdSetUtils
+public class IdSetUtil
 {
   public static long getId(final ResultSet rs) throws Exception {
     return rs.getLong(IdSets.ID_SET_ID);
   }
 
-  public static IdSetRow newIdSetRow(final ResultSet rs) throws Exception {
-    return new IdSetRow(
+  public static IdSet newIdSetRow(final ResultSet rs) throws Exception {
+    return new IdSet(
       rs.getInt(IdSets.ID_SET_ID),
       rs.getInt(IdSets.COLLECTION_ID),
       rs.getInt(IdSets.ORGANISM_ID),
@@ -28,11 +30,11 @@ public class IdSetUtils
     );
   }
 
-  public static IdSetRow newIdSetRow(
+  public static IdSet newIdSetRow(
     final ResultSet rs,
     final NewIdSet  ids
   ) throws Exception {
-    return new IdSetRow(
+    return new IdSet(
       rs.getInt(IdSets.ID_SET_ID),
       ids.getCollection().getId(),
       ids.getOrganism().getId(),
@@ -45,7 +47,7 @@ public class IdSetUtils
   }
 
   public static Map < Long, IdSetResponse > setsToResponses(
-    final Collection < IdSetRow > rows,
+    final Collection < IdSet > rows,
     final Map < Long, CollectionResponse > colls
   ) {
     var out = new HashMap< Long, IdSetResponse >(rows.size());
@@ -59,7 +61,7 @@ public class IdSetUtils
     return out;
   }
 
-  public static IdSetResponse setToRes(IdSetRow set) {
+  public static IdSetResponse setToRes(IdSet set) {
     var out = new IdSetResponseImpl();
 
     out.setIdSetId(set.getId());

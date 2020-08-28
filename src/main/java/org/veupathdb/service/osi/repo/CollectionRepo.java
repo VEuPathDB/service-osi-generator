@@ -1,19 +1,21 @@
 package org.veupathdb.service.osi.repo;
 
 import java.sql.Types;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import org.veupathdb.service.osi.model.RecordQuery;
+import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.NewIdSetCollection;
-import org.veupathdb.service.osi.model.db.raw.IdSetCollectionRow;
-import org.veupathdb.service.osi.service.collections.CollectionUtils;
 import org.veupathdb.service.osi.service.DbMan;
+import org.veupathdb.service.osi.service.collections.CollectionUtils;
 import org.veupathdb.service.osi.util.QueryUtil;
 
 public class CollectionRepo
 {
-  public static IdSetCollectionRow insert(NewIdSetCollection coll)
+  public static IdSetCollection insert(NewIdSetCollection coll)
   throws Exception {
     return new BasicPreparedReadQuery <>(
       SQL.Insert.Osi.COLLECTION,
@@ -26,7 +28,7 @@ public class CollectionRepo
     ).execute().getValue();
   }
 
-  public static Optional < IdSetCollectionRow > select(long id)
+  public static Optional < IdSetCollection > select(long id)
   throws Exception {
     return new BasicPreparedReadQuery<>(
       SQL.Select.Osi.Collections.BY_ID,
@@ -36,7 +38,7 @@ public class CollectionRepo
     ).execute().getValue();
   }
 
-  public static List < IdSetCollectionRow > select(
+  public static List < IdSetCollection > select(
     final RecordQuery query
   ) throws Exception {
     try (
@@ -69,7 +71,7 @@ public class CollectionRepo
         ps.setNull(5, Types.VARCHAR);
 
       try (var rs = ps.executeQuery()) {
-        var out = new ArrayList <IdSetCollectionRow>();
+        var out = new ArrayList < IdSetCollection >();
 
         while (rs.next())
           out.add(CollectionUtils.newCollectionRow(rs));

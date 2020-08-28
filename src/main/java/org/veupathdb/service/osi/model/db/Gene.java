@@ -2,46 +2,49 @@ package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
 
-import org.veupathdb.service.osi.util.Validation;
-
-public class Gene extends NewGene
+public class Gene
 {
   private final long geneId;
 
+  private final long idSetId;
+
+  private final String geneIdentifier;
+
   private final OffsetDateTime createdOn;
 
-  public Gene(
-    long geneId,
-    IdSet idSet,
-    String identifier,
-    User createdBy,
-    OffsetDateTime createdOn
-  ) {
-    super(idSet, identifier, createdBy);
-
-    this.geneId    = Validation.oneMinimum(geneId);
-    this.createdOn = Validation.nonNull(createdOn);
-  }
+  private final long createdBy;
 
   public Gene(
     long geneId,
+    long idSetId,
+    String geneIdentifier,
     OffsetDateTime createdOn,
-    NewGene from
+    long createdBy
   ) {
-    this (
-      geneId,
-      from.getIdSet(),
-      from.getIdentifier(),
-      from.getCreatedBy(),
-      createdOn
-    );
+    this.geneId         = geneId;
+    this.idSetId        = idSetId;
+    this.geneIdentifier = geneIdentifier;
+    this.createdOn      = createdOn;
+    this.createdBy      = createdBy;
   }
 
-  public long getGeneId() {
+  public long getId() {
     return geneId;
+  }
+
+  public long getIdSetId() {
+    return idSetId;
+  }
+
+  public String getGeneIdentifier() {
+    return geneIdentifier;
   }
 
   public OffsetDateTime getCreatedOn() {
     return createdOn;
+  }
+
+  public long getCreatedBy() {
+    return createdBy;
   }
 }

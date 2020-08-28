@@ -1,11 +1,11 @@
 package org.veupathdb.service.osi.repo;
 
+import java.util.function.Supplier;
+
 import io.vulpine.lib.sql.load.SqlLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.osi.repo.Schema.Table;
-
-import java.util.function.Supplier;
 
 public interface SQL
 {
@@ -39,7 +39,8 @@ public interface SQL
         COLLECTION = insert(Table.ID_SET_COLLECTIONS, "new-collection"),
         GENE       = insert(Table.GENES, "new-gene"),
         ID_SET     = insert(Table.ID_SETS, "new-id-set"),
-        ORGANISM   = insert(Table.ORGANISMS, "new-organism");
+        ORGANISM   = insert(Table.ORGANISMS, "new-organism"),
+        TRANSCRIPT = insert(Table.TRANSCRIPTS, "new-transcript");
     }
   }
 

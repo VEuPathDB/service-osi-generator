@@ -14,7 +14,7 @@ public class IdSetPatchEntryImpl implements IdSetPatchEntry {
   private String geneId;
 
   @JsonProperty("transcripts")
-  private long transcripts;
+  private int transcripts;
 
   @JsonProperty("geneId")
   public String getGeneId() {
@@ -27,12 +27,12 @@ public class IdSetPatchEntryImpl implements IdSetPatchEntry {
   }
 
   @JsonProperty("transcripts")
-  public long getTranscripts() {
+  public int getTranscripts() {
     return this.transcripts;
   }
 
   @JsonProperty("transcripts")
-  public void setTranscripts(long transcripts) {
+  public void setTranscripts(int transcripts) {
     this.transcripts = transcripts;
   }
 }

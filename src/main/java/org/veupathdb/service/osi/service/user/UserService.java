@@ -1,6 +1,8 @@
 package org.veupathdb.service.osi.service.user;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.UUID;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotAuthorizedException;

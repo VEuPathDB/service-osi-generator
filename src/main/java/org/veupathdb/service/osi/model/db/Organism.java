@@ -2,21 +2,23 @@ package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
 
-import org.veupathdb.service.osi.util.Errors;
-import org.veupathdb.service.osi.util.Format;
-import org.veupathdb.service.osi.util.Validation;
-
-/**
- * Immutable representation of an expanded Organism record containing references
- * to immutable representations of all parent/depended records.
- */
-public class Organism extends NewOrganism
+public class Organism
 {
   private final long id;
 
-  private final long geneCountCur;
+  private final String name;
 
-  private final long tranCountCur;
+  private final String template;
+
+  private final long geneCounterStart;
+
+  private final long geneCounterCurrent;
+
+  private final long transcriptCounterStart;
+
+  private final long transcriptCounterCurrent;
+
+  private final long createdBy;
 
   private final OffsetDateTime created;
 
@@ -26,58 +28,56 @@ public class Organism extends NewOrganism
     long id,
     String name,
     String template,
-    long geneCountStart,
-    long geneCountCurrent,
-    long transcriptCountStart,
-    long transcriptCountCurrent,
-    User createdBy,
+    long geneCounterStart,
+    long geneCounterCurrent,
+    long transcriptCounterStart,
+    long transcriptCounterCurrent,
+    long createdBy,
     OffsetDateTime created,
     OffsetDateTime modified
   ) {
-    super(name, template, geneCountStart, transcriptCountStart, createdBy);
-
-    this.id           = Validation.oneMinimum(id);
-    this.geneCountCur = Validation.setMinimum(geneCountCurrent, geneCountStart);
-    this.tranCountCur = Validation.setMinimum(
-      transcriptCountCurrent,
-      transcriptCountStart
-    );
-    this.created      = Validation.nonNull(created);
-    this.modified     = Validation.nonNull(modified);
-  }
-
-  public Organism(
-    int id,
-    long geneCounterCurrent,
-    long transcriptCounterCurrent,
-    OffsetDateTime created,
-    OffsetDateTime modified,
-    NewOrganism from
-  ) {
-    this(
-      id,
-      from.getName(),
-      from.getTemplate(),
-      from.getGeneCounterStart(),
-      geneCounterCurrent,
-      from.getTranscriptCounterStart(),
-      transcriptCounterCurrent,
-      from.getCreatedBy(),
-      created,
-      modified
-    );
+    this.id                       = id;
+    this.name                     = name;
+    this.template                 = template;
+    this.geneCounterStart         = geneCounterStart;
+    this.geneCounterCurrent       = geneCounterCurrent;
+    this.transcriptCounterStart   = transcriptCounterStart;
+    this.transcriptCounterCurrent = transcriptCounterCurrent;
+    this.createdBy                = createdBy;
+    this.created                  = created;
+    this.modified                 = modified;
   }
 
   public long getId() {
     return id;
   }
 
+  public String getName() {
+    return name;
+  }
+
+  public String getTemplate() {
+    return template;
+  }
+
+  public long getGeneCounterStart() {
+    return geneCounterStart;
+  }
+
   public long getGeneCounterCurrent() {
-    return geneCountCur;
+    return geneCounterCurrent;
+  }
+
+  public long getTranscriptCounterStart() {
+    return transcriptCounterStart;
   }
 
   public long getTranscriptCounterCurrent() {
-    return tranCountCur;
+    return transcriptCounterCurrent;
+  }
+
+  public long getCreatedBy() {
+    return createdBy;
   }
 
   public OffsetDateTime getCreatedOn() {
@@ -86,40 +86,5 @@ public class Organism extends NewOrganism
 
   public OffsetDateTime getModified() {
     return modified;
-  }
-
-  public Organism incrementGeneCounter(int by) {
-    return new Organism(
-      getId(),
-      getName(),
-      getTemplate(),
-      getGeneCounterStart(),
-      getGeneCounterCurrent() + by,
-      getTranscriptCounterStart(),
-      getTranscriptCounterCurrent(),
-      getCreatedBy(),
-      getCreatedOn(),
-      getModified()
-    );
-  }
-
-  public Organism incrementTranscriptCounter(int by) {
-    return new Organism(
-      getId(),
-      getName(),
-      getTemplate(),
-      getGeneCounterStart(),
-      getGeneCounterCurrent(),
-      getTranscriptCounterStart(),
-      getTranscriptCounterCurrent() + by,
-      getCreatedBy(),
-      getCreatedOn(),
-      getModified()
-    );
-  }
-
-  @Override
-  public String toString() {
-    return Errors.toRuntime(this, Format.Json()::writeValueAsString);
   }
 }

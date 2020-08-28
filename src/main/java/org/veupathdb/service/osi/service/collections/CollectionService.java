@@ -15,7 +15,7 @@ import org.veupathdb.service.osi.repo.CollectionRepo;
 import org.veupathdb.service.osi.repo.IdSetRepo;
 import org.veupathdb.service.osi.service.genes.GeneRepo;
 import org.veupathdb.service.osi.service.genes.GeneUtil;
-import org.veupathdb.service.osi.service.idset.IdSetUtils;
+import org.veupathdb.service.osi.service.idset.IdSetUtil;
 import org.veupathdb.service.osi.service.transcript.TranscriptRepo;
 import org.veupathdb.service.osi.service.transcript.TranscriptUtils;
 import org.veupathdb.service.osi.service.user.UserService;
@@ -70,7 +70,7 @@ public class CollectionService
       var genes = GeneRepo.selectByCollectionId(id);
       var outGenes = GeneUtil.toEntries(
         genes.values(),
-        IdSetUtils.setsToResponses(
+        IdSetUtil.setsToResponses(
           IdSetRepo.selectByCollectionId(id),
           singletonMap(id, res)));
 
@@ -119,7 +119,7 @@ public class CollectionService
       var genes    = GeneRepo.selectByCollectionIds(ids);
       var outGenes = GeneUtil.toEntries(
         genes.values(),
-        IdSetUtils.setsToResponses(
+        IdSetUtil.setsToResponses(
           IdSetRepo.selectByCollectionIds(ids),
           res));
 

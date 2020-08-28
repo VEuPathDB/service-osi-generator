@@ -1,7 +1,6 @@
 package org.veupathdb.service.osi.service.user;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.Date;
 

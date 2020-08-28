@@ -4,7 +4,7 @@ import org.veupathdb.service.osi.util.Validation;
 
 public class NewGene
 {
-  private final IdSet idSet;
+  private final IdSet  idSet;
   private final String identifier;
   private final User createdBy;
 

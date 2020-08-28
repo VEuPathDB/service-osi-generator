@@ -282,7 +282,7 @@ securedBy: basic
         body: error.ServerError
   /{id-set-id}:
     uriParameters:
-      id-set-id: integer
+      id-set-id: OneBasedLong
     get:
       responses:
         200:
@@ -506,7 +506,7 @@ types:
       geneId:
         type: string
         minLength: 3
-      transcripts: OneBasedLong
+      transcripts: ZeroBasedInt
     additionalProperties: false
     example:
       geneId: PF3D7_0145842

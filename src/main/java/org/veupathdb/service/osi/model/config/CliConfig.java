@@ -1,7 +1,5 @@
 package org.veupathdb.service.osi.model.config;
 
-import java.util.UUID;
-
 import org.veupathdb.lib.container.jaxrs.config.Options;
 import picocli.CommandLine.Option;
 

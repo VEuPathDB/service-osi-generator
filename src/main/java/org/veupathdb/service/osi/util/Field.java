@@ -15,6 +15,12 @@ public final class Field
       NAME = "name";
   }
 
+  public static final class Gene
+  {
+    public static final String
+      ID = "geneId";
+  }
+
   public static final class IdSet
   {
     public static final String

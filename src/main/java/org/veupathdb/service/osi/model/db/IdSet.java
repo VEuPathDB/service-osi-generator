@@ -2,49 +2,170 @@ package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
 
-import org.veupathdb.service.osi.model.db.raw.IdSetCollectionRow;
-import org.veupathdb.service.osi.model.db.raw.OrganismRow;
-import org.veupathdb.service.osi.util.Validation;
+import org.veupathdb.service.osi.util.InputValidationException;
 
-public class IdSet extends NewIdSet
+/**
+ * Immutable raw representation of the data in a single row of the
+ * {@code osi.id_sets} table in this service's backing database.
+ */
+public class IdSet
 {
   private final long idSetId;
 
+  private final long collectionId;
+
+  private final long organismId;
+
+  private final String template;
+
+  private final long counterStart;
+
+  private final int numIssued;
+
   private final OffsetDateTime createdOn;
 
+  private final long createdBy;
+
+  /**
+   * Creates a new instance of the {@code IdSetRow} class.
+   *
+   * @param idSetId      Primary key value for this {@code IdSet} record.
+   * @param collectionId Primary key value for this {@code IdSet}'s parent
+   *                     {@link IdSetCollection} record.
+   * @param organismId   Primary key value for this {@code IdSet}'s parent
+   *                     {@link Organism} record.
+   * @param template     Template string as it existed on the parent
+   *                     {@code Organism} record at the time of this
+   *                     {@code IdSet}'s creation.  This value is used when
+   *                     generating new gene ids for under this {@code IdSet}.
+   * @param counterStart The gene id integer component starting point as of the
+   *                     creation of this {@code IdSet} record.
+   * @param numIssued    Number of new gene ids issued under this {@code IdSet}.
+   * @param createdOn      A timestamp of when this {@code IdSet} record was
+   *                     created.
+   * @param createdBy    Primary key value for the user that created this
+   *                     {@code IdSet} record.
+   *
+   * @throws InputValidationException if any of the following are true:
+   * <ul>
+   *   <li>{@code idSetId} is less than {@code 1}</li>
+   *   <li>{@code collectionId} is less than {@code 1}</li>
+   *   <li>{@code organismId} is less than {@code 1}</li>
+   *   <li>{@code template} is {@code null} or blank/empty</li>
+   *   <li>{@code counterStart} is less than {@code 1}</li>
+   *   <li>{@code numIssued} is less than {@code 0}</li>
+   *   <li>{@code createdOn} is {@code null}</li>
+   *   <li>{@code createdBy} is less than {@code 1}</li>
+   * </ul>
+   */
   public IdSet(
     long idSetId,
-    IdSetCollectionRow collection,
-    OrganismRow organism,
+    long collectionId,
+    long organismId,
     String template,
-    User createdBy,
     long counterStart,
     int numIssued,
-    OffsetDateTime createdOn
+    OffsetDateTime createdOn,
+    long createdBy
   ) {
-    super(collection, organism, template, createdBy, counterStart, numIssued);
-    this.idSetId   = Validation.oneMinimum(idSetId);
-    this.createdOn = Validation.nonNull(createdOn);
+    this.idSetId      = idSetId;
+    this.collectionId = collectionId;
+    this.organismId   = organismId;
+    this.template     = template;
+    this.counterStart = counterStart;
+    this.numIssued = numIssued;
+    this.createdOn = createdOn;
+    this.createdBy = createdBy;
   }
 
-  public IdSet(long idSetId, OffsetDateTime createdOn, NewIdSet from) {
-    this(
-      idSetId,
-      from.getCollection(),
-      from.getOrganism(),
-      from.getTemplate(),
-      from.getCreatedBy(),
-      from.getCounterStart(),
-      from.getNumIssued(),
-      createdOn
-    );
-  }
-
+  /**
+   * Returns the database assigned primary key value for this {@code IdSet}
+   * record.
+   *
+   * @return the primary key value for this {@code IdSet}.
+   */
   public long getId() {
     return idSetId;
   }
 
+  /**
+   * Returns the primary key of the {@link IdSetCollection} record to which
+   * this {@code IdSet} belongs.
+   *
+   * @return the primary key for this {@code IdSet}'s parent
+   * {@code IdSetCollection} record.
+   */
+  public long getCollectionId() {
+    return collectionId;
+  }
+
+  /**
+   * Returns the primary key of the {@link Organism} record to which this
+   * {@code IdSet} belongs.
+   *
+   * @return the primary key for this {@code IdSet}'s parent {@code Organism}
+   * record.
+   */
+  public long getOrganismId() {
+    return organismId;
+  }
+
+  /**
+   * Returns the template string that is used to generate new gene ids under
+   * this {@code IdSet}.
+   *
+   * @return this {@code IdSet}'s gene id template string.
+   */
+  public String getTemplate() {
+    return template;
+  }
+
+  /**
+   * Returns the gene id integer component starting point as of the time this
+   * {@code IdSet} was created.
+   * <p>
+   * This value is for indication purposes only and has no impact on gene ids
+   * generated under this {@code IdSet}.
+   *
+   * TODO: is this value even needed?
+   *
+   * @return the gene id integer component starting point as of the time this
+   * {@code IdSet} was created
+   */
+  public long getCounterStart() {
+    return counterStart;
+  }
+
+  /**
+   * Returns the number of gene ids generated by this {@code IdSet}.
+   * <p>
+   * This value is not the same as the number of genes assigned to this
+   * {@code IdSet} as preexisting genes ids may be arbitrarily assigned to an
+   * {@code IdSet}.
+   *
+   * @return the number of gene ids generated by this {@code IdSet}
+   */
+  public int getNumIssued() {
+    return numIssued;
+  }
+
+  /**
+   * Returns the timestamp for the creation date of this {@code IdSet} record.
+   *
+   * @return the timestamp for the creation date of this {@code IdSet} record.
+   */
   public OffsetDateTime getCreatedOn() {
     return createdOn;
+  }
+
+  /**
+   * Returns the primary key to the record representing the user that requested
+   * the creation of this {@code IdSet}.
+   *
+   * @return the primary key to the record representing the user that requested
+   * the creation of this {@code IdSet}.
+   */
+  public long getCreatedBy() {
+    return createdBy;
   }
 }

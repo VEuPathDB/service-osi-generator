@@ -1,49 +1,36 @@
 package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
-import java.util.Map;
 
-import org.veupathdb.service.osi.model.db.raw.IdSetCollectionRow;
-import org.veupathdb.service.osi.util.Validation;
-
-public class IdSetCollection extends NewIdSetCollection
+public class IdSetCollection
 {
   private final long collectionId;
+  private final String name;
+  private final long createdBy;
   private final OffsetDateTime createdOn;
 
   public IdSetCollection(
     long collectionId,
     String name,
-    User createdBy,
+    long createdBy,
     OffsetDateTime createdOn
   ) {
-    super(name, createdBy);
-    this.collectionId = Validation.oneMinimum(collectionId);
-    this.createdOn    = Validation.nonNull(createdOn);
+    this.collectionId = collectionId;
+    this.name         = name;
+    this.createdBy    = createdBy;
+    this.createdOn    = createdOn;
   }
 
-  public IdSetCollection(
-    long collectionId,
-    OffsetDateTime createdOn,
-    NewIdSetCollection from
-  ) {
-    this(collectionId, from.getName(), from.getCreatedBy(), createdOn);
-  }
-
-  public IdSetCollection(
-    IdSetCollectionRow row,
-    Map < Integer, User > users
-  ) {
-    this(
-      row.getId(),
-      row.getName(),
-      users.get(row.getCreatedBy()),
-      row.getCreatedOn()
-    );
-  }
-
-  public long getCollectionId() {
+  public long getId() {
     return collectionId;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public long getCreatedBy() {
+    return createdBy;
   }
 
   public OffsetDateTime getCreatedOn() {

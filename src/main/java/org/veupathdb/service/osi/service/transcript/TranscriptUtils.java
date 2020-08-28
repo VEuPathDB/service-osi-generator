@@ -13,11 +13,7 @@ import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntry;
 import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.Transcript;
-import org.veupathdb.service.osi.model.db.User;
-import org.veupathdb.service.osi.model.db.raw.GeneRow;
-import org.veupathdb.service.osi.model.db.raw.TranscriptRow;
 import org.veupathdb.service.osi.repo.Schema.Osi.Transcripts;
-import org.veupathdb.service.osi.service.user.UserManager;
 
 public class TranscriptUtils
 {
@@ -47,39 +43,24 @@ public class TranscriptUtils
     return getInstance().parseId(rs);
   }
 
-  public static TranscriptRow newTranscriptRow(final ResultSet rs)
+  public static Transcript newTranscriptRow(final ResultSet rs)
   throws Exception {
     return getInstance().createTranscriptRow(rs);
   }
 
-  public static Transcript newTranscript(
-    final ResultSet rs,
-    final Map < Long, User > users,
-    final Map < Long, Gene > genes
-  ) throws Exception {
-    return getInstance().createTranscript(rs, users, genes);
-  }
-
-  public static Transcript newTranscript(
-    final ResultSet rs,
-    final Map < Long, Gene > genes
-  ) throws Exception {
-    return getInstance().createTranscript(rs, genes);
-  }
-
   /**
-   * @see #expandTranscriptIds(GeneRow, TranscriptRow)
+   * @see #expandTranscriptIds(Gene, Transcript)
    */
   public static List < Pair < String, String > > expandTranscript(
-    final GeneRow gene,
-    final TranscriptRow tran
+    final Gene gene,
+    final Transcript tran
   ) {
     return getInstance().expandTranscriptIds(gene, tran);
   }
 
   public static void assign(
-    final Collection < TranscriptRow > rows,
-    final Map < Long, GeneRow > genes,
+    final Collection < Transcript > rows,
+    final Map < Long, Gene > genes,
     final Map < Long, GeneratedTranscriptEntry > entries
   ) {
     getInstance().assignTranscripts(rows, genes, entries);
@@ -96,46 +77,15 @@ public class TranscriptUtils
     return rs.getLong(Transcripts.TRANSCRIPT_ID);
   }
 
-  public TranscriptRow createTranscriptRow(ResultSet rs) throws Exception {
+  public Transcript createTranscriptRow(ResultSet rs) throws Exception {
     log.trace("TranscriptUtils#createTranscriptRow(ResultSet)");
-    return new TranscriptRow(
+    return new Transcript(
       rs.getLong(Transcripts.TRANSCRIPT_ID),
       rs.getLong(Transcripts.GENE_ID),
       rs.getLong(Transcripts.COUNTER_START),
       rs.getInt(Transcripts.NUM_ISSUED),
       rs.getObject(Transcripts.CREATED_ON, OffsetDateTime.class),
       rs.getLong(Transcripts.CREATED_BY)
-    );
-  }
-
-  public TranscriptRow createTranscript(
-    final ResultSet rs,
-    final Map < Long, User > users,
-    final Map < Long, GeneRow > genes
-  ) throws Exception {
-    log.trace("TranscriptUtils#createTranscript(ResultSet, Map, Map)");
-    return new TranscriptRow(
-      rs.getLong(Transcripts.TRANSCRIPT_ID),
-      genes.get(rs.getLong(Transcripts.GENE_ID)),
-      rs.getLong(Transcripts.COUNTER_START),
-      rs.getInt(Transcripts.NUM_ISSUED),
-      users.get(rs.getLong(Transcripts.CREATED_BY)),
-      rs.getObject(Transcripts.CREATED_ON, OffsetDateTime.class)
-    );
-  }
-
-  public TranscriptRow createTranscript(
-    final ResultSet rs,
-    final Map < Long, GeneRow > genes
-  ) throws Exception {
-    log.trace("TranscriptUtils#createTranscript(ResultSet, Map)");
-    return new TranscriptRow(
-      rs.getLong(Transcripts.TRANSCRIPT_ID),
-      genes.get(rs.getLong(Transcripts.GENE_ID)),
-      rs.getLong(Transcripts.COUNTER_START),
-      rs.getInt(Transcripts.NUM_ISSUED),
-      UserManager.getLocal(rs.getInt(Transcripts.CREATED_BY)).orElseThrow(),
-      rs.getObject(Transcripts.CREATED_ON, OffsetDateTime.class)
     );
   }
 
@@ -153,8 +103,8 @@ public class TranscriptUtils
    * do not match (If the transcript row is not for the given gene row).
    */
   public List < Pair < String, String > > expandTranscriptIds(
-    final GeneRow gene,
-    final TranscriptRow tran
+    final Gene gene,
+    final Transcript tran
   ) {
     log.trace("TranscriptUtils#expandTranscriptIds(GeneRow, TranscriptRow)");
     if (gene.getId() != tran.getGeneId())
@@ -177,8 +127,8 @@ public class TranscriptUtils
   }
 
   public void assignTranscripts(
-    final Collection < TranscriptRow > rows,
-    final Map < Long, GeneRow > genes,
+    final Collection < Transcript > rows,
+    final Map < Long, Gene > genes,
     final Map < Long, GeneratedTranscriptEntry > entries
   ) {
     for (var t : rows) {
