@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
+import org.apache.logging.log4j.Logger;
+import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.NewIdSetCollection;
@@ -16,6 +18,8 @@ import org.veupathdb.service.osi.util.QueryUtil;
 public class CollectionRepo
 {
   private static final CollectionRepo instance = new CollectionRepo();
+
+  private final Logger log = LogProvider.logger(getClass());
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                    ║ //
@@ -50,6 +54,7 @@ public class CollectionRepo
 
   public IdSetCollection insertRow(final NewIdSetCollection coll)
   throws Exception {
+    log.trace("CollectionRepo#insertRow(NewIdSetCollection)");
     return new BasicPreparedReadQuery <>(
       SQL.Insert.Osi.COLLECTION,
       DbMan::connection,
@@ -63,6 +68,7 @@ public class CollectionRepo
 
   public Optional < IdSetCollection > selectById(final long id)
   throws Exception {
+    log.trace("CollectionRepo#selectById(long)");
     return new BasicPreparedReadQuery<>(
       SQL.Select.Osi.Collections.BY_ID,
       DbMan::connection,
@@ -73,6 +79,7 @@ public class CollectionRepo
 
   public List < IdSetCollection > selectByQuery(final RecordQuery query)
   throws Exception {
+    log.trace("CollectionRepo#selectByQuery(RecordQuery)");
     try (
       var cn = DbMan.connection();
       var ps = cn.prepareStatement(SQL.Select.Osi.Collections.BY_QUERY)
