@@ -1,16 +1,19 @@
 package org.veupathdb.service.osi.model.db;
 
+import org.veupathdb.service.osi.model.db.raw.GeneRow;
+import org.veupathdb.service.osi.util.Errors;
+import org.veupathdb.service.osi.util.Format;
 import org.veupathdb.service.osi.util.Validation;
 
 public class NewTranscript
 {
-  private final Gene gene;
+  private final GeneRow gene;
   private final long counterStart;
   private final int numIssued;
   private final User createdBy;
 
   public NewTranscript(
-    Gene gene,
+    GeneRow gene,
     long counterStart,
     int numIssued,
     User createdBy
@@ -21,7 +24,7 @@ public class NewTranscript
     this.createdBy    = Validation.nonNull(createdBy);
   }
 
-  public Gene getGene() {
+  public GeneRow getGene() {
     return gene;
   }
 
@@ -35,5 +38,10 @@ public class NewTranscript
 
   public User getCreatedBy() {
     return createdBy;
+  }
+
+  @Override
+  public String toString() {
+    return Errors.toRuntime(this, Format.Json()::writeValueAsString);
   }
 }

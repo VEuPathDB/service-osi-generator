@@ -10,7 +10,7 @@ import org.veupathdb.service.osi.generated.model.IdSetPostRequest;
 import org.veupathdb.service.osi.generated.resources.IdSets;
 import org.veupathdb.service.osi.service.user.UserService;
 
-import static org.veupathdb.service.osi.service.genes.IdSetService.*;
+import static org.veupathdb.service.osi.service.idset.IdSetService.*;
 
 public class IdSetController implements IdSets
 {
@@ -34,7 +34,7 @@ public class IdSetController implements IdSets
   @Override
   public PostIdSetsResponse postIdSets(IdSetPostRequest entity) {
     return PostIdSetsResponse.respond200WithApplicationJson(
-      create(entity, UserService.requireRequestUser(req)));
+      create(entity, req));
   }
 
   @Override

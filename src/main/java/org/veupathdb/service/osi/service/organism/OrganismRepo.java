@@ -12,6 +12,7 @@ import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.NewOrganism;
 import org.veupathdb.service.osi.model.db.Organism;
 import org.veupathdb.service.osi.model.db.User;
+import org.veupathdb.service.osi.model.db.raw.OrganismRow;
 import org.veupathdb.service.osi.repo.SQL;
 import org.veupathdb.service.osi.repo.SQL.Select.Osi.Organisms;
 import org.veupathdb.service.osi.service.DbMan;
@@ -34,8 +35,12 @@ public class OrganismRepo
   /**
    * @see #incrementGeneCounter(long, int)
    */
-  public static long allocateGeneIds(long id, int count) throws Exception {
-    return getInstance().incrementGeneCounter(id, count);
+  public static long allocateGeneIds(
+    final long organismId,
+    final int incrementBy,
+    final Connection con
+  ) throws Exception {
+    return getInstance().incrementGeneCounter(organismId, incrementBy, con);
   }
 
   /**
@@ -64,12 +69,12 @@ public class OrganismRepo
     return getInstance().create(organism);
   }
 
-  public static Optional < Organism > selectById(long organismId)
+  public static Optional < OrganismRow > selectById(long organismId)
   throws Exception {
     return getInstance().getById(organismId);
   }
 
-  public static Optional < Organism > selectById(long orgId, Connection con)
+  public static Optional < OrganismRow > selectById(long orgId, Connection con)
   throws Exception {
     return getInstance().getById(orgId, con);
   }
@@ -112,7 +117,13 @@ public class OrganismRepo
     long tranCounter,
     Connection con
   ) throws Exception {
-    getInstance().updateOrganism(orgId, template, geneCounter, tranCounter, con);
+    getInstance().updateOrganism(
+      orgId,
+      template,
+      geneCounter,
+      tranCounter,
+      con
+    );
   }
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
@@ -125,14 +136,19 @@ public class OrganismRepo
    * Attempts to allocate <code>count</code> sequential gene id int values,
    * returning the first gene id value in the allocated block.
    *
+   * @param id    organism id
    * @param count number of gene id int values to allocate
    *
    * @return first gene id int value in the allocated block.
    */
-  public long incrementGeneCounter(long id, int count) throws Exception {
+  public long incrementGeneCounter(
+    final long id,
+    final int count,
+    final Connection con
+  ) throws Exception {
     return new BasicPreparedReadQuery <>(
       SQL.Update.Osi.Organisms.GENE_COUNTER,
-      DbMan::connection,
+      con,
       QueryUtil.must(OrganismUtil::parseGeneCounter),
       ps -> {
         ps.setInt(1, count);
@@ -206,26 +222,26 @@ public class OrganismRepo
     ).execute().getValue();
   }
 
-  public Optional < Organism > getById(long organismId)
+  public Optional < OrganismRow > getById(long organismId)
   throws Exception {
     try (var con = DbMan.connection()) {
       return getById(organismId, con);
     }
   }
 
-  public Optional < Organism > getById(long orgId, Connection con)
+  public Optional < OrganismRow > getById(long orgId, Connection con)
   throws Exception {
     return new BasicPreparedReadQuery <>(
       Organisms.BY_ID,
       con,
-      QueryUtil.option(OrganismUtil::newOrganism),
+      QueryUtil.option(OrganismUtil::newOrganismRow),
       QueryUtil.singleId(orgId)
     ).execute().getValue();
   }
 
   public Map < Long, Organism > getByIds(long[] organismIds)
   throws Exception {
-    return new BasicPreparedMapReadQuery<>(
+    return new BasicPreparedMapReadQuery <>(
       Organisms.BY_IDS,
       DbMan::connection,
       OrganismUtil::parseId,
@@ -243,7 +259,7 @@ public class OrganismRepo
 
   public Optional < Organism > getByName(String name, Connection con)
   throws Exception {
-    return new BasicPreparedReadQuery<>(
+    return new BasicPreparedReadQuery <>(
       Organisms.BY_NAME,
       con,
       QueryUtil.option(OrganismUtil::newOrganism),
@@ -261,7 +277,7 @@ public class OrganismRepo
    */
   public List < Organism > getByQuery(RecordQuery query)
   throws Exception {
-    return new BasicPreparedListReadQuery<>(
+    return new BasicPreparedListReadQuery <>(
       Organisms.BY_QUERY,
       DbMan::connection,
       OrganismUtil::newOrganism,
@@ -282,9 +298,9 @@ public class OrganismRepo
           ps.setObject(3, query.getEnd());
 
         if (query.getCreatedById() == null)
-          ps.setNull(4, Types.INTEGER);
+          ps.setNull(4, Types.BIGINT);
         else
-          ps.setInt(4, query.getCreatedById());
+          ps.setLong(4, query.getCreatedById());
 
         if (query.getCreatedByName() == null)
           ps.setNull(5, Types.VARCHAR);

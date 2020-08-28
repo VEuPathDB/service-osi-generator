@@ -1,7 +1,10 @@
 package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
+import org.veupathdb.service.osi.util.Field;
+import org.veupathdb.service.osi.util.Format;
 import org.veupathdb.service.osi.util.Validation;
 
 public class User extends NewUser
@@ -44,10 +47,13 @@ public class User extends NewUser
 
   @Override
   public String toString() {
-    return "User{" +
-      "userId=" + userId +
-      ", userName='" + getUserName() +
-      "', apiKey='********'" +
-      ", issued=" + issued + '}';
+    return Format.Json()
+      .createObjectNode()
+      .put(Field.User.ID, getUserId())
+      .put(Field.User.USERNAME, getUserName())
+      .put(Field.User.API_KEY, "********")
+      .put(Field.User.ISSUED, getIssued()
+        .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
+      .toString();
   }
 }

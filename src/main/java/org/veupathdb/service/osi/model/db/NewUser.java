@@ -1,5 +1,7 @@
 package org.veupathdb.service.osi.model.db;
 
+import org.veupathdb.service.osi.util.Field;
+import org.veupathdb.service.osi.util.Format;
 import org.veupathdb.service.osi.util.Validation;
 
 public class NewUser
@@ -22,6 +24,10 @@ public class NewUser
 
   @Override
   public String toString() {
-    return "NewUser{userName='" + userName + "', apiKey='********'}";
+    return Format.Json()
+      .createObjectNode()
+      .put(Field.User.USERNAME, getUserName())
+      .put(Field.User.API_KEY, "********")
+      .toString();
   }
 }

@@ -29,5 +29,4 @@ public final class Format
   public static ObjectMapper Json() {
     return getInstance().getJson();
   }
-
 }

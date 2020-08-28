@@ -1,10 +1,11 @@
-package org.veupathdb.service.osi.service.genes;
+package org.veupathdb.service.osi.service.idset;
 
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 import java.util.*;
 
 import org.veupathdb.service.osi.generated.model.*;
+import org.veupathdb.service.osi.model.db.NewIdSet;
 import org.veupathdb.service.osi.model.db.raw.IdSetRow;
 import org.veupathdb.service.osi.repo.Schema.Osi.IdSets;
 
@@ -24,6 +25,22 @@ public class IdSetUtils
       rs.getInt(IdSets.NUM_ISSUED),
       rs.getObject(IdSets.CREATED_ON, OffsetDateTime.class),
       rs.getInt(IdSets.CREATED_BY)
+    );
+  }
+
+  public static IdSetRow newIdSetRow(
+    final ResultSet rs,
+    final NewIdSet  ids
+  ) throws Exception {
+    return new IdSetRow(
+      rs.getInt(IdSets.ID_SET_ID),
+      ids.getCollection().getId(),
+      ids.getOrganism().getId(),
+      ids.getOrganism().getTemplate(),
+      ids.getCounterStart(),
+      ids.getNumIssued(),
+      rs.getObject(IdSets.CREATED_ON, OffsetDateTime.class),
+      ids.getCreatedBy().getUserId()
     );
   }
 

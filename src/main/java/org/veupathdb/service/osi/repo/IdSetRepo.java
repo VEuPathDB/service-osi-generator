@@ -1,5 +1,6 @@
 package org.veupathdb.service.osi.repo;
 
+import java.sql.Connection;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +9,11 @@ import java.util.Optional;
 import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import org.veupathdb.service.osi.model.RecordQuery;
+import org.veupathdb.service.osi.model.db.NewIdSet;
 import org.veupathdb.service.osi.model.db.raw.IdSetRow;
 import org.veupathdb.service.osi.repo.SQL.Select.Osi.IdSets;
 import org.veupathdb.service.osi.service.DbMan;
-import org.veupathdb.service.osi.service.genes.IdSetUtils;
+import org.veupathdb.service.osi.service.idset.IdSetUtils;
 import org.veupathdb.service.osi.util.QueryUtil;
 
 public class IdSetRepo
@@ -80,6 +82,25 @@ public class IdSetRepo
       DbMan::connection,
       QueryUtil.option(IdSetUtils::newIdSetRow),
       QueryUtil.singleId(id)
+    ).execute().getValue();
+  }
+
+  public static IdSetRow insert(
+    final NewIdSet set,
+    final Connection con
+  ) throws Exception {
+    return new BasicPreparedReadQuery<>(
+      SQL.Insert.Osi.ID_SET,
+      DbMan::connection,
+      QueryUtil.must(rs -> IdSetUtils.newIdSetRow(rs, set)),
+      ps -> {
+        ps.setLong(1, set.getCollection().getId());
+        ps.setLong(2, set.getOrganism().getId());
+        ps.setString(3, set.getTemplate());
+        ps.setLong(4, set.getCounterStart());
+        ps.setInt(5, set.getNumIssued());
+        ps.setLong(6, set.getCreatedBy().getUserId());
+      }
     ).execute().getValue();
   }
 }

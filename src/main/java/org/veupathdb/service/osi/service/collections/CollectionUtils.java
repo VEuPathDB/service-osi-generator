@@ -70,7 +70,7 @@ public class CollectionUtils
   public CollectionResponse collectionToResponse(IdSetCollectionRow col) {
     var out = new CollectionResponseImpl();
 
-    out.setCollectionId(col.getCollectionId());
+    out.setCollectionId(col.getId());
     out.setName(col.getName());
     out.setIdSets(new ArrayList <>());
     out.setCreatedOn(Date.from(col.getCreatedOn().toInstant()));
@@ -85,7 +85,7 @@ public class CollectionUtils
     var out = new HashMap< Long, CollectionResponse >(rows.size());
 
     for (var r : rows)
-      out.put(r.getCollectionId(), collectionToResponse(r));
+      out.put(r.getId(), collectionToResponse(r));
 
     return out;
   }

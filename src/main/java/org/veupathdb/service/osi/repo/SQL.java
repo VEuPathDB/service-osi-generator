@@ -36,10 +36,9 @@ public interface SQL
     interface Osi
     {
       String
-        COLLECTION = insert(
-        Table.ID_SET_COLLECTIONS,
-        "new-collection"
-      ),
+        COLLECTION = insert(Table.ID_SET_COLLECTIONS, "new-collection"),
+        GENE       = insert(Table.GENES, "new-gene"),
+        ID_SET     = insert(Table.ID_SETS, "new-id-set"),
         ORGANISM   = insert(Table.ORGANISMS, "new-organism");
     }
   }

@@ -412,6 +412,11 @@ types:
       * `%` = parameter start marker
       * `07` = left pad the number with zeros for a total length of 7 digits
       * `d` = format as an int
+
+      **NOTE**: When used, this template string will be passed exactly int64
+      value and nothing else.  Templates should only include `%d` based formats.
+      If the template needs more than one instance of the counter int64 value,
+      positional parameters may be used.
     type: string
     pattern: "^.*%[0-9,+\\- $.]*d.*$"
     minLength: 5
@@ -443,6 +448,8 @@ types:
   IdSetPostRequest:
     type: object
     properties:
+      collectionId:
+        type: OneBasedLong
       organismId:
         description: |
           Internal storage primary key for an organism registered with the OSID

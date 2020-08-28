@@ -2,6 +2,7 @@ package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
 
+import org.veupathdb.service.osi.model.db.raw.GeneRow;
 import org.veupathdb.service.osi.util.Validation;
 
 public class Transcript extends NewTranscript
@@ -12,7 +13,7 @@ public class Transcript extends NewTranscript
 
   public Transcript(
     long transcriptId,
-    Gene gene,
+    GeneRow gene,
     long counterStart,
     int numIssued,
     User createdBy,

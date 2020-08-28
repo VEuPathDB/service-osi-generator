@@ -6,15 +6,29 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+    "collectionId",
     "organismId",
     "generateGenes"
 })
 public class IdSetPostRequestImpl implements IdSetPostRequest {
+  @JsonProperty("collectionId")
+  private long collectionId;
+
   @JsonProperty("organismId")
   private long organismId;
 
   @JsonProperty("generateGenes")
   private int generateGenes;
+
+  @JsonProperty("collectionId")
+  public long getCollectionId() {
+    return this.collectionId;
+  }
+
+  @JsonProperty("collectionId")
+  public void setCollectionId(long collectionId) {
+    this.collectionId = collectionId;
+  }
 
   @JsonProperty("organismId")
   public long getOrganismId() {

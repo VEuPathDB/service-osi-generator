@@ -108,13 +108,13 @@ public class TranscriptUtils
     );
   }
 
-  public Transcript createTranscript(
+  public TranscriptRow createTranscript(
     final ResultSet rs,
     final Map < Long, User > users,
-    final Map < Long, Gene > genes
+    final Map < Long, GeneRow > genes
   ) throws Exception {
     log.trace("TranscriptUtils#createTranscript(ResultSet, Map, Map)");
-    return new Transcript(
+    return new TranscriptRow(
       rs.getLong(Transcripts.TRANSCRIPT_ID),
       genes.get(rs.getLong(Transcripts.GENE_ID)),
       rs.getLong(Transcripts.COUNTER_START),
@@ -124,12 +124,12 @@ public class TranscriptUtils
     );
   }
 
-  public Transcript createTranscript(
+  public TranscriptRow createTranscript(
     final ResultSet rs,
-    final Map < Long, Gene > genes
+    final Map < Long, GeneRow > genes
   ) throws Exception {
     log.trace("TranscriptUtils#createTranscript(ResultSet, Map)");
-    return new Transcript(
+    return new TranscriptRow(
       rs.getLong(Transcripts.TRANSCRIPT_ID),
       genes.get(rs.getLong(Transcripts.GENE_ID)),
       rs.getLong(Transcripts.COUNTER_START),

@@ -1,19 +1,23 @@
 package org.veupathdb.service.osi.model.db;
 
+import org.veupathdb.service.osi.model.db.raw.IdSetCollectionRow;
+import org.veupathdb.service.osi.model.db.raw.OrganismRow;
+import org.veupathdb.service.osi.util.Errors;
+import org.veupathdb.service.osi.util.Format;
 import org.veupathdb.service.osi.util.Validation;
 
 public class NewIdSet
 {
-  private final IdSetCollection collection;
-  private final Organism organism;
+  private final IdSetCollectionRow collection;
+  private final OrganismRow organism;
   private final String template;
   private final User createdBy;
   private final long counterStart;
   private final int numIssued;
 
   public NewIdSet(
-    IdSetCollection collection,
-    Organism organism,
+    IdSetCollectionRow collection,
+    OrganismRow organism,
     String template,
     User createdBy,
     long counterStart,
@@ -27,11 +31,11 @@ public class NewIdSet
     this.numIssued  = Validation.zeroMinimum(numIssued);
   }
 
-  public IdSetCollection getCollection() {
+  public IdSetCollectionRow getCollection() {
     return collection;
   }
 
-  public Organism getOrganism() {
+  public OrganismRow getOrganism() {
     return organism;
   }
 
@@ -53,13 +57,6 @@ public class NewIdSet
 
   @Override
   public String toString() {
-    return "NewIdSet{" +
-      "collection=" + collection.getCollectionId() +
-      ", organism=" + organism.getId() +
-      ", template='" + template + '\'' +
-      ", createdBy=" + createdBy.getUserId() +
-      ", counterStart=" + counterStart +
-      ", numIssued=" + numIssued +
-      '}';
+    return Errors.toRuntime(this, Format.Json()::writeValueAsString);
   }
 }

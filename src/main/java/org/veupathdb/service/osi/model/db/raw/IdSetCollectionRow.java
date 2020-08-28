@@ -23,7 +23,7 @@ public class IdSetCollectionRow
     this.createdOn    = createdOn;
   }
 
-  public long getCollectionId() {
+  public long getId() {
     return collectionId;
   }
 

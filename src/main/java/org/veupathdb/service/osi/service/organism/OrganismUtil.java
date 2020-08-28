@@ -11,6 +11,7 @@ import org.veupathdb.service.osi.generated.model.OrganismResponseImpl;
 import org.veupathdb.service.osi.model.db.NewOrganism;
 import org.veupathdb.service.osi.model.db.Organism;
 import org.veupathdb.service.osi.model.db.User;
+import org.veupathdb.service.osi.model.db.raw.OrganismRow;
 import org.veupathdb.service.osi.repo.Schema.Osi.Organisms;
 import org.veupathdb.service.osi.service.user.UserUtil;
 
@@ -27,6 +28,21 @@ public class OrganismUtil
   public static long parseTranscriptCounter(final ResultSet rs)
   throws Exception {
     return rs.getLong(Organisms.TRANSCRIPT_COUNTER_CURRENT);
+  }
+
+  static OrganismRow newOrganismRow(final ResultSet rs) throws Exception {
+    return new OrganismRow(
+      rs.getLong(Organisms.ORGANISM_ID),
+      rs.getString(Organisms.NAME),
+      rs.getString(Organisms.TEMPLATE),
+      rs.getLong(Organisms.GENE_COUNTER_START),
+      rs.getLong(Organisms.GENE_COUNTER_CURRENT),
+      rs.getLong(Organisms.TRANSCRIPT_COUNTER_START),
+      rs.getLong(Organisms.TRANSCRIPT_COUNTER_CURRENT),
+      rs.getLong(Organisms.CREATED_BY),
+      rs.getObject(Organisms.CREATED_ON, OffsetDateTime.class),
+      rs.getObject(Organisms.LAST_MODIFIED, OffsetDateTime.class)
+    );
   }
 
   static Organism newOrganism(

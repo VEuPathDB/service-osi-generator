@@ -2,10 +2,7 @@ package org.veupathdb.service.osi.service.genes;
 
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
@@ -13,6 +10,7 @@ import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntry;
 import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntryImpl;
 import org.veupathdb.service.osi.generated.model.IdSetResponse;
 import org.veupathdb.service.osi.model.db.raw.GeneRow;
+import org.veupathdb.service.osi.model.db.raw.OrganismRow;
 import org.veupathdb.service.osi.repo.Schema.Osi.Genes;
 
 public class GeneUtil
@@ -39,11 +37,26 @@ public class GeneUtil
     return getInstance().createGeneRow(rs);
   }
 
+  public static GeneratedTranscriptEntry toEntry(
+    final GeneRow row
+  ) {
+    return getInstance().geneToEntry(row);
+  }
+
+
   public static Map < Long, GeneratedTranscriptEntry > toEntries(
     final Collection < GeneRow > rows,
     final Map < Long, IdSetResponse > sets
   ) {
     return getInstance().genesToEntries(rows, sets);
+  }
+
+  public static String[] expandGenes(
+    final OrganismRow org,
+    final long        start,
+    final int         count
+  ) {
+    return getInstance().expandGeneIds(org, start, count);
   }
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
@@ -88,6 +101,20 @@ public class GeneUtil
     out.setGeneId(row.getGeneIdentifier());
     out.setProteins(new ArrayList <>());
     out.setTranscripts(new ArrayList <>());
+
+    return out;
+  }
+
+  public String[] expandGeneIds(
+    final OrganismRow org,
+    final long        start,
+    final int         count
+  ) {
+    final var out = new String[count];
+    final var fom = org.getTemplate();
+
+    for (long i = 0; i < count; i++)
+      out[(int) i] = String.format(fom, start + i);
 
     return out;
   }

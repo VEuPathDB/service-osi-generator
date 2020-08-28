@@ -35,7 +35,7 @@ public class IdSetCollection extends NewIdSetCollection
     Map < Integer, User > users
   ) {
     this(
-      row.getCollectionId(),
+      row.getId(),
       row.getName(),
       users.get(row.getCreatedBy()),
       row.getCreatedOn()

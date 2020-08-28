@@ -2,6 +2,8 @@ package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
 
+import org.veupathdb.service.osi.model.db.raw.IdSetCollectionRow;
+import org.veupathdb.service.osi.model.db.raw.OrganismRow;
 import org.veupathdb.service.osi.util.Validation;
 
 public class IdSet extends NewIdSet
@@ -12,8 +14,8 @@ public class IdSet extends NewIdSet
 
   public IdSet(
     long idSetId,
-    IdSetCollection collection,
-    Organism organism,
+    IdSetCollectionRow collection,
+    OrganismRow organism,
     String template,
     User createdBy,
     long counterStart,

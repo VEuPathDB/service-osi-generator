@@ -1,17 +1,11 @@
 SELECT
-  g.gene_id
-, g.id_set_id
-, g.gene_identifier
-, g.created
-, g.created_by
-, u.user_id
-, u.user_name
-, u.api_key
-, u.issued
+  gene_id
+, id_set_id
+, gene_identifier
+, created
+, created_by
 FROM
-  osi.genes             AS g
-  INNER JOIN auth.users AS u
-    ON g.created_by = u.user_id
+  osi.genes
 WHERE
   id_set_id = ?
 ;
