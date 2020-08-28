@@ -60,8 +60,8 @@ public class GeneUtil
 
   public static String[] expandGenes(
     final Organism org,
-    final long        start,
-    final int         count
+    final long start,
+    final int count
   ) {
     return getInstance().expandGeneIds(org, start, count);
   }
@@ -83,6 +83,7 @@ public class GeneUtil
   }
 
   public Gene createGeneRow(final ResultSet rs) throws Exception {
+    log.trace("GeneUtil#createGeneRow(ResultSet)");
     return new Gene(
       rs.getLong(Genes.GENE_ID),
       rs.getLong(Genes.ID_SET_ID),
@@ -96,7 +97,8 @@ public class GeneUtil
     final Collection < Gene > rows,
     final Map < Long, IdSetResponse > idSets
   ) {
-    var out = new HashMap< Long, GeneratedTranscriptEntry >(rows.size());
+    log.trace("GeneUtil#genesToEntries(Collection, Map)");
+    var out = new HashMap < Long, GeneratedTranscriptEntry >(rows.size());
 
     for (var g : rows) {
       var tmp = geneToEntry(g);
@@ -108,6 +110,7 @@ public class GeneUtil
   }
 
   public GeneratedTranscriptEntry geneToEntry(final Gene row) {
+    log.trace("GeneUtil#geneToEntry(Gene)");
     var out = new GeneratedTranscriptEntryImpl();
 
     out.setGeneId(row.getGeneIdentifier());
@@ -119,14 +122,15 @@ public class GeneUtil
 
   public String[] expandGeneIds(
     final Organism org,
-    final long        start,
-    final int         count
+    final long start,
+    final int count
   ) {
+    log.trace("GeneUtil#expandGeneIds(Organism, long, int)");
     final var out = new String[count];
     final var fom = org.getTemplate();
 
     for (long i = 0; i < count; i++)
-      out[(int) i] = String.format(fom, start + i);
+         out[(int) i] = String.format(fom, start + i);
 
     return out;
   }
