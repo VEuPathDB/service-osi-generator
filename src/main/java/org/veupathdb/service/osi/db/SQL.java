@@ -44,8 +44,10 @@ public interface SQL
     }
   }
 
-  interface Lock {
-    interface Osi {
+  interface Lock
+  {
+    interface Osi
+    {
       String ORGANISMS = load(Mode.LOCK, "osi.organisms");
     }
   }
@@ -56,14 +58,9 @@ public interface SQL
     {
       interface Users
       {
-        String
-          BY_ID          = select(Table.USERS, "by-id"),
-          BY_TOKEN       = select(Table.USERS, "by-token"),
-          BY_EMAIL       = select(Table.USERS, "by-name"),
-          BY_COLLECTION  = select(Table.USERS, "by-collection"),
-          BY_IDS         = select(Table.USERS, "by-ids"),
-          BY_COLLECTIONS = select(Table.USERS, "by-collections"),
-          BY_ID_SETS     = select(Table.USERS, "by-id-sets");
+        String BY_ID    = select(Table.USERS, "by-id");
+        String BY_TOKEN = select(Table.USERS, "by-token");
+        String BY_EMAIL = select(Table.USERS, "by-name");
       }
     }
 
@@ -73,7 +70,6 @@ public interface SQL
       {
         String
           BY_ID    = select(Table.ID_SET_COLLECTIONS, "by-id"),
-          BY_IDS   = select(Table.ID_SET_COLLECTIONS, "by-ids"),
           BY_QUERY = select(Table.ID_SET_COLLECTIONS, "find-collections");
       }
 
@@ -82,7 +78,6 @@ public interface SQL
         String
           BY_COLLECTION  = select(Table.GENES, "by-collection"),
           BY_COLLECTIONS = select(Table.GENES, "by-collections"),
-          BY_ID_SET      = select(Table.GENES, "by-id-set"),
           BY_ID_SETS     = select(Table.GENES, "by-id-sets");
       }
 
@@ -98,9 +93,7 @@ public interface SQL
       interface Organisms
       {
         String
-          BY_COLLECTIONS = select(Table.ORGANISMS, "by-collections"),
           BY_ID          = select(Table.ORGANISMS, "by-id"),
-          BY_IDS         = select(Table.ORGANISMS, "by-ids"),
           BY_NAME        = select(Table.ORGANISMS, "by-name"),
           BY_QUERY       = select(Table.ORGANISMS, "by-query");
       }
@@ -156,7 +149,7 @@ public interface SQL
     return switch (mode) {
       case INSERT -> LOADER.insert(path).orElseThrow(error(mode, path));
       case SELECT -> LOADER.select(path).orElseThrow(error(mode, path));
-      case LOCK ->   LOADER.rawSql("lock."+path).orElseThrow(error(mode, path));
+      case LOCK -> LOADER.rawSql("lock." + path).orElseThrow(error(mode, path));
       case UPDATE -> LOADER.udpate(path).orElseThrow(error(mode, path));
       case DELETE -> LOADER.delete(path).orElseThrow(error(mode, path));
     };

@@ -32,16 +32,25 @@ public class GeneRepo
     return instance;
   }
 
-  public static Map < Long, Gene > selectBySetIds(long[] ids)
+  /**
+   * @see #getBySetIds(long[])
+   */
+  public static Map < Long, Gene > selectBySetIds(final long[] ids)
   throws Exception {
     return getInstance().getBySetIds(ids);
   }
 
+  /**
+   * @see #getByIds(String[])
+   */
   public static Map < String, Gene > select(final String[] ids)
   throws Exception {
     return getInstance().getByIds(ids);
   }
 
+  /**
+   * @see #getByIds(String[], Connection)
+   */
   public static Map < String, Gene > select(
     final String[] ids,
     final Connection con
@@ -49,6 +58,9 @@ public class GeneRepo
     return getInstance().getByIds(ids, con);
   }
 
+  /**
+   * @see #getBySetId(long, Connection)
+   */
   public static List < Gene > selectBySetId(
     final long id,
     final Connection con
@@ -56,19 +68,27 @@ public class GeneRepo
     return getInstance().getBySetId(id, con);
   }
 
+  /**
+   * @see #getByCollectionIds(long[])
+   */
   public static Map < Long, Gene > selectByCollectionIds(
     final long[] collectionIds
   ) throws Exception {
     return getInstance().getByCollectionIds(collectionIds);
   }
 
-
+  /**
+   * @see #getByCollectionId(long)
+   */
   public static Map < Long, Gene > selectByCollectionId(
     final long collection
   ) throws Exception {
     return getInstance().getByCollectionId(collection);
   }
 
+  /**
+   * @see #insertGenes(IdSet, String[], Connection, User)
+   */
   public static void insert(
     final IdSet set,
     final String[] ids,

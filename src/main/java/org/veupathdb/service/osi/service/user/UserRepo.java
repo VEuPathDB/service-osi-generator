@@ -1,17 +1,14 @@
 package org.veupathdb.service.osi.service.user;
 
 import java.time.OffsetDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.veupathdb.service.osi.model.db.NewUser;
-import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.db.SQL;
 import org.veupathdb.service.osi.db.Schema;
+import org.veupathdb.service.osi.model.db.NewUser;
+import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.service.DbMan;
 import org.veupathdb.service.osi.util.Validation;
 
@@ -54,95 +51,6 @@ public class UserRepo
         );
       }
     }
-  }
-
-  public static Map <Integer, User> selectUsers(long[] ids)
-  throws Exception {
-    log.trace("UserRepo#selectUsers({})", ids);
-    final var out = new HashMap<Integer, User>(ids.length);
-
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_IDS)
-    ) {
-      ps.setObject(1, ids);
-
-      try (var rs = ps.executeQuery()) {
-        while (rs.next()) {
-          final var user = UserUtil.newUser(rs);
-          out.put(user.getUserId(), user);
-        }
-      }
-    }
-
-    return out;
-  }
-
-  public static Map < Integer, User > selectUsersByIdSets(long[] ids)
-  throws Exception {
-    log.trace("UserRepo#selectUsersByIdSets({})", Arrays.toString(ids));
-    final var out = new HashMap<Integer, User>();
-
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_ID_SETS)
-    ) {
-      ps.setObject(1, ids);
-
-      try (var rs = ps.executeQuery()) {
-        while (rs.next()) {
-          var row = UserUtil.newUser(rs);
-          out.put(row.getUserId(), row);
-        }
-      }
-    }
-
-    return out;
-  }
-
-
-  public static Map < Integer, User > selectUsersByCollections(long[] ids)
-  throws Exception {
-    log.trace("UserRepo#selectUsersByCollections({})", Arrays.toString(ids));
-    final var out = new HashMap<Integer, User>();
-
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_COLLECTIONS)
-    ) {
-      ps.setObject(1, ids);
-
-      try (var rs = ps.executeQuery()) {
-        while (rs.next()) {
-          var row = UserUtil.newUser(rs);
-          out.put(row.getUserId(), row);
-        }
-      }
-    }
-
-    return out;
-  }
-
-  public static Map < Integer, User > selectUsersByCollection(long collectionId)
-  throws Exception {
-    log.trace("UserRepo#selectUsersByCollection({})", collectionId);
-    final var out = new HashMap<Integer, User>();
-
-    try (
-      var cn = DbMan.connection();
-      var ps = cn.prepareStatement(SQL.Select.Auth.Users.BY_COLLECTION)
-    ) {
-      ps.setLong(1, collectionId);
-
-      try (var rs = ps.executeQuery()) {
-        while (rs.next()) {
-          var row = UserUtil.newUser(rs);
-          out.put(row.getUserId(), row);
-        }
-      }
-    }
-
-    return out;
   }
 
   /**
