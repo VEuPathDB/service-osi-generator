@@ -10,8 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.service.osi.model.db.NewUser;
 import org.veupathdb.service.osi.model.db.User;
-import org.veupathdb.service.osi.repo.SQL;
-import org.veupathdb.service.osi.repo.Schema;
+import org.veupathdb.service.osi.db.SQL;
+import org.veupathdb.service.osi.db.Schema;
 import org.veupathdb.service.osi.service.DbMan;
 import org.veupathdb.service.osi.util.Validation;
 

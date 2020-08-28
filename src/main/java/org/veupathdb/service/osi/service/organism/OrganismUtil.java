@@ -10,7 +10,7 @@ import org.veupathdb.service.osi.generated.model.OrganismResponseImpl;
 import org.veupathdb.service.osi.model.db.NewOrganism;
 import org.veupathdb.service.osi.model.db.Organism;
 import org.veupathdb.service.osi.model.db.User;
-import org.veupathdb.service.osi.repo.Schema.Osi.Organisms;
+import org.veupathdb.service.osi.db.Schema.Osi.Organisms;
 
 public class OrganismUtil
 {

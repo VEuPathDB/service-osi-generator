@@ -9,7 +9,7 @@ import org.veupathdb.service.osi.generated.model.IdSetResponse;
 import org.veupathdb.service.osi.generated.model.IdSetResponseImpl;
 import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.NewIdSet;
-import org.veupathdb.service.osi.repo.Schema.Osi.IdSets;
+import org.veupathdb.service.osi.db.Schema.Osi.IdSets;
 
 public class IdSetUtil
 {

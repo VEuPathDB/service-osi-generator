@@ -13,7 +13,7 @@ import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntry;
 import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.Transcript;
-import org.veupathdb.service.osi.repo.Schema.Osi.Transcripts;
+import org.veupathdb.service.osi.db.Schema.Osi.Transcripts;
 
 public class TranscriptUtils
 {

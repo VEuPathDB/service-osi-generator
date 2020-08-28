@@ -1,4 +1,4 @@
-package org.veupathdb.service.osi.repo;
+package org.veupathdb.service.osi.service.collections;
 
 import java.sql.Types;
 import java.util.ArrayList;
@@ -9,8 +9,8 @@ import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.NewIdSetCollection;
+import org.veupathdb.service.osi.db.SQL;
 import org.veupathdb.service.osi.service.DbMan;
-import org.veupathdb.service.osi.service.collections.CollectionUtils;
 import org.veupathdb.service.osi.util.QueryUtil;
 
 public class CollectionRepo

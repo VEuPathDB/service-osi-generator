@@ -8,7 +8,7 @@ import org.veupathdb.service.osi.generated.model.CollectionResponse;
 import org.veupathdb.service.osi.generated.model.CollectionResponseImpl;
 import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.NewIdSetCollection;
-import org.veupathdb.service.osi.repo.Schema.Osi.Collections;
+import org.veupathdb.service.osi.db.Schema.Osi.Collections;
 
 public class CollectionUtils
 {

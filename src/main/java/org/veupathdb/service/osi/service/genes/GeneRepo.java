@@ -11,8 +11,8 @@ import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.User;
-import org.veupathdb.service.osi.repo.SQL;
-import org.veupathdb.service.osi.repo.SQL.Select.Osi.Genes;
+import org.veupathdb.service.osi.db.SQL;
+import org.veupathdb.service.osi.db.SQL.Select.Osi.Genes;
 import org.veupathdb.service.osi.service.DbMan;
 import org.veupathdb.service.osi.util.QueryUtil;
 

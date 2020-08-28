@@ -1,11 +1,11 @@
-package org.veupathdb.service.osi.repo;
+package org.veupathdb.service.osi.db;
 
 import java.util.function.Supplier;
 
 import io.vulpine.lib.sql.load.SqlLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.veupathdb.service.osi.repo.Schema.Table;
+import org.veupathdb.service.osi.db.Schema.Table;
 
 public interface SQL
 {

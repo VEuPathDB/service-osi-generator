@@ -1,4 +1,4 @@
-package org.veupathdb.service.osi.repo;
+package org.veupathdb.service.osi.db;
 
 public interface Schema
 {

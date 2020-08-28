@@ -14,7 +14,7 @@ import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntryImpl;
 import org.veupathdb.service.osi.generated.model.IdSetResponse;
 import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.Organism;
-import org.veupathdb.service.osi.repo.Schema.Osi.Genes;
+import org.veupathdb.service.osi.db.Schema.Osi.Genes;
 
 public class GeneUtil
 {
