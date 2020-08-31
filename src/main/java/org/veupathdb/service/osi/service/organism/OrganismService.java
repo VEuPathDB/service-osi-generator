@@ -21,17 +21,14 @@ import org.veupathdb.service.osi.util.Errors;
 import org.veupathdb.service.osi.util.Field;
 import org.veupathdb.service.osi.util.Params;
 
+import static org.veupathdb.service.osi.service.organism.OrganismUtil.TEMPLATE_PATTERN;
+import static org.veupathdb.service.osi.service.organism.OrganismUtil.TEMPLATE_REGEX;
 import static org.veupathdb.service.osi.util.Params.or;
 import static org.veupathdb.service.osi.util.Params.orStr;
 
 public class OrganismService
 {
   private static OrganismService instance = new OrganismService();
-
-  private static final String
-    TEMPLATE_PATTERN = "^.*%[0-9,+\\- $.]*d.*$";
-  private static final Pattern
-    TEMPLATE_REGEX   = Pattern.compile(TEMPLATE_PATTERN);
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                    ║ //

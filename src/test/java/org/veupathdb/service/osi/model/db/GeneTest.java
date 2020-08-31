@@ -53,7 +53,7 @@ class GeneTest
   @Test
   @DisplayName("Gene constructor validates inputs")
   void Gene() {
-    var target = new Gene(geneId, setId, geneName, createdOn, userId);
+    new Gene(geneId, setId, geneName, createdOn, userId);
 
     verify(mValidation).enforceOneMinimum(geneId);
     verify(mValidation).enforceOneMinimum(setId);

@@ -3,6 +3,7 @@ package org.veupathdb.service.osi.service.organism;
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import org.veupathdb.service.osi.generated.model.OrganismPostRequest;
 import org.veupathdb.service.osi.generated.model.OrganismResponse;
@@ -11,9 +12,30 @@ import org.veupathdb.service.osi.model.db.NewOrganism;
 import org.veupathdb.service.osi.model.db.Organism;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.db.Schema.Osi.Organisms;
+import org.veupathdb.service.osi.util.InputValidationException;
+import org.veupathdb.service.osi.util.Validation;
 
 public class OrganismUtil
 {
+  private static OrganismUtil instance = new OrganismUtil();
+
+  public static final String
+    TEMPLATE_PATTERN = "^.*%[0-9,+\\- $.]*d.*$";
+  public static final Pattern
+    TEMPLATE_REGEX   = Pattern.compile(TEMPLATE_PATTERN);
+
+  private static String
+    ERR_BAD_PATTERN = "The organism id template field must match the regex"
+    + " pattern \"" + TEMPLATE_PATTERN + "\".";
+
+  public static OrganismUtil getInstance() {
+    return instance;
+  }
+
+  public static String validateTemplate(final String pattern) {
+    return getInstance().enforceOrgPattern(pattern);
+  }
+
   public static long parseId(final ResultSet rs) throws Exception {
     return rs.getLong(Organisms.ORGANISM_ID);
   }
@@ -84,5 +106,14 @@ public class OrganismUtil
       req.getTranscriptIntStart(),
       user
     );
+  }
+
+  public String enforceOrgPattern(final String name) {
+    Validation.nonEmpty(name);
+
+    if (TEMPLATE_REGEX.matcher(name).matches())
+      throw new InputValidationException(name, ERR_BAD_PATTERN);
+
+    return name;
   }
 }

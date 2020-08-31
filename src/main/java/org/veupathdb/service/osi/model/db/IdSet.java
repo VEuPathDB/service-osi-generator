@@ -2,7 +2,9 @@ package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
 
+import org.veupathdb.service.osi.service.organism.OrganismUtil;
 import org.veupathdb.service.osi.util.InputValidationException;
+import org.veupathdb.service.osi.util.Validation;
 
 /**
  * Immutable raw representation of the data in a single row of the
@@ -41,7 +43,7 @@ public class IdSet
    * @param counterStart The gene id integer component starting point as of the
    *                     creation of this {@code IdSet} record.
    * @param numIssued    Number of new gene ids issued under this {@code IdSet}.
-   * @param createdOn      A timestamp of when this {@code IdSet} record was
+   * @param createdOn    A timestamp of when this {@code IdSet} record was
    *                     created.
    * @param createdBy    Primary key value for the user that created this
    *                     {@code IdSet} record.
@@ -59,23 +61,23 @@ public class IdSet
    * </ul>
    */
   public IdSet(
-    long idSetId,
-    long collectionId,
-    long organismId,
-    String template,
-    long counterStart,
-    int numIssued,
-    OffsetDateTime createdOn,
-    long createdBy
+    final long idSetId,
+    final long collectionId,
+    final long organismId,
+    final String template,
+    final long counterStart,
+    final int numIssued,
+    final OffsetDateTime createdOn,
+    final long createdBy
   ) {
-    this.idSetId      = idSetId;
-    this.collectionId = collectionId;
-    this.organismId   = organismId;
-    this.template     = template;
-    this.counterStart = counterStart;
-    this.numIssued = numIssued;
-    this.createdOn = createdOn;
-    this.createdBy = createdBy;
+    this.idSetId      = Validation.oneMinimum(idSetId);
+    this.collectionId = Validation.oneMinimum(collectionId);
+    this.organismId   = Validation.oneMinimum(organismId);
+    this.template     = OrganismUtil.validateTemplate(template);
+    this.counterStart = Validation.oneMinimum(counterStart);
+    this.numIssued    = Validation.zeroMinimum(numIssued);
+    this.createdOn    = Validation.nonNull(createdOn);
+    this.createdBy    = Validation.oneMinimum(createdBy);
   }
 
   /**
@@ -126,7 +128,7 @@ public class IdSet
    * <p>
    * This value is for indication purposes only and has no impact on gene ids
    * generated under this {@code IdSet}.
-   *
+   * <p>
    * TODO: is this value even needed?
    *
    * @return the gene id integer component starting point as of the time this
