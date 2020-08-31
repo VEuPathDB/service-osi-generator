@@ -4,14 +4,16 @@ import org.veupathdb.service.osi.util.Validation;
 
 public class NewGene
 {
-  private final IdSet  idSet;
+  private final IdSet idSet;
+
   private final String identifier;
+
   private final User createdBy;
 
   public NewGene(
-    IdSet idSet,
-    String identifier,
-    User createdBy
+    final IdSet idSet,
+    final String identifier,
+    final User createdBy
   ) {
     this.idSet      = Validation.nonNull(idSet);
     this.identifier = Validation.nonEmpty(identifier);
