@@ -9,19 +9,24 @@ import org.veupathdb.service.osi.util.Validation;
 public class Transcript
 {
   private final long transcriptId;
+
   private final long geneId;
+
   private final long counterStart;
+
   private final int numIssued;
+
   private final OffsetDateTime createdOn;
+
   private final long createdBy;
 
   public Transcript(
-    long transcriptId,
-    long geneId,
-    long counterStart,
-    int numIssued,
-    OffsetDateTime createdOn,
-    long createdBy
+    final long transcriptId,
+    final long geneId,
+    final long counterStart,
+    final int numIssued,
+    final OffsetDateTime createdOn,
+    final long createdBy
   ) {
     this.transcriptId = Validation.oneMinimum(transcriptId);
     this.geneId       = Validation.oneMinimum(geneId);
