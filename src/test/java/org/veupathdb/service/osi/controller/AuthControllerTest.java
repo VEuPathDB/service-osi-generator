@@ -1,8 +1,6 @@
 package org.veupathdb.service.osi.controller;
 
 import java.util.UUID;
-import javax.swing.text.html.parser.Entity;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Request;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -13,7 +11,8 @@ import org.veupathdb.service.osi.generated.model.NewUserResponse;
 import org.veupathdb.service.osi.generated.model.UserPostRequest;
 import org.veupathdb.service.osi.service.user.UserService;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
 class AuthControllerTest

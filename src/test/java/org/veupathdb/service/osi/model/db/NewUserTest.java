@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.veupathdb.service.osi.util.Field;
 import util.TestBase;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
 class NewUserTest extends TestBase

@@ -5,10 +5,9 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.veupathdb.service.osi.util.Format;
 import util.TestBase;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
 class NewIdSetCollectionTest extends TestBase
@@ -24,8 +23,8 @@ class NewIdSetCollectionTest extends TestBase
   public void setUp() throws Exception {
     super.setUp();
 
-    json  = UUID.randomUUID().toString();
-    name  = UUID.randomUUID().toString();
+    json  = randomString();
+    name  = randomString();
     mUser = mock(User.class);
 
     doReturn(name).when(mValidation).enforceNonEmpty(name);

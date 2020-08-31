@@ -8,7 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import util.TestBase;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
 class NewIdSetTest extends TestBase
@@ -31,11 +32,10 @@ class NewIdSetTest extends TestBase
   public void setUp() throws Exception {
     super.setUp();
 
-    var rand = new Random(System.currentTimeMillis());
-    template     = UUID.randomUUID().toString();
-    counterStart = rand.nextLong();
-    numIssued    = rand.nextInt();
-    json         = "some json string";
+    template     = randomString();
+    counterStart = random.nextLong();
+    numIssued    = random.nextInt();
+    json         = randomString();
     mCollection  = mock(IdSetCollection.class);
     mOrganism    = mock(Organism.class);
     mUser        = mock(User.class);

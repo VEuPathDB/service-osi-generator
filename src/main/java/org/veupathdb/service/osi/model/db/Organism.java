@@ -2,8 +2,10 @@ package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
 
+import org.veupathdb.service.osi.service.organism.OrganismUtil;
 import org.veupathdb.service.osi.util.Errors;
 import org.veupathdb.service.osi.util.Format;
+import org.veupathdb.service.osi.util.Validation;
 
 public class Organism
 {
@@ -28,27 +30,31 @@ public class Organism
   private final OffsetDateTime modified;
 
   public Organism(
-    long id,
-    String name,
-    String template,
-    long geneCounterStart,
-    long geneCounterCurrent,
-    long transcriptCounterStart,
-    long transcriptCounterCurrent,
-    long createdBy,
-    OffsetDateTime created,
-    OffsetDateTime modified
+    final long id,
+    final String name,
+    final String template,
+    final long geneCounterStart,
+    final long geneCounterCurrent,
+    final long transcriptCounterStart,
+    final long transcriptCounterCurrent,
+    final OffsetDateTime created,
+    final OffsetDateTime modified,
+    final long createdBy
   ) {
-    this.id                       = id;
-    this.name                     = name;
-    this.template                 = template;
-    this.geneCounterStart         = geneCounterStart;
-    this.geneCounterCurrent       = geneCounterCurrent;
-    this.transcriptCounterStart   = transcriptCounterStart;
-    this.transcriptCounterCurrent = transcriptCounterCurrent;
-    this.createdBy                = createdBy;
-    this.created                  = created;
-    this.modified                 = modified;
+    this.id                       = Validation.oneMinimum(id);
+    this.name                     = Validation.nonEmpty(name);
+    this.template                 = OrganismUtil.validateTemplate(template);
+    this.geneCounterStart         = Validation.oneMinimum(geneCounterStart);
+    this.geneCounterCurrent       = Validation.minimum(
+      geneCounterStart,
+      geneCounterCurrent);
+    this.transcriptCounterStart   = Validation.oneMinimum(transcriptCounterStart);
+    this.transcriptCounterCurrent = Validation.minimum(
+      transcriptCounterStart,
+      transcriptCounterCurrent);
+    this.created                  = Validation.nonNull(created);
+    this.modified                 = Validation.nonNull(modified);
+    this.createdBy                = Validation.oneMinimum(createdBy);
   }
 
   public long getId() {

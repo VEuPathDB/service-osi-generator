@@ -58,9 +58,9 @@ public class OrganismUtil
       rs.getLong(Organisms.GENE_COUNTER_CURRENT),
       rs.getLong(Organisms.TRANSCRIPT_COUNTER_START),
       rs.getLong(Organisms.TRANSCRIPT_COUNTER_CURRENT),
-      rs.getLong(Organisms.CREATED_BY),
       rs.getObject(Organisms.CREATED_ON, OffsetDateTime.class),
-      rs.getObject(Organisms.LAST_MODIFIED, OffsetDateTime.class)
+      rs.getObject(Organisms.LAST_MODIFIED, OffsetDateTime.class),
+      rs.getLong(Organisms.CREATED_BY)
     );
   }
 
@@ -76,9 +76,9 @@ public class OrganismUtil
       org.getGeneCounterStart(),
       org.getTranscriptCounterStart(),
       org.getTranscriptCounterStart(),
-      org.getCreatedBy().getUserId(),
       rs.getObject(Organisms.CREATED_ON, OffsetDateTime.class),
-      rs.getObject(Organisms.LAST_MODIFIED, OffsetDateTime.class)
+      rs.getObject(Organisms.LAST_MODIFIED, OffsetDateTime.class),
+      org.getCreatedBy().getUserId()
     );
   }
 

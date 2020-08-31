@@ -12,7 +12,8 @@ import org.veupathdb.service.osi.generated.model.IdSetPostRequest;
 import org.veupathdb.service.osi.generated.model.IdSetResponse;
 import org.veupathdb.service.osi.service.idset.IdSetService;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
 class IdSetControllerTest

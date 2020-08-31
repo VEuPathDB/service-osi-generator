@@ -5,11 +5,10 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.veupathdb.service.osi.util.Validation;
 import util.TestBase;
 
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class NewGeneTest extends TestBase
 {
@@ -27,8 +26,8 @@ class NewGeneTest extends TestBase
 
     mIdSet = mock(IdSet.class);
     mUser  = mock(User.class);
-    name   = UUID.randomUUID().toString();
-    json   = "some json string";
+    name   = randomString();
+    json   = randomString();
 
     doReturn(mIdSet).when(mValidation).enforceNonNull(mIdSet);
     doReturn(name).when(mValidation).enforceNonEmpty(name);

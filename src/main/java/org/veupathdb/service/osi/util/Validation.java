@@ -26,6 +26,13 @@ public class Validation
   }
 
   /**
+   * @see #enforceMinimum(long, long)
+   */
+  public static long minimum(final long min, final long value) {
+    return getInstance().enforceMinimum(min, value);
+  }
+
+  /**
    * @see #enforceOneMinimum(long)
    */
   public static long oneMinimum(final long val) {

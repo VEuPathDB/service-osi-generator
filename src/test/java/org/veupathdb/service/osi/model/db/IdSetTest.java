@@ -10,10 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.veupathdb.service.osi.service.organism.OrganismUtil;
-import org.veupathdb.service.osi.util.Validation;
 import util.TestBase;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
 class IdSetTest extends TestBase
@@ -40,18 +40,15 @@ class IdSetTest extends TestBase
     orgInst.setAccessible(true);
     orgInst.set(null, mOrgUtil);
 
-    var rand = new Random(System.currentTimeMillis());
-
-    idSetId      = rand.nextLong();
-    collectionId = rand.nextLong();
-    organismId   = rand.nextLong();
-    counterStart = rand.nextLong();
-    createdBy    = rand.nextLong();
-    template     = UUID.randomUUID().toString();
-    numIssued    = rand.nextInt();
-    createdOn    = OffsetDateTime.ofInstant(Instant.ofEpochMilli(
-      Math.abs(rand.nextLong())), ZoneId.systemDefault());
-    json = "some json string";
+    idSetId      = random.nextLong();
+    collectionId = random.nextLong();
+    organismId   = random.nextLong();
+    counterStart = random.nextLong();
+    createdBy    = random.nextLong();
+    template     = randomString();
+    numIssued    = random.nextInt();
+    createdOn    = randomDate();
+    json         = randomString();
 
     doReturn(idSetId).when(mValidation).enforceOneMinimum(idSetId);
     doReturn(collectionId).when(mValidation).enforceOneMinimum(collectionId);
@@ -141,7 +138,7 @@ class IdSetTest extends TestBase
 
   @Test
   @DisplayName("String serialization returns JSON")
-  void stringify() throws Exception{
+  void stringify() throws Exception {
     assertSame(json, target.toString());
     verify(mJson).writeValueAsString(target);
   }

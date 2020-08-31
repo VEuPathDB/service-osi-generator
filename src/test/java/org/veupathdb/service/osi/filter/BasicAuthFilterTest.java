@@ -1,18 +1,11 @@
 package org.veupathdb.service.osi.filter;
 
-import java.util.Collections;
-import java.util.Optional;
 import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.core.MultivaluedHashMap;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.veupathdb.lib.container.jaxrs.Globals;
 import org.veupathdb.service.osi.model.db.User;
 import org.veupathdb.service.osi.service.user.UserManager;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class BasicAuthFilterTest
 {

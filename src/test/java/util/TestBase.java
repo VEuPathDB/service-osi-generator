@@ -1,5 +1,8 @@
 package util;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Random;
 import java.util.UUID;
 
@@ -42,5 +45,10 @@ public class TestBase
 
   protected String randomString() {
     return UUID.randomUUID().toString();
+  }
+
+  protected OffsetDateTime randomDate() {
+    return OffsetDateTime.ofInstant(Instant.ofEpochMilli(Math.abs(
+      random.nextLong())), ZoneId.systemDefault());
   }
 }

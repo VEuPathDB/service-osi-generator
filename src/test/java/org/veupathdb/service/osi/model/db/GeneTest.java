@@ -1,10 +1,6 @@
 package org.veupathdb.service.osi.model.db;
 
-import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.util.Random;
-import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +9,8 @@ import util.TestBase;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 
 class GeneTest extends TestBase
 {
@@ -29,18 +26,12 @@ class GeneTest extends TestBase
   public void setUp() throws Exception {
     super.setUp();
 
-    var random = new Random(System.currentTimeMillis());
-
     json      = "some json string";
     geneId    = random.nextLong();
     setId     = random.nextLong();
     userId    = random.nextLong();
-    geneName  = UUID.randomUUID().toString();
-    createdOn = OffsetDateTime.ofInstant(
-      Instant.ofEpochMilli(
-        Math.abs(random.nextLong())),
-      ZoneId.systemDefault()
-    );
+    geneName  = randomString();
+    createdOn = randomDate();
 
     doReturn(geneId).when(mValidation).enforceOneMinimum(geneId);
     doReturn(setId).when(mValidation).enforceOneMinimum(setId);

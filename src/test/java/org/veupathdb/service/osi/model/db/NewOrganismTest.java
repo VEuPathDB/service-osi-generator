@@ -1,6 +1,5 @@
 package org.veupathdb.service.osi.model.db;
 
-import java.util.Random;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.veupathdb.service.osi.service.organism.OrganismUtil;
 import util.TestBase;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
 class NewOrganismTest extends TestBase
@@ -29,9 +29,9 @@ class NewOrganismTest extends TestBase
   public void setUp() throws Exception {
     super.setUp();
 
-    name            = UUID.randomUUID().toString();
-    template        = UUID.randomUUID().toString();
-    json            = UUID.randomUUID().toString();
+    name            = randomString();
+    template        = randomString();
+    json            = randomString();
     geneCountStart  = random.nextLong();
     transCountStart = random.nextLong();
 

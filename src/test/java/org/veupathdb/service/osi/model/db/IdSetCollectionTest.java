@@ -1,18 +1,17 @@
 package org.veupathdb.service.osi.model.db;
 
-import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.Random;
-import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import util.TestBase;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 
 public class IdSetCollectionTest extends TestBase
 {
@@ -28,13 +27,11 @@ public class IdSetCollectionTest extends TestBase
   public void setUp() throws Exception {
     super.setUp();
 
-    var rand = new Random(System.currentTimeMillis());
-    collectionId = rand.nextLong();
-    name         = UUID.randomUUID().toString();
-    createdOn    = OffsetDateTime.ofInstant(Instant.ofEpochMilli(
-      Math.abs(rand.nextLong())), ZoneId.systemDefault());
-    createdBy    = rand.nextLong();
-    json         = "some json string";
+    collectionId = random.nextLong();
+    name         = randomString();
+    createdOn    = randomDate();
+    createdBy    = random.nextLong();
+    json         = randomString();
 
     doReturn(collectionId).when(mValidation).enforceOneMinimum(collectionId);
     doReturn(name).when(mValidation).enforceNonEmpty(name);
