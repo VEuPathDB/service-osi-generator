@@ -1,5 +1,6 @@
 package org.veupathdb.service.osi.model.db;
 
+import org.veupathdb.service.osi.service.organism.OrganismUtil;
 import org.veupathdb.service.osi.util.Errors;
 import org.veupathdb.service.osi.util.Format;
 import org.veupathdb.service.osi.util.InputValidationException;
@@ -44,17 +45,17 @@ public class NewOrganism
    * are less than {@code 1}.
    */
   public NewOrganism(
-    String name,
-    String template,
-    long geneCounterStart,
-    long tranCounterStart,
-    User createdBy
+    final String name,
+    final String template,
+    final long geneCounterStart,
+    final long tranCounterStart,
+    final User createdBy
   ) {
     this.name                   = Validation.nonEmpty(name);
-    this.template               = Validation.nonEmpty(template);
+    this.template               = OrganismUtil.validateTemplate(template);
     this.geneCounterStart       = Validation.oneMinimum(geneCounterStart);
     this.transcriptCounterStart = Validation.oneMinimum(tranCounterStart);
-    this.createdBy              = createdBy;
+    this.createdBy              = Validation.nonNull(createdBy);
   }
 
   /**
