@@ -1,6 +1,7 @@
 package util;
 
 import java.util.Random;
+import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,5 +38,9 @@ public class TestBase
 
     mJson = mock(ObjectMapper.class);
     doReturn(mJson).when(mFormat).getJson();
+  }
+
+  protected String randomString() {
+    return UUID.randomUUID().toString();
   }
 }

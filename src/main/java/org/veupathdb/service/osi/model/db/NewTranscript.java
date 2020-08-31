@@ -7,15 +7,18 @@ import org.veupathdb.service.osi.util.Validation;
 public class NewTranscript
 {
   private final Gene gene;
+
   private final long counterStart;
+
   private final int numIssued;
+
   private final User createdBy;
 
   public NewTranscript(
-    Gene gene,
-    long counterStart,
-    int numIssued,
-    User createdBy
+    final Gene gene,
+    final long counterStart,
+    final int numIssued,
+    final User createdBy
   ) {
     this.gene         = Validation.nonNull(gene);
     this.counterStart = Validation.oneMinimum(counterStart);
