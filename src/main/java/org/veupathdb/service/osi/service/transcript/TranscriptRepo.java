@@ -4,10 +4,10 @@ import java.sql.Connection;
 import java.util.List;
 
 import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
-import org.veupathdb.service.osi.model.db.NewTranscript;
-import org.veupathdb.service.osi.model.db.Transcript;
 import org.veupathdb.service.osi.db.SQL;
 import org.veupathdb.service.osi.db.SQL.Select.Osi.Transcripts;
+import org.veupathdb.service.osi.model.db.NewTranscript;
+import org.veupathdb.service.osi.model.db.Transcript;
 import org.veupathdb.service.osi.service.DbMan;
 import org.veupathdb.service.osi.util.QueryUtil;
 

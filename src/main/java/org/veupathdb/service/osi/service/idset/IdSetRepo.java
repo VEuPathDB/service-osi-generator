@@ -10,11 +10,11 @@ import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
+import org.veupathdb.service.osi.db.SQL;
+import org.veupathdb.service.osi.db.SQL.Select.Osi.IdSets;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.NewIdSet;
-import org.veupathdb.service.osi.db.SQL;
-import org.veupathdb.service.osi.db.SQL.Select.Osi.IdSets;
 import org.veupathdb.service.osi.service.DbMan;
 import org.veupathdb.service.osi.util.QueryUtil;
 

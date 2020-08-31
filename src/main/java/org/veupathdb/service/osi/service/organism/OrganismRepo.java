@@ -8,11 +8,11 @@ import java.util.Optional;
 import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedWriteQuery;
+import org.veupathdb.service.osi.db.SQL;
+import org.veupathdb.service.osi.db.SQL.Select.Osi.Organisms;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.NewOrganism;
 import org.veupathdb.service.osi.model.db.Organism;
-import org.veupathdb.service.osi.db.SQL;
-import org.veupathdb.service.osi.db.SQL.Select.Osi.Organisms;
 import org.veupathdb.service.osi.service.DbMan;
 import org.veupathdb.service.osi.util.QueryUtil;
 

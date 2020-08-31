@@ -10,10 +10,10 @@ import java.util.Map;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.grizzly.utils.Pair;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
+import org.veupathdb.service.osi.db.Schema.Osi.Transcripts;
 import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntry;
 import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.Transcript;
-import org.veupathdb.service.osi.db.Schema.Osi.Transcripts;
 
 public class TranscriptUtils
 {

@@ -1,7 +1,6 @@
 package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
-import java.util.Random;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

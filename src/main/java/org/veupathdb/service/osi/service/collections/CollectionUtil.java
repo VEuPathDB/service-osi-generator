@@ -6,11 +6,11 @@ import java.util.*;
 
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
+import org.veupathdb.service.osi.db.Schema.Osi.Collections;
 import org.veupathdb.service.osi.generated.model.CollectionResponse;
 import org.veupathdb.service.osi.generated.model.CollectionResponseImpl;
 import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.NewIdSetCollection;
-import org.veupathdb.service.osi.db.Schema.Osi.Collections;
 
 public class CollectionUtil
 {

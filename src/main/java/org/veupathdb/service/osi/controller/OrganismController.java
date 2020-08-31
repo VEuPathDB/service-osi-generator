@@ -6,9 +6,6 @@ import javax.ws.rs.core.Request;
 import org.veupathdb.service.osi.generated.model.OrganismPostRequest;
 import org.veupathdb.service.osi.generated.model.OrganismPutRequest;
 import org.veupathdb.service.osi.generated.resources.Organisms;
-import org.veupathdb.service.osi.model.RecordQuery;
-import org.veupathdb.service.osi.service.user.UserService;
-import org.veupathdb.service.osi.util.Params;
 
 import static org.veupathdb.service.osi.service.organism.OrganismService.*;
 

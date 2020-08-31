@@ -9,12 +9,12 @@ import java.util.Map;
 
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
+import org.veupathdb.service.osi.db.Schema.Osi.Genes;
 import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntry;
 import org.veupathdb.service.osi.generated.model.GeneratedTranscriptEntryImpl;
 import org.veupathdb.service.osi.generated.model.IdSetResponse;
 import org.veupathdb.service.osi.model.db.Gene;
 import org.veupathdb.service.osi.model.db.Organism;
-import org.veupathdb.service.osi.db.Schema.Osi.Genes;
 
 public class GeneUtil
 {

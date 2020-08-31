@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.util.function.Supplier;
 
 import io.vulpine.lib.query.util.basic.BasicStatementVoidQuery;
-import org.veupathdb.service.osi.model.db.Organism;
 import org.veupathdb.service.osi.db.SQL;
+import org.veupathdb.service.osi.model.db.Organism;
 import org.veupathdb.service.osi.service.DbMan;
 
 import static org.veupathdb.service.osi.service.organism.OrganismRepo.selectById;

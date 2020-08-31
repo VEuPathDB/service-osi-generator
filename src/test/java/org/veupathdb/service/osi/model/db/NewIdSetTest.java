@@ -1,8 +1,5 @@
 package org.veupathdb.service.osi.model.db;
 
-import java.util.Random;
-import java.util.UUID;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

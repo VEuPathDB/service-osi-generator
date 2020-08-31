@@ -4,10 +4,10 @@ import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 import java.util.Date;
 
+import org.veupathdb.service.osi.db.Schema;
 import org.veupathdb.service.osi.generated.model.NewUserResponse;
 import org.veupathdb.service.osi.generated.model.NewUserResponseImpl;
 import org.veupathdb.service.osi.model.db.User;
-import org.veupathdb.service.osi.db.Schema;
 
 public class UserUtil
 {

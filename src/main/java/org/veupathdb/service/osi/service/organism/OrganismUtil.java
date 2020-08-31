@@ -5,13 +5,13 @@ import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+import org.veupathdb.service.osi.db.Schema.Osi.Organisms;
 import org.veupathdb.service.osi.generated.model.OrganismPostRequest;
 import org.veupathdb.service.osi.generated.model.OrganismResponse;
 import org.veupathdb.service.osi.generated.model.OrganismResponseImpl;
 import org.veupathdb.service.osi.model.db.NewOrganism;
 import org.veupathdb.service.osi.model.db.Organism;
 import org.veupathdb.service.osi.model.db.User;
-import org.veupathdb.service.osi.db.Schema.Osi.Organisms;
 import org.veupathdb.service.osi.util.InputValidationException;
 import org.veupathdb.service.osi.util.Validation;
 

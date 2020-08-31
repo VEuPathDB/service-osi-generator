@@ -4,12 +4,12 @@ import java.sql.ResultSet;
 import java.time.OffsetDateTime;
 import java.util.*;
 
+import org.veupathdb.service.osi.db.Schema.Osi.IdSets;
 import org.veupathdb.service.osi.generated.model.CollectionResponse;
 import org.veupathdb.service.osi.generated.model.IdSetResponse;
 import org.veupathdb.service.osi.generated.model.IdSetResponseImpl;
 import org.veupathdb.service.osi.model.db.IdSet;
 import org.veupathdb.service.osi.model.db.NewIdSet;
-import org.veupathdb.service.osi.db.Schema.Osi.IdSets;
 
 public class IdSetUtil
 {
