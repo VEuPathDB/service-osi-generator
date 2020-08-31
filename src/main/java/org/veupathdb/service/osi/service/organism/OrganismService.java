@@ -9,13 +9,14 @@ import java.util.stream.Collectors;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.Request;
 
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
 import org.veupathdb.service.osi.generated.model.OrganismPostRequest;
 import org.veupathdb.service.osi.generated.model.OrganismPutRequest;
 import org.veupathdb.service.osi.generated.model.OrganismResponse;
 import org.veupathdb.service.osi.model.RecordQuery;
-import org.veupathdb.service.osi.model.db.User;
+import org.veupathdb.service.osi.service.user.UserService;
 import org.veupathdb.service.osi.util.Errors;
 import org.veupathdb.service.osi.util.Field;
 import org.veupathdb.service.osi.util.Params;
@@ -25,10 +26,67 @@ import static org.veupathdb.service.osi.util.Params.orStr;
 
 public class OrganismService
 {
+  private static final OrganismService instance = new OrganismService();
+
   private static final String
     TEMPLATE_PATTERN = "^.*%[0-9,+\\- $.]*d.*$";
   private static final Pattern
-    TEMPLATE_REGEX = Pattern.compile(TEMPLATE_PATTERN);
+    TEMPLATE_REGEX   = Pattern.compile(TEMPLATE_PATTERN);
+
+  // ╔════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                    ║ //
+  // ║    Static Access Methods                                           ║ //
+  // ║                                                                    ║ //
+  // ╚════════════════════════════════════════════════════════════════════╝ //
+
+  public static OrganismService getInstance() {
+    return instance;
+  }
+
+  /**
+   * @see #handleSearch(String, Long, Long, String, Request)
+   */
+  public static List < OrganismResponse > search(
+    final String organismName,
+    final Long createdAfter,
+    final Long createdBefore,
+    final String createdBy,
+    final Request req
+  ) {
+    return getInstance()
+      .handleSearch(organismName, createdAfter, createdBefore, createdBy, req);
+  }
+
+  /**
+   * @see #handleGet(String, Request)
+   */
+  public static OrganismResponse get(
+    final String identifier,
+    final Request req
+  ) {
+    return getInstance().handleGet(identifier, req);
+  }
+
+  /**
+   * @see #handleCreate(OrganismPostRequest, Request)
+   */
+  public static long create(
+    final OrganismPostRequest body,
+    final Request req
+  ) {
+    return getInstance().handleCreate(body, req);
+  }
+
+  /**
+   * @see #handleUpdate(String, OrganismPutRequest, Request)
+   */
+  public static void update(
+    final String organismId,
+    final OrganismPutRequest body,
+    final Request req
+  ) {
+    getInstance().handleUpdate(organismId, body, req);
+  }
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                    ║ //
@@ -36,8 +94,27 @@ public class OrganismService
   // ║                                                                    ║ //
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
-  public static List < OrganismResponse > handleSearch(RecordQuery query) {
+  public List < OrganismResponse > handleSearch(
+    final String organismName,
+    final Long createdAfter,
+    final Long createdBefore,
+    final String createdBy,
+    final Request req
+  ) {
     try {
+      UserService.requireRequestUser(req);
+
+      var query = new RecordQuery()
+        .setStart(Params.nullableTimestamp(createdAfter))
+        .setEnd(Params.nullableTimestamp(createdBefore))
+        .setName(organismName);
+
+      if (createdBy != null)
+        Params.stringOrLong(createdBy)
+          .ifLeft(query::setCreatedByName)
+          .ifRight(query::setCreatedById);
+
+
       return OrganismRepo.search(Objects.requireNonNull(query))
         .stream()
         .map(OrganismUtil::org2OrgRes)
@@ -53,13 +130,19 @@ public class OrganismService
   // ║                                                                    ║ //
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
-  public static OrganismResponse handleGet(String identifier) {
+  public OrganismResponse handleGet(
+    final String identifier,
+    final Request req
+  ) {
+    UserService.requireRequestUser(req);
     try {
       var either = Params.stringOrLong(identifier);
 
-      return (either.isLeft()
-        ? OrganismRepo.selectByName(either.getLeft())
-        : OrganismRepo.selectById(either.getRight()))
+      return (
+        either.isLeft()
+          ? OrganismRepo.selectByName(either.getLeft())
+          : OrganismRepo.selectById(either.getRight())
+      )
         .map(OrganismUtil::org2OrgRes)
         .orElseThrow(NotFoundException::new);
     } catch (Exception e) {
@@ -73,16 +156,20 @@ public class OrganismService
   // ║                                                                    ║ //
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
-  public static long handleCreate(OrganismPostRequest req, User user) {
+  public long handleCreate(
+    final OrganismPostRequest body,
+    final Request req
+  ) {
+    var user = UserService.requireRequestUser(req);
+
     if (req == null)
       throw new BadRequestException();
 
-    validateOrgCreateRequest(req);
+    validateOrgCreateRequest(body);
 
     try {
-      var org = OrganismRepo.insert(OrganismUtil.orgReq2NewOrg(
-        Objects.requireNonNull(req), Objects.requireNonNull(user)));
-      return org.getId();
+      return OrganismRepo.insert(OrganismUtil.orgReq2NewOrg(body, user))
+        .getId();
     } catch (Exception e) {
       throw Errors.wrapErr(e);
     }
@@ -94,7 +181,7 @@ public class OrganismService
     VAL_BAD_TEMP   = "The organism id template field must match the regex"
       + " pattern \"" + TEMPLATE_PATTERN + "\".";
 
-  private static void validateOrgCreateRequest(OrganismPostRequest req) {
+  void validateOrgCreateRequest(OrganismPostRequest req) {
     if (req == null)
       throw new BadRequestException();
 
@@ -104,11 +191,15 @@ public class OrganismService
       errs.put(Field.Organism.NAME, Collections.singletonList(VAL_BLANK_NAME));
 
     if (req.getTemplate() == null || req.getTemplate().isBlank())
-      errs.put(Field.Organism.TEMPLATE,
-        Collections.singletonList(VAL_BLANK_TEMP));
+      errs.put(
+        Field.Organism.TEMPLATE,
+        Collections.singletonList(VAL_BLANK_TEMP)
+      );
     else if (!TEMPLATE_REGEX.matcher(req.getTemplate()).matches())
-      errs.put(Field.Organism.TEMPLATE,
-        Collections.singletonList(VAL_BAD_TEMP));
+      errs.put(
+        Field.Organism.TEMPLATE,
+        Collections.singletonList(VAL_BAD_TEMP)
+      );
 
     if (!errs.isEmpty())
       throw new UnprocessableEntityException(errs);
@@ -120,12 +211,18 @@ public class OrganismService
   // ║                                                                    ║ //
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
-  public static void handleUpdate(String identifier, OrganismPutRequest req) {
-    prevalidatePutReq(req);
+  public void handleUpdate(
+    final String identifier,
+    final OrganismPutRequest body,
+    final Request req
+  ) {
+    UserService.requireRequestUser(req);
+
+    prevalidatePutReq(body);
 
     Params.stringOrLong(identifier)
-      .ifLeft(s -> handleStrPutRequest(s, req))
-      .ifRight(i -> handleIntPutRequest(i, req));
+      .ifLeft(s -> handleStrPutRequest(s, body))
+      .ifRight(i -> handleIntPutRequest(i, body));
   }
 
   private static void handleIntPutRequest(long orgId, OrganismPutRequest req) {
@@ -154,7 +251,7 @@ public class OrganismService
   throws Exception {
     try (
       var load = OrganismUpdater.begin();
-      var upd  = load.loadOrganism(name, NotFoundException::new)
+      var upd = load.loadOrganism(name, NotFoundException::new)
     ) {
       upd.update(template);
     }
@@ -164,7 +261,7 @@ public class OrganismService
   throws Exception {
     try (
       var load = OrganismUpdater.begin();
-      var upd  = load.loadOrganism(id, NotFoundException::new)
+      var upd = load.loadOrganism(id, NotFoundException::new)
     ) {
       upd.update(template);
     }
@@ -177,7 +274,7 @@ public class OrganismService
   throws Exception {
     try (
       var load = OrganismUpdater.begin();
-      var upd  = load.loadOrganism(name, NotFoundException::new)
+      var upd = load.loadOrganism(name, NotFoundException::new)
     ) {
       handleOrgFullUpdate(upd, req);
     }
@@ -187,7 +284,7 @@ public class OrganismService
   throws Exception {
     try (
       var load = OrganismUpdater.begin();
-      var upd  = load.loadOrganism(id, NotFoundException::new)
+      var upd = load.loadOrganism(id, NotFoundException::new)
     ) {
       handleOrgFullUpdate(upd, req);
     }
@@ -198,7 +295,7 @@ public class OrganismService
     OrganismPutRequest req
   ) throws Exception {
     if (!up.canUpdateCounters()) {
-      var errs = new HashMap< String, List < String > >();
+      var errs = new HashMap < String, List < String > >();
       if (req.getGeneIntStart() != null)
         errs.put(Field.Organism.GENE_INT_START, Collections.singletonList(
           VAL_ORG_UP));
@@ -227,6 +324,7 @@ public class OrganismService
     )
       throw new UnprocessableEntityException(
         Collections.singletonList(VAL_EMPTY_PUT),
-        Collections.emptyMap());
+        Collections.emptyMap()
+      );
   }
 }

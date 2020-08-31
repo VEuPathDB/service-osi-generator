@@ -81,7 +81,14 @@ class CollectionControllerTest
     @Test
     @DisplayName("passes uri param to service layer")
     void happyPath() {
+      var uriParam  = 123456L;
+      var mResponse = mock(CollectionResponse.class);
+      var target    = new CollectionController(mRequest);
 
+      doReturn(mResponse).when(mService).getCollection(uriParam, mRequest);
+
+      assertNotNull(target.getIdSetCollectionsByCollectionId(uriParam));
+      verify(mService).getCollection(uriParam, mRequest);
     }
   }
 }

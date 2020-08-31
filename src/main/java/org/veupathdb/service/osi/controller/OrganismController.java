@@ -22,37 +22,25 @@ public class OrganismController implements Organisms
 
   @Override
   public GetOrganismsResponse getOrganisms(
-    String organismName,
-    Long   createdAfter,
-    Long   createdBefore,
-    String createdBy
+    final String organismName,
+    final Long   createdAfter,
+    final Long   createdBefore,
+    final String createdBy
   ) {
-    UserService.requireRequestUser(req);
-
-    var query = new RecordQuery()
-      .setStart(Params.nullableTimestamp(createdAfter))
-      .setEnd(Params.nullableTimestamp(createdBefore))
-      .setName(organismName);
-
-    if (createdBy != null)
-      Params.stringOrLong(createdBy)
-        .ifLeft(query::setCreatedByName)
-        .ifRight(query::setCreatedById);
-
-    return GetOrganismsResponse.respond200WithApplicationJson(handleSearch(query));
+    return GetOrganismsResponse.respond200WithApplicationJson(
+      search(organismName, createdAfter, createdBefore, createdBy, req));
   }
 
   @Override
-  public PostOrganismsResponse postOrganisms(OrganismPostRequest entity) {
-    return PostOrganismsResponse.respond200WithApplicationJson(handleCreate(
-      entity, UserService.requireRequestUser(req)));
+  public PostOrganismsResponse postOrganisms(final OrganismPostRequest entity) {
+    return PostOrganismsResponse.respond200WithApplicationJson(
+      create(entity, req));
   }
 
   @Override
   public GetOrganismsByOrganismIdResponse getOrganismsByOrganismId(String organismId) {
-    UserService.requireRequestUser(req);
     return GetOrganismsByOrganismIdResponse.respond200WithApplicationJson(
-      handleGet(organismId));
+      get(organismId, req));
   }
 
   @Override
@@ -60,8 +48,7 @@ public class OrganismController implements Organisms
     String organismId,
     OrganismPutRequest entity
   ) {
-    UserService.requireRequestUser(req);
-    handleUpdate(organismId, entity);
+    update(organismId, entity, req);
     return PutOrganismsByOrganismIdResponse.respond204();
   }
 }

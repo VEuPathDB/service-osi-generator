@@ -36,7 +36,8 @@ import static java.util.Collections.singletonMap;
 
 public class IdSetService
 {
-  private static final IdSetService instance = new IdSetService();
+  @SuppressWarnings("FieldMayBeFinal")
+  private static IdSetService instance = new IdSetService();
 
   private final Logger log = LogProvider.logger(getClass());
 
@@ -47,8 +48,13 @@ public class IdSetService
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
   public static
-  List < IdSetResponse > search(Long start, Long end, String user) {
-    return getInstance().handleSearch(start, end, user);
+  List < IdSetResponse > search(
+    final Long start,
+    final Long end,
+    final String user,
+    final Request request
+  ) {
+    return getInstance().handleSearch(start, end, user, request);
   }
 
   public static
@@ -82,8 +88,14 @@ public class IdSetService
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
   public
-  List < IdSetResponse > handleSearch(Long start, Long end, String user) {
+  List < IdSetResponse > handleSearch(
+    final Long start,
+    final Long end,
+    final String user,
+    final Request request
+  ) {
     log.trace("IdSetService#handleSearch(Long, Long, String)");
+    UserService.requireRequestUser(request);
 
     var query = new RecordQuery()
       .setStart(Params.nullableTimestamp(start))

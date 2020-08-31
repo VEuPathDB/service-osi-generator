@@ -3,17 +3,16 @@ package org.veupathdb.service.osi.controller;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
-import org.glassfish.jersey.server.ContainerRequest;
 import org.veupathdb.service.osi.generated.model.IdSetCollectionPostRequest;
 import org.veupathdb.service.osi.generated.resources.IdSetCollections;
 import org.veupathdb.service.osi.service.collections.CollectionService;
 
 public class CollectionController implements IdSetCollections
 {
-  private final ContainerRequest request;
+  private final Request request;
 
   public CollectionController(@Context Request request) {
-    this.request = (ContainerRequest) request;
+    this.request = request;
   }
 
   @Override
