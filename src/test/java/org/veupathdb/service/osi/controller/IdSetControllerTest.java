@@ -1,6 +1,7 @@
 package org.veupathdb.service.osi.controller;
 
 import java.util.List;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Request;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -41,12 +42,15 @@ class IdSetControllerTest
       var after     = 123456L;
       var before    = 654321L;
       var user      = "some user";
-      var target    = new IdSetController(mRequest);
 
       doReturn(mResponse).when(mService)
         .handleSearch(after, before, user, mRequest);
 
-      assertNotNull(target.getIdSets(after, before, user));
+      var output = new IdSetController(mRequest)
+        .getIdSets(after, before, user);
+
+      assertNotNull(output);
+      assertSame(mResponse, ((GenericEntity) output.getEntity()).getEntity());
       verify(mService).handleSearch(after, before, user, mRequest);
     }
   }
@@ -60,11 +64,13 @@ class IdSetControllerTest
     void happyPath() {
       var mResponse = mock(IdSetResponse.class);
       var body      = mock(IdSetPostRequest.class);
-      var target    = new IdSetController(mRequest);
 
       doReturn(mResponse).when(mService).handleCreate(body, mRequest);
 
-      assertNotNull(target.postIdSets(body));
+      var output = new IdSetController(mRequest).postIdSets(body);
+
+      assertNotNull(output);
+      assertSame(mResponse, output.getEntity());
       verify(mService).handleCreate(body, mRequest);
     }
   }
@@ -78,11 +84,13 @@ class IdSetControllerTest
     void happyPath() {
       var mResponse = mock(IdSetResponse.class);
       var uriParam  = 123456L;
-      var target    = new IdSetController(mRequest);
 
       doReturn(mResponse).when(mService).handleGet(uriParam, mRequest);
 
-      assertNotNull(target.getIdSetsByIdSetId(uriParam));
+      var output = new IdSetController(mRequest).getIdSetsByIdSetId(uriParam);
+
+      assertNotNull(output);
+      assertSame(mResponse, output.getEntity());
       verify(mService).handleGet(uriParam, mRequest);
     }
   }
@@ -98,11 +106,14 @@ class IdSetControllerTest
       var mResponse = mock(IdSetResponse.class);
       var uriParam  = 456789L;
       var body      = mock(List.class);
-      var target    = new IdSetController(mRequest);
 
       doReturn(mResponse).when(mService).handleUpdate(uriParam, body, mRequest);
 
-      assertNotNull(target.patchIdSetsByIdSetId(uriParam, body));
+      var output = new IdSetController(mRequest)
+        .patchIdSetsByIdSetId(uriParam, body);
+
+      assertNotNull(output);
+      assertSame(mResponse, output.getEntity());
       verify(mService).handleUpdate(uriParam, body, mRequest);
     }
   }

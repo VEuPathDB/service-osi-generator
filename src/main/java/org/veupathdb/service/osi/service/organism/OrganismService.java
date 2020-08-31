@@ -26,7 +26,7 @@ import static org.veupathdb.service.osi.util.Params.orStr;
 
 public class OrganismService
 {
-  private static final OrganismService instance = new OrganismService();
+  private static OrganismService instance = new OrganismService();
 
   private static final String
     TEMPLATE_PATTERN = "^.*%[0-9,+\\- $.]*d.*$";

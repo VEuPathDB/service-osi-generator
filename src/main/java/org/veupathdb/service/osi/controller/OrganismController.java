@@ -38,7 +38,9 @@ public class OrganismController implements Organisms
   }
 
   @Override
-  public GetOrganismsByOrganismIdResponse getOrganismsByOrganismId(String organismId) {
+  public GetOrganismsByOrganismIdResponse getOrganismsByOrganismId(
+    final String organismId
+  ) {
     return GetOrganismsByOrganismIdResponse.respond200WithApplicationJson(
       get(organismId, req));
   }

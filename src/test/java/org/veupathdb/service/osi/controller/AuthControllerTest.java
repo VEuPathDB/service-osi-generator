@@ -1,6 +1,8 @@
 package org.veupathdb.service.osi.controller;
 
 import java.util.UUID;
+import javax.swing.text.html.parser.Entity;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Request;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -42,9 +44,10 @@ class AuthControllerTest
 
       doReturn(mResponse).when(mService).createNewUser(mBody, mRequest);
 
-      var target = new AuthController(mRequest);
+      var output = new AuthController(mRequest).postAuth(mBody);
 
-      assertNotNull(target.postAuth(mBody));
+      assertNotNull(output);
+      assertSame(mResponse, output.getEntity());
       verify(mService).createNewUser(mBody, mRequest);
     }
   }
@@ -58,11 +61,14 @@ class AuthControllerTest
     void happyPath() {
       var uriParam  = UUID.randomUUID().toString();
       var mResponse = mock(NewUserResponse.class);
-      var target    = new AuthController(mRequest);
 
       doReturn(mResponse).when(mService).getUserRecord(uriParam, mRequest);
 
-      assertNotNull(target.getAuthByUserIdentifier(uriParam));
+      var output = new AuthController(mRequest)
+        .getAuthByUserIdentifier(uriParam);
+
+      assertNotNull(output);
+      assertSame(mResponse, output.getEntity());
       verify(mService).getUserRecord(uriParam, mRequest);
     }
   }

@@ -124,7 +124,6 @@ public interface SQL
     }
   }
 
-
   private static String delete(final String table, final String file) {
     log.trace("Loading delete query " + file + " for table " + table);
     return load(Mode.DELETE, String.format(PATH_FORMAT, table, file));

@@ -1,6 +1,7 @@
 package org.veupathdb.service.osi.controller;
 
 import java.util.List;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Request;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -38,19 +39,21 @@ class CollectionControllerTest
     @Test
     @DisplayName("passes query params to service layer")
     void happyPath() {
-      var after  = 1234L;
-      var before = 4321L;
-      var by     = "some user";
-      var name   = "some collection name";
-
       var mResponse = mock(List.class);
+      var after     = 1234L;
+      var before    = 4321L;
+      var by        = "some user";
+      var name      = "some collection name";
+
 
       doReturn(mResponse).when(mService)
         .findCollections(name, after, before, by, mRequest);
 
-      var target = new CollectionController(mRequest);
+      var output = new CollectionController(mRequest)
+        .getIdSetCollections(after, before, by, name);
 
-      assertNotNull(target.getIdSetCollections(after, before, by, name));
+      assertNotNull(output);
+      assertSame(mResponse, ((GenericEntity) output.getEntity()).getEntity());
       verify(mService).findCollections(name, after, before, by, mRequest);
     }
   }
@@ -65,11 +68,14 @@ class CollectionControllerTest
     void happyPath() {
       var body      = mock(IdSetCollectionPostRequest.class);
       var mResponse = mock(CollectionResponse.class);
-      var target    = new CollectionController(mRequest);
 
       doReturn(mResponse).when(mService).newCollection(body, mRequest);
 
-      assertNotNull(target.postIdSetCollections(body));
+      var output = new CollectionController(mRequest)
+        .postIdSetCollections(body);
+
+      assertNotNull(output);
+      assertSame(mResponse, output.getEntity());
       verify(mService).newCollection(body, mRequest);
     }
   }
@@ -83,11 +89,14 @@ class CollectionControllerTest
     void happyPath() {
       var uriParam  = 123456L;
       var mResponse = mock(CollectionResponse.class);
-      var target    = new CollectionController(mRequest);
 
       doReturn(mResponse).when(mService).getCollection(uriParam, mRequest);
 
-      assertNotNull(target.getIdSetCollectionsByCollectionId(uriParam));
+      var output = new CollectionController(mRequest)
+        .getIdSetCollectionsByCollectionId(uriParam);
+
+      assertNotNull(output);
+      assertSame(mResponse, output.getEntity());
       verify(mService).getCollection(uriParam, mRequest);
     }
   }
