@@ -116,7 +116,7 @@ class IdSetTest
   }
 
   @Test
-  @DisplayName("Issued gene ID counter getter returns expected value")
+  @DisplayName("Issued gene ID count getter returns expected value")
   void getNumIssued() {
     var target = newIdSet();
     assertEquals(numIssued, target.getNumIssued());

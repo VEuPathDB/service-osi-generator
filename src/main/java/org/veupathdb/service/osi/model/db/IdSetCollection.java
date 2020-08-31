@@ -2,23 +2,28 @@ package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
 
+import org.veupathdb.service.osi.util.Validation;
+
 public class IdSetCollection
 {
   private final long collectionId;
+
   private final String name;
-  private final long createdBy;
+
   private final OffsetDateTime createdOn;
 
+  private final long createdBy;
+
   public IdSetCollection(
-    long collectionId,
-    String name,
-    long createdBy,
-    OffsetDateTime createdOn
+    final long collectionId,
+    final String name,
+    final OffsetDateTime createdOn,
+    final long createdBy
   ) {
-    this.collectionId = collectionId;
-    this.name         = name;
-    this.createdBy    = createdBy;
-    this.createdOn    = createdOn;
+    this.collectionId = Validation.oneMinimum(collectionId);
+    this.name         = Validation.nonEmpty(name);
+    this.createdOn    = Validation.nonNull(createdOn);
+    this.createdBy    = Validation.oneMinimum(createdBy);
   }
 
   public long getId() {

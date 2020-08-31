@@ -74,8 +74,7 @@ public class CollectionUtil
     return new IdSetCollection(
       rs.getLong(Collections.COLLECTION_ID),
       base.getName(),
-      base.getCreatedBy().getUserId(),
-      rs.getObject(Collections.CREATED_ON, OffsetDateTime.class)
+      rs.getObject(Collections.CREATED_ON, OffsetDateTime.class), base.getCreatedBy().getUserId()
     );
   }
 
@@ -85,8 +84,7 @@ public class CollectionUtil
     return new IdSetCollection(
       rs.getLong(Collections.COLLECTION_ID),
       rs.getString(Collections.NAME),
-      rs.getLong(Collections.CREATED_BY),
-      rs.getObject(Collections.CREATED_ON, OffsetDateTime.class)
+      rs.getObject(Collections.CREATED_ON, OffsetDateTime.class), rs.getLong(Collections.CREATED_BY)
     );
   }
 
