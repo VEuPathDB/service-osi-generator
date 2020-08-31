@@ -12,11 +12,11 @@ import static org.mockito.Mockito.*;
 
 class NewUserTest extends TestBase
 {
-  private String name, key, json;
+  protected String name, key, json;
 
-  private NewUser target;
+  protected ObjectNode mNode;
 
-  private ObjectNode mNode;
+  protected NewUser target;
 
   @BeforeEach
   public void setUp() throws Exception {

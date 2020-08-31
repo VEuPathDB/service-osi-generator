@@ -14,10 +14,10 @@ public class User extends NewUser
   private final OffsetDateTime issued;
 
   public User(
-    long userId,
-    String userEmail,
-    String apiKey,
-    OffsetDateTime issued
+    final long userId,
+    final String userEmail,
+    final String apiKey,
+    final OffsetDateTime issued
   ) {
     super(userEmail, apiKey);
     this.userId = Validation.oneMinimum(userId);
