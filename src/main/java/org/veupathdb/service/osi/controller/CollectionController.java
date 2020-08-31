@@ -18,10 +18,10 @@ public class CollectionController implements IdSetCollections
 
   @Override
   public GetIdSetCollectionsResponse getIdSetCollections(
-    Long createdAfter,
-    Long createdBefore,
-    String createdBy,
-    String name
+    final Long createdAfter,
+    final Long createdBefore,
+    final String createdBy,
+    final String name
   ) {
     return GetIdSetCollectionsResponse.respond200WithApplicationJson(
       CollectionService.search(
@@ -34,7 +34,7 @@ public class CollectionController implements IdSetCollections
 
   @Override
   public PostIdSetCollectionsResponse postIdSetCollections(
-    IdSetCollectionPostRequest entity
+    final IdSetCollectionPostRequest entity
   ) {
     return PostIdSetCollectionsResponse.respond200WithApplicationJson(
       CollectionService.create(entity, request));

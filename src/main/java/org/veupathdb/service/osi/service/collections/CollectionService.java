@@ -28,7 +28,8 @@ import static java.util.Collections.singletonMap;
 
 public class CollectionService
 {
-  private static final CollectionService instance = new CollectionService();
+  @SuppressWarnings("FieldMayBeFinal")
+  private static CollectionService instance = new CollectionService();
 
   private final Logger log = LogProvider.logger(getClass());
 

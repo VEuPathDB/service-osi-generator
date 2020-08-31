@@ -22,7 +22,8 @@ import org.veupathdb.service.osi.util.Params;
 
 public class UserService
 {
-  private static final UserService instance = new UserService();
+  @SuppressWarnings("FieldMayBeFinal")
+  private static UserService instance = new UserService();
 
   private static final String
     ERR_NOT_AUTH = "Users must be logged in to use this endpoint.";

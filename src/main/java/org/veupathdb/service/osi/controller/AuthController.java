@@ -16,7 +16,7 @@ public class AuthController implements Auth
   }
 
   @Override
-  public PostAuthResponse postAuth(UserPostRequest entity) {
+  public PostAuthResponse postAuth(final UserPostRequest entity) {
     return PostAuthResponse.respond200WithApplicationJson(
       UserService.createUser(entity, req));
   }
