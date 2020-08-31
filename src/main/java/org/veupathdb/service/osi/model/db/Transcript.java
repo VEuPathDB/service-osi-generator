@@ -2,6 +2,8 @@ package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
 
+import org.veupathdb.service.osi.util.Errors;
+import org.veupathdb.service.osi.util.Format;
 import org.veupathdb.service.osi.util.Validation;
 
 public class Transcript
@@ -51,5 +53,10 @@ public class Transcript
 
   public long getCreatedBy() {
     return createdBy;
+  }
+
+  @Override
+  public String toString() {
+    return Errors.toRuntime(this, Format.Json()::writeValueAsString);
   }
 }

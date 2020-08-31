@@ -167,9 +167,7 @@ public class IdSetService
             oCol.get(),
             oOrg.get(),
             oOrg.get().getTemplate(),
-            user,
-            count,
-            body.getGenerateGenes()
+            count, body.getGenerateGenes(), user
           ),
           con);
 

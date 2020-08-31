@@ -5,24 +5,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Mockable static serialization format provider.
  */
-public final class Format
+public class Format
 {
-  private static Format instance;
+  private static Format instance = new Format();
 
-  private final ObjectMapper json;
-
-  private Format() {
-    this.json = new ObjectMapper();
-  }
+  private final ObjectMapper json = new ObjectMapper();
 
   public ObjectMapper getJson() {
     return json;
   }
 
   public static Format getInstance() {
-    if (instance == null)
-      instance = new Format();
-
     return instance;
   }
 

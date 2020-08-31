@@ -11,36 +11,34 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.veupathdb.service.osi.service.organism.OrganismUtil;
 import org.veupathdb.service.osi.util.Validation;
+import util.TestBase;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class IdSetTest
+class IdSetTest extends TestBase
 {
   private OrganismUtil mOrgUtil;
 
-  private Validation mValidation;
-
   private long idSetId, collectionId, organismId, counterStart, createdBy;
 
-  private String template;
+  private String template, json;
 
   private int numIssued;
 
   private OffsetDateTime createdOn;
 
+  private IdSet target;
+
   @BeforeEach
-  void setUp() throws Exception {
-    mOrgUtil    = mock(OrganismUtil.class);
-    mValidation = mock(Validation.class);
+  public void setUp() throws Exception {
+    super.setUp();
+
+    mOrgUtil = mock(OrganismUtil.class);
 
     var orgInst = OrganismUtil.class.getDeclaredField("instance");
     orgInst.setAccessible(true);
     orgInst.set(null, mOrgUtil);
-
-    var valInst = Validation.class.getDeclaredField("instance");
-    valInst.setAccessible(true);
-    valInst.set(null, mValidation);
 
     var rand = new Random(System.currentTimeMillis());
 
@@ -53,6 +51,7 @@ class IdSetTest
     numIssued    = rand.nextInt();
     createdOn    = OffsetDateTime.ofInstant(Instant.ofEpochMilli(
       Math.abs(rand.nextLong())), ZoneId.systemDefault());
+    json = "some json string";
 
     doReturn(idSetId).when(mValidation).enforceOneMinimum(idSetId);
     doReturn(collectionId).when(mValidation).enforceOneMinimum(collectionId);
@@ -64,12 +63,24 @@ class IdSetTest
     doReturn(createdOn).when(mValidation).enforceNonNull(createdOn);
 
     doReturn(template).when(mOrgUtil).enforceOrgPattern(template);
+
+    target = new IdSet(
+      idSetId,
+      collectionId,
+      organismId,
+      template,
+      counterStart,
+      numIssued,
+      createdOn,
+      createdBy
+    );
+
+    doReturn(json).when(mJson).writeValueAsString(target);
   }
 
   @Test
   @DisplayName("constructor validates inputs")
   void constructor() {
-    newIdSet();
     verify(mValidation).enforceOneMinimum(idSetId);
     verify(mValidation).enforceOneMinimum(collectionId);
     verify(mValidation).enforceOneMinimum(organismId);
@@ -83,69 +94,55 @@ class IdSetTest
   @Test
   @DisplayName("ID set ID getter returns expected value")
   void getId() {
-    var target = newIdSet();
     assertEquals(idSetId, target.getId());
   }
 
   @Test
   @DisplayName("Collection ID getter returns expected value")
   void getCollectionId() {
-    var target = newIdSet();
     assertEquals(collectionId, target.getCollectionId());
   }
 
   @Test
   @DisplayName("Organism ID getter returns expected value")
   void getOrganismId() {
-    var target = newIdSet();
     assertEquals(organismId, target.getOrganismId());
   }
 
   @Test
   @DisplayName("Template getter returns expected value")
   void getTemplate() {
-    var target = newIdSet();
     assertSame(template, target.getTemplate());
   }
 
   @Test
   @DisplayName("Counter start point getter returns expected value")
   void getCounterStart() {
-    var target = newIdSet();
     assertEquals(counterStart, target.getCounterStart());
   }
 
   @Test
   @DisplayName("Issued gene ID count getter returns expected value")
   void getNumIssued() {
-    var target = newIdSet();
     assertEquals(numIssued, target.getNumIssued());
   }
 
   @Test
   @DisplayName("ID set record creation date getter returns expected value")
   void getCreatedOnId() {
-    var target = newIdSet();
     assertSame(createdOn, target.getCreatedOn());
   }
 
   @Test
   @DisplayName("ID set record created by user getter returns expected value")
   void getCreatedBy() {
-    var target = newIdSet();
     assertEquals(createdBy, target.getCreatedBy());
   }
 
-  IdSet newIdSet() {
-    return new IdSet(
-      idSetId,
-      collectionId,
-      organismId,
-      template,
-      counterStart,
-      numIssued,
-      createdOn,
-      createdBy
-    );
+  @Test
+  @DisplayName("String serialization returns JSON")
+  void stringify() throws Exception{
+    assertSame(json, target.toString());
+    verify(mJson).writeValueAsString(target);
   }
 }

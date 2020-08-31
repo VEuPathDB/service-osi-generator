@@ -7,9 +7,10 @@ import org.veupathdb.service.osi.util.Validation;
 public class NewIdSetCollection
 {
   private final String name;
+
   private final User createdBy;
 
-  public NewIdSetCollection(String name, User createdBy) {
+  public NewIdSetCollection(final String name, final User createdBy) {
     this.name      = Validation.nonEmpty(name);
     this.createdBy = Validation.nonNull(createdBy);
   }

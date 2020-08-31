@@ -9,9 +9,10 @@ public final class Errors
 {
   private static Errors instance;
 
-  private Errors() {}
+  private Errors() {
+  }
 
-  public < T, R > R errorToRuntime(T value, CheckedFunction <T, R> fn) {
+  public < T, R > R errorToRuntime(T value, CheckedFunction < T, R > fn) {
     try {
       return fn.apply(value);
     } catch (Exception e) {

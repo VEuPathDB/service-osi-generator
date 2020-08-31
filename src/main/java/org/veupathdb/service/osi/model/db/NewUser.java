@@ -1,5 +1,6 @@
 package org.veupathdb.service.osi.model.db;
 
+import org.veupathdb.service.osi.util.Errors;
 import org.veupathdb.service.osi.util.Field;
 import org.veupathdb.service.osi.util.Format;
 import org.veupathdb.service.osi.util.Validation;

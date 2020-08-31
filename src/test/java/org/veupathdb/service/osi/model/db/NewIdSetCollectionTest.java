@@ -5,36 +5,33 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.veupathdb.service.osi.util.Validation;
+import org.veupathdb.service.osi.util.Format;
 import util.TestBase;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-class NewGeneTest extends TestBase
+class NewIdSetCollectionTest extends TestBase
 {
-  private IdSet mIdSet;
+  private String name, json;
 
   private User mUser;
 
-  private String name, json;
+  private NewIdSetCollection target;
 
-  private NewGene target;
-
+  @Override
   @BeforeEach
   public void setUp() throws Exception {
     super.setUp();
 
-    mIdSet = mock(IdSet.class);
-    mUser  = mock(User.class);
-    name   = UUID.randomUUID().toString();
-    json   = "some json string";
+    json  = UUID.randomUUID().toString();
+    name  = UUID.randomUUID().toString();
+    mUser = mock(User.class);
 
-    doReturn(mIdSet).when(mValidation).enforceNonNull(mIdSet);
     doReturn(name).when(mValidation).enforceNonEmpty(name);
     doReturn(mUser).when(mValidation).enforceNonNull(mUser);
 
-    target = new NewGene(mIdSet, name, mUser);
+    target = new NewIdSetCollection(name, mUser);
 
     doReturn(json).when(mJson).writeValueAsString(target);
   }
@@ -42,21 +39,14 @@ class NewGeneTest extends TestBase
   @Test
   @DisplayName("Constructor validates inputs")
   void constructor() {
-    verify(mValidation).enforceNonNull(mIdSet);
     verify(mValidation).enforceNonEmpty(name);
     verify(mValidation).enforceNonNull(mUser);
   }
 
   @Test
-  @DisplayName("ID set getter returns expected value")
-  void getIdSet() {
-    assertSame(mIdSet, target.getIdSet());
-  }
-
-  @Test
-  @DisplayName("Gene identifier getter returns expected value")
-  void getIdentifier() {
-    assertSame(name, target.getIdentifier());
+  @DisplayName("Name getter returns expected value")
+  void getName() {
+    assertSame(name, target.getName());
   }
 
   @Test
@@ -66,8 +56,8 @@ class NewGeneTest extends TestBase
   }
 
   @Test
-  @DisplayName("String serialization returns JSON")
-  void stringify() throws Exception{
+  @DisplayName("String serializer returns a non-null value.")
+  void stringer() throws Exception {
     assertSame(json, target.toString());
     verify(mJson).writeValueAsString(target);
   }

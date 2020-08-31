@@ -3,6 +3,8 @@ package org.veupathdb.service.osi.model.db;
 import java.time.OffsetDateTime;
 
 import org.veupathdb.service.osi.service.organism.OrganismUtil;
+import org.veupathdb.service.osi.util.Errors;
+import org.veupathdb.service.osi.util.Format;
 import org.veupathdb.service.osi.util.InputValidationException;
 import org.veupathdb.service.osi.util.Validation;
 
@@ -169,5 +171,10 @@ public class IdSet
    */
   public long getCreatedBy() {
     return createdBy;
+  }
+
+  @Override
+  public String toString() {
+    return Errors.toRuntime(this, Format.Json()::writeValueAsString);
   }
 }

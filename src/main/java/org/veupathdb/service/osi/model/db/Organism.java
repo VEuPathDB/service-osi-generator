@@ -2,6 +2,9 @@ package org.veupathdb.service.osi.model.db;
 
 import java.time.OffsetDateTime;
 
+import org.veupathdb.service.osi.util.Errors;
+import org.veupathdb.service.osi.util.Format;
+
 public class Organism
 {
   private final long id;
@@ -86,5 +89,10 @@ public class Organism
 
   public OffsetDateTime getModified() {
     return modified;
+  }
+
+  @Override
+  public String toString() {
+    return Errors.toRuntime(this, Format.Json()::writeValueAsString);
   }
 }
