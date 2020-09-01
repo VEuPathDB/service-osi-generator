@@ -10,7 +10,9 @@ import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Request;
 
+import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
+import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.osi.generated.model.OrganismPostRequest;
 import org.veupathdb.service.osi.generated.model.OrganismPutRequest;
 import org.veupathdb.service.osi.generated.model.OrganismResponse;
@@ -27,7 +29,10 @@ import static org.veupathdb.service.osi.util.Params.orStr;
 
 public class OrganismService
 {
+  @SuppressWarnings("FieldMayBeFinal")
   private static OrganismService instance = new OrganismService();
+
+  private final Logger log = LogProvider.logger(getClass());
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                    ║ //
@@ -97,6 +102,8 @@ public class OrganismService
     final String createdBy,
     final Request req
   ) {
+    log.trace("OrganismService#handleSearch(String, Long, Long, String, Request)");
+
     try {
       UserService.requireUser(req);
 
@@ -130,6 +137,8 @@ public class OrganismService
     final String identifier,
     final Request req
   ) {
+    log.trace("OrganismService#handleGet(String, Request)");
+
     UserService.requireUser(req);
     try {
       var either = Params.stringOrLong(identifier);
@@ -156,6 +165,8 @@ public class OrganismService
     final OrganismPostRequest body,
     final Request req
   ) {
+    log.trace("OrganismService#handleCreate(OrganismPostRequest, Request)");
+
     var user = UserService.requireUser(req);
 
     if (req == null)
@@ -177,7 +188,9 @@ public class OrganismService
     VAL_BAD_TEMP   = "The organism id template field must match the regex"
       + " pattern \"" + TEMPLATE_PATTERN + "\".";
 
-  void validateOrgCreateRequest(OrganismPostRequest req) {
+  void validateOrgCreateRequest(final OrganismPostRequest req) {
+    log.trace("OrganismService#validateOrgCreateRequest(OrganismPostRequest)");
+
     if (req == null)
       throw new BadRequestException();
 
@@ -212,6 +225,8 @@ public class OrganismService
     final OrganismPutRequest body,
     final Request req
   ) {
+    log.trace("OrganismService#handleUpdate(String, OrganismPutRequest, Request)");
+
     UserService.requireUser(req);
 
     prevalidatePutReq(body);
@@ -221,7 +236,12 @@ public class OrganismService
       .ifRight(i -> handleIntPutRequest(i, body));
   }
 
-  private static void handleIntPutRequest(long orgId, OrganismPutRequest req) {
+  private void handleIntPutRequest(
+    final long orgId,
+    final OrganismPutRequest req
+  ) {
+    log.trace("OrganismService#handleIntPutRequest(long, OrganismPutRequest)");
+
     try {
       if (req.getGeneIntStart() == null && req.getTranscriptIntStart() == null)
         handleOrgTemplateUpdate(orgId, req.getTemplate());
@@ -232,7 +252,12 @@ public class OrganismService
     }
   }
 
-  private static void handleStrPutRequest(String name, OrganismPutRequest req) {
+  private void handleStrPutRequest(
+    final String name,
+    final OrganismPutRequest req
+  ) {
+    log.trace("OrganismService#handleStrPutRequest(String, OrganismPutRequest)");
+
     try {
       if (req.getGeneIntStart() == null && req.getTranscriptIntStart() == null)
         handleOrgTemplateUpdate(name, req.getTemplate());
@@ -243,8 +268,12 @@ public class OrganismService
     }
   }
 
-  private static void handleOrgTemplateUpdate(String name, String template)
-  throws Exception {
+  private void handleOrgTemplateUpdate(
+    final String name,
+    final String template
+  ) throws Exception {
+    log.trace("OrganismService#handleOrgTemplateUpdate(String, String)");
+
     try (
       var load = OrganismUpdater.begin();
       var upd = load.loadOrganism(name, NotFoundException::new)
@@ -253,8 +282,12 @@ public class OrganismService
     }
   }
 
-  private static void handleOrgTemplateUpdate(long id, String template)
-  throws Exception {
+  private void handleOrgTemplateUpdate(
+    final long id,
+    final String template
+  ) throws Exception {
+    log.trace("OrganismService#handleOrgTemplateUpdate(long, String)");
+
     try (
       var load = OrganismUpdater.begin();
       var upd = load.loadOrganism(id, NotFoundException::new)
@@ -266,8 +299,11 @@ public class OrganismService
   private static final String
     VAL_ORG_UP = "Cannot organism id counters after ids have been issued.";
 
-  private static void handleOrgFullUpdate(String name, OrganismPutRequest req)
-  throws Exception {
+  private void handleOrgFullUpdate(
+    final String name,
+    final OrganismPutRequest req
+  ) throws Exception {
+    log.trace("OrganismService#handleOrgFullUpdate(String, OrganismPutRequest)");
     try (
       var load = OrganismUpdater.begin();
       var upd = load.loadOrganism(name, NotFoundException::new)
@@ -286,10 +322,12 @@ public class OrganismService
     }
   }
 
-  private static void handleOrgFullUpdate(
-    OrganismUpdater up,
-    OrganismPutRequest req
+  private void handleOrgFullUpdate(
+    final OrganismUpdater up,
+    final OrganismPutRequest req
   ) throws Exception {
+    log.trace("OrganismService#handleOrgFullUpdate(OrganismUpdater, OrganismPutRequest)");
+
     if (!up.canUpdateCounters()) {
       var errs = new HashMap < String, List < String > >();
       if (req.getGeneIntStart() != null)
@@ -313,7 +351,9 @@ public class OrganismService
   private static final String
     VAL_EMPTY_PUT = "Organism put requests must contain at least one value.";
 
-  private static void prevalidatePutReq(OrganismPutRequest req) {
+  private void prevalidatePutReq(final OrganismPutRequest req) {
+    log.trace("OrganismService#prevalidatePutReq(OrganismPutRequest)");
+
     if (req.getTemplate() == null
       && req.getGeneIntStart() == null
       && req.getTranscriptIntStart() == null
