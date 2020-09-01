@@ -5,7 +5,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 FROM veupathdb/alpine-dev-base:latest AS prep
 
-LABEL service="demo-service"
+LABEL service="osi-service"
 
 WORKDIR /workspace
 RUN jlink --compress=2 --module-path /opt/jdk/jmods \
@@ -15,11 +15,11 @@ RUN jlink --compress=2 --module-path /opt/jdk/jmods \
     && git config --global advice.detachedHead false
 
 ENV DOCKER=build
-COPY ../makefile .
+COPY makefile .
 
 RUN make install-dev-env
 
-COPY .. .
+COPY . .
 
 RUN mkdir -p vendor \
     && cp -n /jdbc/* vendor \
@@ -34,7 +34,7 @@ RUN mkdir -p vendor \
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 FROM foxcapades/alpine-oracle:1.3
 
-LABEL service="demo-service"
+LABEL service="osi-service"
 
 ENV JAVA_HOME=/opt/jdk \
     PATH=/opt/jdk/bin:$PATH

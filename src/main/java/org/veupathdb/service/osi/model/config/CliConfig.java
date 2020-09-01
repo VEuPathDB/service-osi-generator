@@ -47,7 +47,7 @@ public class CliConfig extends Options
   @Option(
     arity = "1",
     defaultValue = "${env:DB_POOL_SIZE}",
-    names = "db-username",
+    names = "db-pool-size",
     description = "Postgres connection pool size.\n"
       + "May be set using the environment variable DB_POOL_SIZE.\n"
       + "If not set, defaults to \"20\"."
@@ -57,7 +57,7 @@ public class CliConfig extends Options
   @Option(
     arity = "1",
     defaultValue = "${env:DB_HOST}",
-    names = "db-username",
+    names = "db-host",
     description = "Postgres host address.\n"
       + "May be set using the environment variable DB_HOST.\n"
       + "If not set, defaults to \"postgres\"."
@@ -67,7 +67,7 @@ public class CliConfig extends Options
   @Option(
     arity = "1",
     defaultValue = "${env:DB_NAME}",
-    names = "db-username",
+    names = "db-name",
     description = "Postgres database name.\n"
       + "May be set using the environment variable DB_NAME.\n"
       + "If not set, defaults to \"postgres\""
