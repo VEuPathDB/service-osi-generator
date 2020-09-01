@@ -5,10 +5,10 @@ services:
     build:
       context: ..
       dockerfile: docker/DB.Dockerfile
-    ports:
-      - 5432:5432
+    volumes:
+    - postgres_data:/var/lib/postgresql/data
     networks:
-      - internal
+    - internal
     environment:
       # Admin user password
       POSTGRES_PASSWORD:
@@ -19,28 +19,46 @@ services:
     build:
       context: ..
       dockerfile: docker/SVC.Dockerfile
-    ports:
-      - 80:8080
     depends_on:
-      - osi-db
-    networks:
-      - internal
+    - osi-db
     environment:
       # Postgres connection details
       #
       # DB_PASSWORD here must match DB_PASSWORD in the osi-db environment
       # settings.
       DB_PASSWORD:
-#      - DB_USERNAME: osi_service
-#      - DB_PORT: 5432
-#      - DB_POOL_SIZE: 20
-#      - DB_HOST: osi-db
-#      - DB_NAME: postgres
+#      DB_USERNAME: osi_service
+#      DB_PORT: 5432
+#      DB_POOL_SIZE: 20
+#      DB_HOST: osi-db
+#      DB_NAME: postgres
 
       # User administration user credentials
       ADMIN_USER:
       ADMIN_PASS:
 
+      SERVER_PORT: 80
+    command: >-
+      sh -c "while ! nc -z osi-db 5432; do
+        echo 'waiting for postgres';
+        sleep 1;
+      done;
+      java -jar /service.jar"
+    networks:
+    - internal
+    - traefik
+    labels:
+    - "traefik.http.routers.osid-service-dev.rule=Host(`osid-service-dev.local.apidb.org`)"
+    - "traefik.http.routers.osid-service-dev.tls=true"
+    - "traefik.http.routers.osid-service-dev.entrypoints=local"
+    - "traefik.http.services.osid-service-dev.loadbalancer.server.port=80"
+
+
 networks:
   internal:
     internal: true
+  traefik:
+    external: true
+
+volumes:
+  postgres_data:

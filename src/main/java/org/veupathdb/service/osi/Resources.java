@@ -15,11 +15,8 @@ import org.veupathdb.service.osi.model.config.CliConfig;
  * should be registered.
  */
 public class Resources extends ContainerResources {
-  private final CliConfig opts;
-
   public Resources(CliConfig opts) {
     super(opts);
-    this.opts = opts;
   }
 
   /**
@@ -30,7 +27,9 @@ public class Resources extends ContainerResources {
   @Override
   protected Object[] resources() {
     return new Object[] {
-      new BasicAuthFilter(opts.getAdminUser(), opts.getAdminPass()),
+      new BasicAuthFilter(
+        Main.config.getAdminUser(),
+        Main.config.getAdminPass()),
       AuthController.class,
       CollectionController.class,
       OrganismController.class,

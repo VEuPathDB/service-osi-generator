@@ -31,15 +31,21 @@ services:
       # DB_PASSWORD here must match DB_PASSWORD in the osi-db environment
       # settings.
       DB_PASSWORD:
-#      - DB_USERNAME: osi_service
-#      - DB_PORT: 5432
-#      - DB_POOL_SIZE: 20
-#      - DB_HOST: osi-db
-#      - DB_NAME: postgres
+#      DB_USERNAME: osi_service
+#      DB_PORT: 5432
+#      DB_POOL_SIZE: 20
+#      DB_HOST: osi-db
+#      DB_NAME: postgres
 
       # User administration user credentials
       ADMIN_USER:
       ADMIN_PASS:
+    command: >-
+      sh -c "while ! nc -z osi-db 5432; do
+        echo 'waiting for postgres';
+        sleep 1;
+      done;
+      java -jar /service.jar"
 
 networks:
   internal:

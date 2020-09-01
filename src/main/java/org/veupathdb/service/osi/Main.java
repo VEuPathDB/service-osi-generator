@@ -9,11 +9,10 @@ import org.veupathdb.service.osi.model.config.CliConfig;
 import org.veupathdb.service.osi.service.DbMan;
 
 public class Main extends Server {
-  private final CliConfig config = new CliConfig();
+  static final CliConfig config = new CliConfig();
 
   public static void main(String[] args) throws IOException {
     var server = new Main();
-    server.enableAccountDB();
     server.start(args);
   }
 
