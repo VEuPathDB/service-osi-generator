@@ -109,5 +109,4 @@ class RecordQueryTest extends TestBase
     assertSame(target, target.setCreatedByName(null));
     assertFalse(target.hasCreatedByName());
   }
-
 }

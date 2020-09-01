@@ -17,6 +17,7 @@ import org.veupathdb.service.osi.util.Validation;
 
 public class OrganismUtil
 {
+  @SuppressWarnings("FieldMayBeFinal")
   private static OrganismUtil instance = new OrganismUtil();
 
   public static final String

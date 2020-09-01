@@ -18,7 +18,8 @@ import org.veupathdb.service.osi.util.QueryUtil;
 
 public class GeneRepo
 {
-  private static final GeneRepo instance = new GeneRepo();
+  @SuppressWarnings("FieldMayBeFinal")
+  private static GeneRepo instance = new GeneRepo();
 
   private final Logger log = LogProvider.logger(getClass());
 

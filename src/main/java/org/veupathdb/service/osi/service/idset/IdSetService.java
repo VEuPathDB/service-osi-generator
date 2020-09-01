@@ -47,8 +47,10 @@ public class IdSetService
   // ║                                                                    ║ //
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
-  public static
-  List < IdSetResponse > search(
+  /**
+   * @see #handleSearch(Long, Long, String, Request)
+   */
+  public static List < IdSetResponse > search(
     final Long start,
     final Long end,
     final String user,
@@ -57,18 +59,27 @@ public class IdSetService
     return getInstance().handleSearch(start, end, user, request);
   }
 
-  public static
-  IdSetResponse create(IdSetPostRequest body, Request req) {
+  /**
+   * @see #handleCreate(IdSetPostRequest, Request)
+   */
+  public static IdSetResponse create(
+    final IdSetPostRequest body,
+    final Request req
+  ) {
     return getInstance().handleCreate(body, req);
   }
 
-  public static
-  IdSetResponse get(final long id, final Request req) {
+  /**
+   * @see #handleGet(long, Request)
+   */
+  public static IdSetResponse get(final long id, final Request req) {
     return getInstance().handleGet(id, req);
   }
 
-  public static
-  IdSetResponse update(
+  /**
+   * @see #handleUpdate(long, List, Request)
+   */
+  public static IdSetResponse update(
     final long idSetId,
     final List < IdSetPatchEntry > entries,
     final Request req
@@ -76,8 +87,7 @@ public class IdSetService
     return getInstance().handleUpdate(idSetId, entries, req);
   }
 
-  public static
-  IdSetService getInstance() {
+  public static IdSetService getInstance() {
     return instance;
   }
 
@@ -87,15 +97,14 @@ public class IdSetService
   // ║                                                                    ║ //
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
-  public
-  List < IdSetResponse > handleSearch(
+  public List < IdSetResponse > handleSearch(
     final Long start,
     final Long end,
     final String user,
     final Request request
   ) {
     log.trace("IdSetService#handleSearch(Long, Long, String)");
-    UserService.requireRequestUser(request);
+    UserService.requireUser(request);
 
     var query = new RecordQuery()
       .setStart(Params.nullableTimestamp(start))
@@ -110,7 +119,8 @@ public class IdSetService
         .map(IdSetUtil::setToRes)
         .collect(Collectors.toMap(
           IdSetResponse::getIdSetId,
-          Function.identity()));
+          Function.identity()
+        ));
 
       return populateIdSets(sets);
     } catch (Exception e) {
@@ -131,19 +141,19 @@ public class IdSetService
 
   public IdSetResponse handleCreate(
     final IdSetPostRequest body,
-    final Request          req
-    ) {
+    final Request req
+  ) {
     log.trace("IdSetService#handleCreate(IdSetPostRequest, User)");
 
     if (body == null)
       throw new BadRequestException();
 
-    final var user = UserService.requireRequestUser(req);
+    final var user = UserService.requireUser(req);
 
     validateNewIdSetRequest(body);
 
     try {
-      final var errs = new HashMap< String, List < String > >();
+      final var errs = new HashMap < String, List < String > >();
       final var oOrg = OrganismRepo.selectById(body.getOrganismId());
       final var oCol = CollectionRepo.select(body.getCollectionId());
 
@@ -160,16 +170,20 @@ public class IdSetService
         final var count = OrganismRepo.allocateGeneIds(
           body.getOrganismId(),
           body.getGenerateGenes(),
-          con);
+          con
+        );
 
         final var set = IdSetRepo.insert(
           new NewIdSet(
             oCol.get(),
             oOrg.get(),
             oOrg.get().getTemplate(),
-            count, body.getGenerateGenes(), user
+            count,
+            body.getGenerateGenes(),
+            user
           ),
-          con);
+          con
+        );
 
         final var geneIds = GeneUtil.expandGenes(
           oOrg.get(),
@@ -195,10 +209,10 @@ public class IdSetService
     }
   }
 
-  final void validateNewIdSetRequest(final IdSetPostRequest req) {
+  private void validateNewIdSetRequest(final IdSetPostRequest req) {
     log.trace("IdSetService#validateNewIdSetRequest(IdSetPostRequest)");
 
-    final var errs = new HashMap< String, List < String > >();
+    final var errs = new HashMap < String, List < String > >();
 
     if (req.getOrganismId() < 1)
       errs.put(Field.IdSet.ORGANISM_ID, singletonList(VAL_BAD_ORG_ID));
@@ -219,7 +233,7 @@ public class IdSetService
 
   public IdSetResponse handleGet(final long id, final Request req) {
     log.trace("IdSetService#handleGet(int)");
-    UserService.requireRequestUser(req);
+    UserService.requireUser(req);
     try {
       return populateIdSets(
         singletonMap(id, IdSetUtil.setToRes(IdSetRepo.select(id)
@@ -238,8 +252,7 @@ public class IdSetService
   private static final String
     VAL_EMPTY = "Field cannot be blank.",
     VAL_LZERO = "Field cannot be less than 0.",
-    VAL_ENTRY = "Invalid patch on record %d."
-    ;
+    VAL_ENTRY = "Invalid patch on record %d.";
 
   public IdSetResponse handleUpdate(
     final long idSetId,
@@ -248,7 +261,7 @@ public class IdSetService
   ) {
     log.trace("IdSetService#handleSearch(List, User)");
 
-    final var user = UserService.requireRequestUser(req);
+    final var user = UserService.requireUser(req);
     validatePatchEntries(entries);
 
     try {
@@ -268,7 +281,8 @@ public class IdSetService
       final var genes = GeneRepo.select(geneIds);
       final var start = OrganismRepo.allocateTranscriptIds(
         idSet.getOrganismId(),
-        totalTranscriptCount);
+        totalTranscriptCount
+      );
 
       doGeneInsert(idSet, entries, geneIds, genes, start, user);
 
@@ -278,7 +292,8 @@ public class IdSetService
         singletonMap(idSetId, out),
         genes.values().stream().collect(Collectors.toMap(
           Gene::getId,
-          Function.identity())),
+          Function.identity()
+        )),
         singletonList(out)
       );
 
@@ -342,14 +357,15 @@ public class IdSetService
       } catch (UnprocessableEntityException e) {
         throw new UnprocessableEntityException(
           singletonList(String.format(VAL_ENTRY, i)),
-          e.getByKey());
+          e.getByKey()
+        );
       }
     }
   }
 
   void validatePatchEntry(final IdSetPatchEntry entry) {
     log.trace("IdSetService#validatePatchEntry(IdSetPatchEntry)");
-    final var errs = new HashMap< String, List < String > >();
+    final var errs = new HashMap < String, List < String > >();
 
     if (entry.getGeneId() == null || entry.getGeneId().isBlank())
       errs.put(Field.Gene.ID, singletonList(VAL_EMPTY));
@@ -400,7 +416,8 @@ public class IdSetService
         .mapToLong(Long::longValue)
         .toArray()),
       genes,
-      outGenes);
+      outGenes
+    );
 
     return out;
   }

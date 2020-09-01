@@ -20,7 +20,8 @@ import org.veupathdb.service.osi.util.QueryUtil;
 
 public class IdSetRepo
 {
-  private static final IdSetRepo instance = new IdSetRepo();
+  @SuppressWarnings("FieldMayBeFinal")
+  private static IdSetRepo instance = new IdSetRepo();
 
   private final Logger log = LogProvider.logger(getClass());
 
@@ -95,7 +96,7 @@ public class IdSetRepo
 
       try (var rs = ps.executeQuery()) {
         while (rs.next()) {
-          out.add(IdSetUtil.newIdSetRow(rs));
+          out.add(IdSetUtil.newIdSet(rs));
         }
       }
     }
@@ -108,7 +109,7 @@ public class IdSetRepo
     return new BasicPreparedListReadQuery<>(
       SQL.Select.Osi.IdSets.BY_COLLECTION,
       DbMan::connection,
-      IdSetUtil::newIdSetRow,
+      IdSetUtil::newIdSet,
       QueryUtil.singleId(collectionId)
     ).execute().getValue();
   }
@@ -118,7 +119,7 @@ public class IdSetRepo
     return new BasicPreparedListReadQuery<>(
       SQL.Select.Osi.IdSets.BY_COLLECTIONS,
       DbMan::connection,
-      IdSetUtil::newIdSetRow,
+      IdSetUtil::newIdSet,
       QueryUtil.idSet(collectionIds)
     ).execute().getValue();
   }
@@ -127,7 +128,7 @@ public class IdSetRepo
     return new BasicPreparedReadQuery<>(
       IdSets.BY_ID,
       DbMan::connection,
-      QueryUtil.option(IdSetUtil::newIdSetRow),
+      QueryUtil.option(IdSetUtil::newIdSet),
       QueryUtil.singleId(id)
     ).execute().getValue();
   }
@@ -139,7 +140,7 @@ public class IdSetRepo
     return new BasicPreparedReadQuery<>(
       SQL.Insert.Osi.ID_SET,
       con,
-      QueryUtil.must(rs -> IdSetUtil.newIdSetRow(rs, set)),
+      QueryUtil.must(rs -> IdSetUtil.newIdSet(rs, set)),
       ps -> {
         ps.setLong(1, set.getCollection().getId());
         ps.setLong(2, set.getOrganism().getId());

@@ -46,15 +46,8 @@ public class UserService
     return getInstance().getUserRecord(userId, req);
   }
 
-  public static User requireRequestUser(Request req) {
-    if (!(Objects.requireNonNull(req) instanceof ContainerRequest))
-      throw new InternalServerErrorException("Invalid request type");
-    var out = ((ContainerRequest) req).getProperty(Globals.REQUEST_USER);
-
-    if (out == null)
-      throw new NotAuthorizedException(ERR_NOT_AUTH);
-
-    return (User) out;
+  public static User requireUser(final Request req) {
+    return getInstance().requireRequestUser(req);
   }
 
   /**
@@ -127,4 +120,17 @@ public class UserService
       throw Errors.wrapErr(e);
     }
   }
+
+  public User requireRequestUser(final Request req) {
+    if (!(Objects.requireNonNull(req) instanceof ContainerRequest))
+      throw new InternalServerErrorException("Invalid request type");
+
+    var out = ((ContainerRequest) req).getProperty(Globals.REQUEST_USER);
+
+    if (out == null)
+      throw new NotAuthorizedException(ERR_NOT_AUTH);
+
+    return (User) out;
+  }
+
 }

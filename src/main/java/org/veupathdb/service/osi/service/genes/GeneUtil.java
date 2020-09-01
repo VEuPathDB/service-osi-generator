@@ -18,7 +18,8 @@ import org.veupathdb.service.osi.model.db.Organism;
 
 public class GeneUtil
 {
-  private static final GeneUtil instance = new GeneUtil();
+  @SuppressWarnings("FieldMayBeFinal")
+  private static GeneUtil instance = new GeneUtil();
 
   private final Logger log = LogProvider.logger(getClass());
 

@@ -12,7 +12,6 @@ public class DbMan implements AutoCloseable
   private static final String
     JDBC_TEMPLATE = "jdbc:postgresql://%s:%d/%s";
 
-
   /**
    * Class Error Messages
    */

@@ -73,7 +73,7 @@ public class CollectionService
   public CollectionResponse getCollection(final long id, final Request req) {
     log.trace("CollectionService#getCollection(long, Request)");
 
-    UserService.requireRequestUser(req);
+    UserService.requireUser(req);
 
     try {
       var res = CollectionUtil.toCollectionResponse(CollectionRepo.select(id)
@@ -81,7 +81,7 @@ public class CollectionService
       var genes = GeneRepo.selectByCollectionId(id);
       var outGenes = GeneUtil.toEntries(
         genes.values(),
-        IdSetUtil.setsToResponses(
+        IdSetUtil.setsToRes(
           IdSetRepo.selectByCollection(id),
           singletonMap(id, res)));
 
@@ -106,7 +106,7 @@ public class CollectionService
   ) {
     log.trace("CollectionService#getCollection(String, Long, Long, String, Request)");
 
-    UserService.requireRequestUser(req);
+    UserService.requireUser(req);
 
     var query = new RecordQuery()
       .setName(orgName)
@@ -132,7 +132,7 @@ public class CollectionService
       var genes    = GeneRepo.selectByCollectionIds(ids);
       var outGenes = GeneUtil.toEntries(
         genes.values(),
-        IdSetUtil.setsToResponses(
+        IdSetUtil.setsToRes(
           IdSetRepo.selectByCollections(ids),
           res));
 
@@ -157,7 +157,7 @@ public class CollectionService
     if (body == null)
       throw new BadRequestException();
 
-    final var user = UserService.requireRequestUser(req);
+    final var user = UserService.requireUser(req);
 
     RequestValidation.notEmpty(Field.Collection.NAME, body.getName());
 

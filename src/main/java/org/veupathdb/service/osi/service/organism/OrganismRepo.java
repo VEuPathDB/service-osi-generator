@@ -18,7 +18,8 @@ import org.veupathdb.service.osi.util.QueryUtil;
 
 public class OrganismRepo
 {
-  private static final OrganismRepo instance = new OrganismRepo();
+  @SuppressWarnings("FieldMayBeFinal")
+  private static OrganismRepo instance = new OrganismRepo();
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                    ║ //

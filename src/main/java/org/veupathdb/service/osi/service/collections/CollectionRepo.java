@@ -17,7 +17,8 @@ import org.veupathdb.service.osi.util.QueryUtil;
 
 public class CollectionRepo
 {
-  private static final CollectionRepo instance = new CollectionRepo();
+  @SuppressWarnings("FieldMayBeFinal")
+  private static CollectionRepo instance = new CollectionRepo();
 
   private final Logger log = LogProvider.logger(getClass());
 

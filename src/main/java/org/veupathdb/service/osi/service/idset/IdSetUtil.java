@@ -13,11 +13,54 @@ import org.veupathdb.service.osi.model.db.NewIdSet;
 
 public class IdSetUtil
 {
+  @SuppressWarnings("FieldMayBeFinal")
+  private static IdSetUtil instance = new IdSetUtil();
+
+  // ╔════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                    ║ //
+  // ║    Static Access Methods                                           ║ //
+  // ║                                                                    ║ //
+  // ╚════════════════════════════════════════════════════════════════════╝ //
+
+  public static IdSetUtil getInstance() {
+    return instance;
+  }
+
   public static long getId(final ResultSet rs) throws Exception {
+    return getInstance().parseId(rs);
+  }
+
+  public static IdSet newIdSet(final ResultSet rs) throws Exception {
+    return getInstance().parseIdSet(rs);
+  }
+
+  public static IdSet newIdSet(final ResultSet rs, final NewIdSet  ids)
+  throws Exception {
+    return getInstance().parseIdSet(rs, ids);
+  }
+
+  public static Map < Long, IdSetResponse > setsToRes(
+    final Collection < IdSet > rows,
+    final Map < Long, CollectionResponse > colls
+  ) {
+    return getInstance().setsToResponses(rows, colls);
+  }
+
+  public static IdSetResponse setToRes(final IdSet set) {
+    return getInstance().setToResponse(set);
+  }
+
+  // ╔════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                    ║ //
+  // ║    Mockable Instance Methods                                       ║ //
+  // ║                                                                    ║ //
+  // ╚════════════════════════════════════════════════════════════════════╝ //
+
+  public long parseId(final ResultSet rs) throws Exception {
     return rs.getLong(IdSets.ID_SET_ID);
   }
 
-  public static IdSet newIdSetRow(final ResultSet rs) throws Exception {
+  public IdSet parseIdSet(final ResultSet rs) throws Exception {
     return new IdSet(
       rs.getInt(IdSets.ID_SET_ID),
       rs.getInt(IdSets.COLLECTION_ID),
@@ -29,8 +72,7 @@ public class IdSetUtil
       rs.getInt(IdSets.CREATED_BY)
     );
   }
-
-  public static IdSet newIdSetRow(
+  public IdSet parseIdSet(
     final ResultSet rs,
     final NewIdSet  ids
   ) throws Exception {
@@ -46,7 +88,7 @@ public class IdSetUtil
     );
   }
 
-  public static Map < Long, IdSetResponse > setsToResponses(
+  public Map < Long, IdSetResponse > setsToResponses(
     final Collection < IdSet > rows,
     final Map < Long, CollectionResponse > colls
   ) {
@@ -61,7 +103,7 @@ public class IdSetUtil
     return out;
   }
 
-  public static IdSetResponse setToRes(IdSet set) {
+  public IdSetResponse setToResponse(final IdSet set) {
     var out = new IdSetResponseImpl();
 
     out.setIdSetId(set.getId());

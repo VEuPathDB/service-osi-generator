@@ -98,7 +98,7 @@ public class OrganismService
     final Request req
   ) {
     try {
-      UserService.requireRequestUser(req);
+      UserService.requireUser(req);
 
       var query = new RecordQuery()
         .setStart(Params.nullableTimestamp(createdAfter))
@@ -130,7 +130,7 @@ public class OrganismService
     final String identifier,
     final Request req
   ) {
-    UserService.requireRequestUser(req);
+    UserService.requireUser(req);
     try {
       var either = Params.stringOrLong(identifier);
 
@@ -156,7 +156,7 @@ public class OrganismService
     final OrganismPostRequest body,
     final Request req
   ) {
-    var user = UserService.requireRequestUser(req);
+    var user = UserService.requireUser(req);
 
     if (req == null)
       throw new BadRequestException();
@@ -212,7 +212,7 @@ public class OrganismService
     final OrganismPutRequest body,
     final Request req
   ) {
-    UserService.requireRequestUser(req);
+    UserService.requireUser(req);
 
     prevalidatePutReq(body);
 
