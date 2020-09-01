@@ -1,5 +1,5 @@
 INSERT INTO
-  auth.users (user_email, api_key)
+  auth.users (user_name, api_key)
 VALUES
   (?, ?)
 RETURNING

@@ -46,7 +46,7 @@ public class UserRepo
 
         return new User(
           rs.getInt(Schema.Auth.Users.USER_ID),
-          rs.getObject(Schema.Auth.Users.COLUMN_ISSUED, OffsetDateTime.class),
+          rs.getObject(Schema.Auth.Users.ISSUED, OffsetDateTime.class),
           user
         );
       }

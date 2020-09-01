@@ -6,7 +6,8 @@ public interface Schema
     AUTH = "auth",
     OSI  = "osi";
 
-  interface Table {
+  interface Table
+  {
     String USERS = Schema.AUTH + ".users";
 
     String
@@ -22,10 +23,10 @@ public interface Schema
     interface Users
     {
       String
-        USER_ID           = "user_id",
-        COLUMN_USER_EMAIL = "user_email",
-        COLUMN_API_KEY    = "api_key",
-        COLUMN_ISSUED     = "issued";
+        USER_ID   = "user_id",
+        USER_NAME = "user_name",
+        API_KEY   = "api_key",
+        ISSUED    = "issued";
     }
   }
 

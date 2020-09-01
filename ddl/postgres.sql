@@ -73,6 +73,15 @@ CREATE USER osi_service LOGIN PASSWORD '${DB_PASSWORD}';
 GRANT USAGE ON SCHEMA "osi" TO osi_service;
 GRANT USAGE ON SCHEMA "auth" TO osi_service;
 
+GRANT USAGE, SELECT ON
+  auth.users_user_id_seq
+, osi.genes_gene_id_seq
+, osi.id_set_collections_id_set_coll_id_seq
+, osi.id_sets_id_set_id_seq
+, osi.organisms_organism_id_seq
+, osi.transcripts_transcript_id_seq
+TO osi_service;
+
 GRANT INSERT, SELECT ON ALL TABLES IN SCHEMA osi  TO osi_service;
 GRANT INSERT, SELECT ON ALL TABLES IN SCHEMA auth TO osi_service;
 

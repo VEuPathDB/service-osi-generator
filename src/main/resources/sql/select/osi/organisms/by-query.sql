@@ -41,7 +41,7 @@ WHERE
     )
     OR (
       $5 IS NULL
-      OR u.user_email = $5
+      OR u.user_name = $5
     )
   )
 ;

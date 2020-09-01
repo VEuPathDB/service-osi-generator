@@ -108,7 +108,7 @@ public class BasicAuthFilter implements ContainerRequestFilter
       // admin credentials let the request through without a user lookup.
       if (split[0].equals(user)
         && split[1].equals(pass)
-        && path.equals(ADMIN_PATH)
+        && path.split("/", 2)[0].equals(ADMIN_PATH)
       ) {
         ctx.setProperty(ADMIN_FLAG, true);
         return;

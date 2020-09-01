@@ -31,9 +31,9 @@ public class UserUtil
   public User createUser(final ResultSet rs) throws Exception {
     return new User(
       rs.getLong(Schema.Auth.Users.USER_ID),
-      rs.getString(Schema.Auth.Users.COLUMN_USER_EMAIL),
-      rs.getString(Schema.Auth.Users.COLUMN_API_KEY),
-      rs.getObject(Schema.Auth.Users.COLUMN_ISSUED, OffsetDateTime.class)
+      rs.getString(Schema.Auth.Users.USER_NAME),
+      rs.getString(Schema.Auth.Users.API_KEY),
+      rs.getObject(Schema.Auth.Users.ISSUED, OffsetDateTime.class)
     );
   }
 
