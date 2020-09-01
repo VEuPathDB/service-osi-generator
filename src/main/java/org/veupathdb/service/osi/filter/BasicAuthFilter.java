@@ -1,6 +1,7 @@
 package org.veupathdb.service.osi.filter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Base64;
 import javax.annotation.Priority;
 import javax.ws.rs.BadRequestException;
@@ -35,6 +36,12 @@ public class BasicAuthFilter implements ContainerRequestFilter
   private static final String
     authHeader = "Authorization",
     authPrefix = "Basic ";
+
+  private static final String[] excludedPaths = {
+    "/health",
+    "/metrics",
+    "/api"
+  };
 
   private final String user;
   private final String pass;
@@ -72,6 +79,10 @@ public class BasicAuthFilter implements ContainerRequestFilter
   @Override
   public void filter(ContainerRequestContext ctx) throws IOException {
     final var headers = ctx.getHeaders();
+    final var path    = ctx.getUriInfo().getPath();
+
+    if (Arrays.asList(excludedPaths).contains(path))
+      return;
 
     if (!headers.containsKey(authHeader))
       throw new NotAuthorizedException("Missing required auth header.");
@@ -90,7 +101,7 @@ public class BasicAuthFilter implements ContainerRequestFilter
       // admin credentials let the request through without a user lookup.
       if (split[0].equals(user)
         && split[1].equals(pass)
-        && ctx.getUriInfo().getPath().equals("/auth")
+        && path.equals("/auth")
         && ctx.getMethod().equals("POST")
       ) {
         ctx.setProperty(ADMIN_FLAG, true);

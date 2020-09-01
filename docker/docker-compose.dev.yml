@@ -7,8 +7,6 @@ services:
       dockerfile: docker/DB.Dockerfile
     ports:
       - 5432:5432
-    networks:
-      - internal
     environment:
       # Admin user password
       POSTGRES_PASSWORD:
@@ -23,8 +21,6 @@ services:
       - 8080:8080
     depends_on:
       - osi-db
-    networks:
-      - internal
     environment:
       # Postgres connection details
       #
@@ -46,7 +42,3 @@ services:
         sleep 1;
       done;
       java -jar /service.jar"
-
-networks:
-  internal:
-    internal: true
