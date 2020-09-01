@@ -1,0 +1,66 @@
+= Service Deployment
+
+== Environment
+
+=== Administration
+
+`ADMIN_USER` (required)::
+User administration user credentials username.
++
+The user administration user is a special set of credentials that grant access
+to only the `/auth` endpoints.  These credentials will be sent in requests to
+create new users for the service.
+
+`ADMIN_PASS` (required)::
+User administration user credentials password.
++
+The user administration user is a special set of credentials that grant access
+to only the `/auth` endpoints.  These credentials will be sent in requests to
+create new users for the service.
+
+=== Database
+
+`DB_HOST`::
+Postgres database hostname as it is visible to this service.
++
+If unset, defaults to `osi-db` which is the service name in the docker-compose
+configuration.
+
+`DB_USERNAME`::
+Postgres username for the service user.
++
+If unset, defaults to `osi_service`.
++
+WARNING: This value cannot be changed without also changing the Postgres
+database schema file.
+
+`DB_PASSWORD` (required)::
+Postgres password for the service user.
++
+This value controls both the password the service will use to connect to the
+Postgres instance, and the value that is set on the service user when
+created in Postgres.
+
+`DB_PORT`::
+The port the service will use when attempting to connect to the Postgres
+database.
++
+If unset, defaults to `5432`.
+
+`DB_NAME`::
+The name of the specific database the service will connect to on the Postgres
+server.
++
+If unset, defaults to `postgres`.
+
+`DB_POOL_SIZE`::
+The max size of the database connection pool that will be used by the service.
++
+If unset, defaults to `20`.
+
+=== Server
+
+`SERVER_PORT`::
+The port the HTTP server will bind to on startup.
++
+If unset, defaults to `8080`.
