@@ -12,7 +12,9 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.ext.Provider;
 
+import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.Globals;
+import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.osi.service.user.UserManager;
 import org.veupathdb.service.osi.util.InputValidationException;
 import org.veupathdb.service.osi.util.Validation;
@@ -33,15 +35,19 @@ public class BasicAuthFilter implements ContainerRequestFilter
 
   public static final String ADMIN_FLAG = "userIsAdmin";
 
+  public static final String ADMIN_PATH = "auth";
+
   private static final String
     authHeader = "Authorization",
     authPrefix = "Basic ";
 
   private static final String[] excludedPaths = {
-    "/health",
-    "/metrics",
-    "/api"
+    "health",
+    "metrics",
+    "api"
   };
+
+  private final Logger log = LogProvider.logger(getClass());
 
   private final String user;
   private final String pass;
@@ -72,12 +78,13 @@ public class BasicAuthFilter implements ContainerRequestFilter
    * </ul>
    */
   public BasicAuthFilter(String user, String pass) {
-    this.user = Validation.minLength(8, user);
-    this.pass = Validation.minLength(32, pass);
+    this.user = Validation.minLength(MIN_USER_LENGTH, user);
+    this.pass = Validation.minLength(MIN_PASS_LENGTH, pass);
   }
 
   @Override
   public void filter(ContainerRequestContext ctx) throws IOException {
+    log.trace("BasicAuthFilter#filter(ContainerRequestContext)");
     final var headers = ctx.getHeaders();
     final var path    = ctx.getUriInfo().getPath();
 
@@ -101,7 +108,7 @@ public class BasicAuthFilter implements ContainerRequestFilter
       // admin credentials let the request through without a user lookup.
       if (split[0].equals(user)
         && split[1].equals(pass)
-        && path.equals("/auth")
+        && path.equals(ADMIN_PATH)
         && ctx.getMethod().equals("POST")
       ) {
         ctx.setProperty(ADMIN_FLAG, true);
