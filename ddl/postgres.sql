@@ -72,5 +72,17 @@ CREATE TABLE osi.transcripts
 CREATE USER osi_service LOGIN PASSWORD '${DB_PASSWORD}';
 GRANT USAGE ON SCHEMA "osi" TO osi_service;
 GRANT USAGE ON SCHEMA "auth" TO osi_service;
-GRANT INSERT, UPDATE, SELECT ON ALL TABLES IN SCHEMA osi TO osi_service;
-GRANT INSERT, UPDATE, SELECT ON ALL TABLES IN SCHEMA auth TO osi_service;
+
+GRANT INSERT, SELECT ON ALL TABLES IN SCHEMA osi  TO osi_service;
+GRANT INSERT, SELECT ON ALL TABLES IN SCHEMA auth TO osi_service;
+
+GRANT UPDATE (
+  template
+, gene_counter_start
+, gene_counter_current
+, transcript_counter_start
+, transcript_counter_current
+, modified
+) ON osi.organisms TO osi_service;
+
+GRANT UPDATE (name) ON osi.id_set_collections TO osi_service;

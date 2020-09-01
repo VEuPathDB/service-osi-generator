@@ -1,11 +1,12 @@
 package org.veupathdb.service.osi;
 
-import org.veupathdb.lib.container.jaxrs.config.Options;
 import org.veupathdb.lib.container.jaxrs.server.ContainerResources;
 import org.veupathdb.service.osi.controller.AuthController;
 import org.veupathdb.service.osi.controller.CollectionController;
 import org.veupathdb.service.osi.controller.IdSetController;
 import org.veupathdb.service.osi.controller.OrganismController;
+import org.veupathdb.service.osi.filter.BasicAuthFilter;
+import org.veupathdb.service.osi.model.config.CliConfig;
 
 /**
  * Service Resource Registration.
@@ -14,8 +15,11 @@ import org.veupathdb.service.osi.controller.OrganismController;
  * should be registered.
  */
 public class Resources extends ContainerResources {
-  public Resources(Options opts) {
+  private final CliConfig opts;
+
+  public Resources(CliConfig opts) {
     super(opts);
+    this.opts = opts;
   }
 
   /**
@@ -26,6 +30,7 @@ public class Resources extends ContainerResources {
   @Override
   protected Object[] resources() {
     return new Object[] {
+      new BasicAuthFilter(opts.getAdminUser(), opts.getAdminPass()),
       AuthController.class,
       CollectionController.class,
       OrganismController.class,

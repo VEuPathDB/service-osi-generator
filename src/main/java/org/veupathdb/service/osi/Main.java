@@ -9,6 +9,8 @@ import org.veupathdb.service.osi.model.config.CliConfig;
 import org.veupathdb.service.osi.service.DbMan;
 
 public class Main extends Server {
+  private final CliConfig config = new CliConfig();
+
   public static void main(String[] args) throws IOException {
     var server = new Main();
     server.enableAccountDB();
@@ -17,7 +19,7 @@ public class Main extends Server {
 
   @Override
   protected ContainerResources newResourceConfig(Options options) {
-    final var out =  new Resources(options);
+    final var out = new Resources(config);
 
     // Enabled by default for debugging purposes, this should be removed when
     // production ready.
@@ -34,7 +36,7 @@ public class Main extends Server {
 
   @Override
   protected Options newOptions() {
-    return new CliConfig();
+    return config;
   }
 
   @Override

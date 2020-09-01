@@ -3,20 +3,41 @@ version: "3.8"
 services:
   osi-db:
     build:
-      context: .
+      context: ..
       dockerfile: docker/DB.Dockerfile
     ports:
       - 5432:5432
     networks:
       - internal
+    environment:
+      # Admin user password
+      POSTGRES_PASSWORD:
+
+      # Service user password
+      DB_PASSWORD:
   osi-service:
     build:
-      context: .
+      context: ..
       dockerfile: docker/SVC.Dockerfile
     ports:
       - 8080:80
     networks:
       - internal
+    environment:
+      # Postgres connection details
+      #
+      # DB_PASSWORD here must match DB_PASSWORD in the osi-db environment
+      # settings.
+      DB_PASSWORD:
+#      - DB_USERNAME: osi_service
+#      - DB_PORT: 5432
+#      - DB_POOL_SIZE: 20
+#      - DB_HOST: osi-db
+#      - DB_NAME: postgres
+
+      # User administration user credentials
+      ADMIN_USER:
+      ADMIN_PASS:
 
 networks:
   internal:
