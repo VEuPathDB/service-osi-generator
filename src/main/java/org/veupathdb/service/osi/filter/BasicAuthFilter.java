@@ -102,14 +102,13 @@ public class BasicAuthFilter implements ContainerRequestFilter
     try {
       final var joined = new String(Base64.getDecoder()
         .decode(auth.substring(authPrefix.length())));
-      final var split = joined.split(":", 1);
+      final var split = joined.split(":", 2);
 
       // For the specific case of a POST request to the /auth endpoint with the
       // admin credentials let the request through without a user lookup.
       if (split[0].equals(user)
         && split[1].equals(pass)
         && path.equals(ADMIN_PATH)
-        && ctx.getMethod().equals("POST")
       ) {
         ctx.setProperty(ADMIN_FLAG, true);
         return;
