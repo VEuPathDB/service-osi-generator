@@ -15,6 +15,14 @@ public class NewUser
     this.apiKey   = Validation.nonEmpty(apiKey);
   }
 
+  /**
+   * Internal constructor avoiding duplicate validation.
+   */
+  protected NewUser(final NewUser user) {
+    this.userName = user.getUserName();
+    this.apiKey   = user.getApiKey();
+  }
+
   public String getUserName() {
     return userName;
   }

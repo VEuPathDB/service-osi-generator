@@ -25,16 +25,13 @@ public class User extends NewUser
   }
 
   public User(
-    long userId,
-    OffsetDateTime issued,
-    NewUser from
+    final long userId,
+    final OffsetDateTime issued,
+    final NewUser from
   ) {
-    this(
-      userId,
-      from.getUserName(),
-      from.getApiKey(),
-      issued
-    );
+    super(from);
+    this.userId = Validation.oneMinimum(userId);
+    this.issued = Validation.nonNull(issued);
   }
 
   public long getUserId() {

@@ -15,7 +15,6 @@ class UserTest extends NewUserTest
 {
   private long userId;
 
-
   private OffsetDateTime created;
 
   protected User sTarget;
@@ -24,6 +23,8 @@ class UserTest extends NewUserTest
   @BeforeEach
   public void setUp() throws Exception {
     super.setUp();
+
+    System.out.println("RESET");
 
     userId   = random.nextLong();
     created  = randomDate();
@@ -40,6 +41,18 @@ class UserTest extends NewUserTest
   void constructor() {
     verify(mValidation).enforceOneMinimum(userId);
     verify(mValidation).enforceNonNull(created);
+  }
+
+  @Test
+  @DisplayName("Second constructor validates inputs")
+  void constructor2() throws Exception {
+    reset(mValidation);
+
+    new User(userId, created, new NewUser(name, key));
+    verify(mValidation).enforceOneMinimum(userId);
+    verify(mValidation).enforceNonNull(created);
+    verify(mValidation).enforceNonEmpty(name);
+    verify(mValidation).enforceNonEmpty(key);
   }
 
   @Test

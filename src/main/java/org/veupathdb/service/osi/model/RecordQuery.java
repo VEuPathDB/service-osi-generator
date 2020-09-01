@@ -5,16 +5,20 @@ import java.time.OffsetDateTime;
 public class RecordQuery
 {
   private String name;
+
   private OffsetDateTime start;
+
   private OffsetDateTime end;
+
   private Long createdById;
+
   private String createdByName;
 
   public String getName() {
     return name;
   }
 
-  public RecordQuery setName(String name) {
+  public RecordQuery setName(final String name) {
     this.name = name;
     return this;
   }
@@ -27,7 +31,7 @@ public class RecordQuery
     return start;
   }
 
-  public RecordQuery setStart(OffsetDateTime start) {
+  public RecordQuery setStart(final OffsetDateTime start) {
     this.start = start;
     return this;
   }
@@ -40,7 +44,7 @@ public class RecordQuery
     return end;
   }
 
-  public RecordQuery setEnd(OffsetDateTime end) {
+  public RecordQuery setEnd(final OffsetDateTime end) {
     this.end = end;
     return this;
   }
@@ -53,8 +57,9 @@ public class RecordQuery
     return createdById;
   }
 
-  public void setCreatedById(Long createdById) {
+  public RecordQuery setCreatedById(final Long createdById) {
     this.createdById = createdById;
+    return this;
   }
 
   public boolean hasCreatedById() {
@@ -65,8 +70,9 @@ public class RecordQuery
     return createdByName;
   }
 
-  public void setCreatedByName(String createdByName) {
+  public RecordQuery setCreatedByName(final String createdByName) {
     this.createdByName = createdByName;
+    return this;
   }
 
   public boolean hasCreatedByName() {
