@@ -312,8 +312,10 @@ public class OrganismService
     }
   }
 
-  private static void handleOrgFullUpdate(long id, OrganismPutRequest req)
+  private void handleOrgFullUpdate(long id, OrganismPutRequest req)
   throws Exception {
+    log.trace("OrganismService#handleOrgFullUpdate(long, OrganismPutRequest)");
+
     try (
       var load = OrganismUpdater.begin();
       var upd = load.loadOrganism(id, NotFoundException::new)

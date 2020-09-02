@@ -26,12 +26,12 @@ public class BasicAuthFilter implements ContainerRequestFilter
   /**
    * Minimum number of characters an admin username must contain.
    */
-  private static final int MIN_USER_LENGTH = 8;
+  public static final int MIN_USER_LENGTH = 8;
 
   /**
    * Minimum number of characters an admin password must contain.
    */
-  private static final int MIN_PASS_LENGTH = 32;
+  public static final int MIN_PASS_LENGTH = 32;
 
   public static final String ADMIN_FLAG = "userIsAdmin";
 
