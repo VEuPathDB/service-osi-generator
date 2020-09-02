@@ -12,7 +12,8 @@ import org.veupathdb.service.osi.model.db.User;
 
 public class UserUtil
 {
-  private static final UserUtil instance = new UserUtil();
+  @SuppressWarnings("FieldMayBeFinal")
+  private static UserUtil instance = new UserUtil();
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                    ║ //
@@ -40,10 +41,10 @@ public class UserUtil
   }
 
   /**
-   * @see #userToNewUserResponse(User)
+   * @see #userToResponse(User)
    */
-  public static NewUserResponse userToNewRes(final User user) {
-    return getInstance().userToNewUserResponse(user);
+  public static NewUserResponse userToRes(final User user) {
+    return getInstance().userToResponse(user);
   }
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
@@ -79,7 +80,7 @@ public class UserUtil
    *
    * @return client safe response
    */
-  public NewUserResponse userToNewUserResponse(final User user) {
+  public NewUserResponse userToResponse(final User user) {
     var out = new NewUserResponseImpl();
 
     out.setUserId(user.getUserId());

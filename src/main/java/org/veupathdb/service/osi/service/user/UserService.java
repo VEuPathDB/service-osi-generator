@@ -97,7 +97,7 @@ public class UserService
         Collections.singletonList("username is required")));
 
     try {
-      return UserUtil.userToNewRes(UserRepo.insertNewUser(new NewUser(
+      return UserUtil.userToRes(UserRepo.insertNewUser(new NewUser(
         body.getUsername(),
         UUID.randomUUID().toString().replaceAll("-", ""))));
     } catch (Exception e) {
@@ -112,9 +112,9 @@ public class UserService
 
     try {
       return id.isLeft()
-        ? UserUtil.userToNewRes(UserRepo.selectUser(id.getLeft())
+        ? UserUtil.userToRes(UserRepo.selectUser(id.getLeft())
           .orElseThrow(NotFoundException::new))
-        : UserUtil.userToNewRes(UserRepo.selectUser(id.getRight())
+        : UserUtil.userToRes(UserRepo.selectUser(id.getRight())
           .orElseThrow(NotFoundException::new));
     } catch (Exception e) {
       throw Errors.wrapErr(e);

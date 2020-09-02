@@ -2,13 +2,13 @@ package org.veupathdb.service.osi.service.user;
 
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
-import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.veupathdb.service.osi.db.Schema;
+import org.veupathdb.service.osi.generated.model.NewUserResponse;
 import org.veupathdb.service.osi.model.db.NewUser;
 import org.veupathdb.service.osi.model.db.User;
 
@@ -18,17 +18,21 @@ import static org.mockito.Mockito.*;
 @DisplayName("UserUtil")
 class UserUtilTest
 {
+  private ResultSet mResult;
+
+  @BeforeEach
+  void setUp() throws Exception {
+    mResult = mock(ResultSet.class);
+
+    var inst = UserUtil.class.getDeclaredField("instance");
+    inst.setAccessible(true);
+    inst.set(null, new UserUtil());
+  }
+
   @Nested
   @DisplayName("#createUser(ResultSet)")
   class CreateUser1
   {
-    private ResultSet mResult;
-
-    @BeforeEach
-    void setUp() {
-      mResult = mock(ResultSet.class);
-    }
-
     @Test
     @DisplayName("accurately copies data from the input ResultSet")
     void test1() throws Exception {
@@ -56,12 +60,10 @@ class UserUtilTest
   @DisplayName("#createUser(ResultSet, NewUser)")
   class CreateUser2
   {
-    private ResultSet mResult;
-    private NewUser   mUser;
+    private NewUser mUser;
 
     @BeforeEach
     void setUp() {
-      mResult = mock(ResultSet.class);
       mUser   = mock(NewUser.class);
     }
 
@@ -90,7 +92,7 @@ class UserUtilTest
   }
 
   @Nested
-  @DisplayName("#userToNewUserResponse(User)")
+  @DisplayName("#userToResponse(User)")
   class UserToNewUserResponse
   {
     private final User user = new User(
@@ -103,7 +105,7 @@ class UserUtilTest
     @Test
     @DisplayName("accurately copies the given user instance")
     void test1() {
-      var out = UserUtil.getInstance().userToNewUserResponse(user);
+      var out = UserUtil.getInstance().userToResponse(user);
 
       assertEquals(user.getUserId(), out.getUserId());
       assertSame(user.getUserName(), out.getUsername());
@@ -120,6 +122,59 @@ class UserUtilTest
       assertEquals(user.getIssued().getHour(), out.getIssued().getHours());
       assertEquals(user.getIssued().getMinute(), out.getIssued().getMinutes());
       assertEquals(user.getIssued().getSecond(), out.getIssued().getSeconds());
+    }
+  }
+
+  @Nested
+  @DisplayName("Static Access")
+  class Statics
+  {
+    private UserUtil mUtil;
+
+    private User mUser;
+
+    @BeforeEach
+    void setUp() throws Exception {
+      mUtil = mock(UserUtil.class);
+      mUser = mock(User.class);
+
+      var inst = UserUtil.class.getDeclaredField("instance");
+      inst.setAccessible(true);
+      inst.set(null, mUtil);
+    }
+
+    @Test
+    @DisplayName("#newUser(ResultSet) calls #createUser(ResultSet)")
+    void test1() throws Exception {
+      doReturn(mUser).when(mUtil).createUser(mResult);
+
+      assertSame(mUser, UserUtil.newUser(mResult));
+      verify(mUtil).createUser(mResult);
+      verifyNoMoreInteractions(mUtil);
+    }
+
+    @Test
+    @DisplayName("#newUser(ResultSet, NewUser) calls #createUser(ResultSet, NewUser)")
+    void test2() throws Exception {
+      var mnu = mock(NewUser.class);
+
+      doReturn(mUser).when(mUtil).createUser(mResult, mnu);
+
+      assertSame(mUser, UserUtil.newUser(mResult, mnu));
+      verify(mUtil).createUser(mResult, mnu);
+      verifyNoMoreInteractions(mUtil);
+    }
+
+    @Test
+    @DisplayName("#userToRes(User) calls #userToResponse(User)")
+    void test3() throws Exception {
+      var mre = mock(NewUserResponse.class);
+
+      doReturn(mre).when(mUtil).userToResponse(mUser);
+
+      assertSame(mre, UserUtil.userToRes(mUser));
+      verify(mUtil).userToResponse(mUser);
+      verifyNoMoreInteractions(mUtil);
     }
   }
 }
