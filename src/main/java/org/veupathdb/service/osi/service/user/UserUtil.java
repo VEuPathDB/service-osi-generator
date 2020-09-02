@@ -7,6 +7,7 @@ import java.util.Date;
 import org.veupathdb.service.osi.db.Schema;
 import org.veupathdb.service.osi.generated.model.NewUserResponse;
 import org.veupathdb.service.osi.generated.model.NewUserResponseImpl;
+import org.veupathdb.service.osi.model.db.NewUser;
 import org.veupathdb.service.osi.model.db.User;
 
 public class UserUtil
@@ -17,8 +18,12 @@ public class UserUtil
     return instance;
   }
 
-  public static User newUser(ResultSet rs) throws Exception {
+  public static User newUser(final ResultSet rs) throws Exception {
     return getInstance().createUser(rs);
+  }
+
+  public static User newUser(final ResultSet rs, final NewUser user) {
+    return getInstance().createUser(rs, user);
   }
 
   /**
@@ -33,6 +38,16 @@ public class UserUtil
       rs.getLong(Schema.Auth.Users.USER_ID),
       rs.getString(Schema.Auth.Users.USER_NAME),
       rs.getString(Schema.Auth.Users.API_KEY),
+      rs.getObject(Schema.Auth.Users.ISSUED, OffsetDateTime.class)
+    );
+  }
+
+  public User createUser(final ResultSet rs, final NewUser user)
+  throws Exception {
+    return new User(
+      rs.getLong(Schema.Auth.Users.USER_ID),
+      user.getUserName(),
+      user.getApiKey(),
       rs.getObject(Schema.Auth.Users.ISSUED, OffsetDateTime.class)
     );
   }

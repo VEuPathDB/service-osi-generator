@@ -59,8 +59,7 @@ public interface SQL
       interface Users
       {
         String BY_ID    = select(Table.USERS, "by-id");
-        String BY_TOKEN = select(Table.USERS, "by-token");
-        String BY_EMAIL = select(Table.USERS, "by-name");
+        String BY_NAME  = select(Table.USERS, "by-name");
       }
     }
 
