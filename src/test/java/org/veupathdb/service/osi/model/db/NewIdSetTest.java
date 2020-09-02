@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
+@DisplayName("NewIdSet")
 class NewIdSetTest extends TestBase
 {
   private IdSetCollection mCollection;

@@ -28,6 +28,7 @@ import org.veupathdb.service.osi.util.Field;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@DisplayName("IdSetService")
 class IdSetServiceTest extends ServiceTestBase
 {
   private IdSetService target;
@@ -47,7 +48,7 @@ class IdSetServiceTest extends ServiceTestBase
   }
 
   @Nested
-  @DisplayName("IdSetService#handleCreate(IdSetPostRequest, Request)")
+  @DisplayName("#handleCreate(IdSetPostRequest, Request)")
   class HandleCreate
   {
     private IdSetPostRequest mPost;

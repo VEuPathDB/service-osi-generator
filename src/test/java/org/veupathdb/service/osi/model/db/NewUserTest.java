@@ -10,6 +10,7 @@ import util.TestBase;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
+@DisplayName("NewUser")
 class NewUserTest extends TestBase
 {
   protected String name, key, json;

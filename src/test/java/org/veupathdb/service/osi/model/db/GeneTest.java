@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
+@DisplayName("Gene")
 class GeneTest extends TestBase
 {
   private long geneId, setId, userId;

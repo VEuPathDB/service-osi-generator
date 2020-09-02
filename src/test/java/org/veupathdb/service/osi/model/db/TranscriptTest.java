@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
+@DisplayName("Transcript")
 class TranscriptTest extends TestBase
 {
   private long transcriptId, geneId, countStart, userId;

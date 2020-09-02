@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
+@DisplayName("NewOrganism")
 class NewOrganismTest extends TestBase
 {
   private OrganismUtil mOrgUtil;

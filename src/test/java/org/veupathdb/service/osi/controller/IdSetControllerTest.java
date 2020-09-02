@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
+@DisplayName("IdSetController")
 class IdSetControllerTest
 {
   private static Request mRequest;
@@ -33,7 +34,7 @@ class IdSetControllerTest
   }
 
   @Nested
-  @DisplayName("IdSetController#getIdSets(Long, Long, String)")
+  @DisplayName("#getIdSets(Long, Long, String)")
   class GetIdSets
   {
     @Test
@@ -57,7 +58,7 @@ class IdSetControllerTest
   }
 
   @Nested
-  @DisplayName("IdSetController#postIdSets(IdSetPostRequest)")
+  @DisplayName("#postIdSets(IdSetPostRequest)")
   class PostIdSets
   {
     @Test
@@ -77,7 +78,7 @@ class IdSetControllerTest
   }
 
   @Nested
-  @DisplayName("IdSetController#getIdSetsByIdSetId(Long)")
+  @DisplayName("#getIdSetsByIdSetId(Long)")
   class GetIdSetsByIdSetId
   {
     @Test
@@ -97,7 +98,7 @@ class IdSetControllerTest
   }
 
   @Nested
-  @DisplayName("IdSetController#patchIdSetsByIdSetId(Long, List)")
+  @DisplayName("#patchIdSetsByIdSetId(Long, List)")
   class PatchIdSetsByIdSetId
   {
     @SuppressWarnings("unchecked")

@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
+@DisplayName("CollectionController")
 class CollectionControllerTest
 {
   private static Request mRequest;
@@ -33,8 +34,7 @@ class CollectionControllerTest
   }
 
   @Nested
-  @DisplayName(
-    "CollectionController#getIdSetCollections(Long, Long, String, String)")
+  @DisplayName("#getIdSetCollections(Long, Long, String, String)")
   class GetIdSetCollections
   {
     @Test
@@ -60,8 +60,7 @@ class CollectionControllerTest
   }
 
   @Nested
-  @DisplayName(
-    "CollectionController#postIdSetCollections(IdSetCollectionPostRequest")
+  @DisplayName("#postIdSetCollections(IdSetCollectionPostRequest")
   class PostIdSetCollections
   {
     @Test
@@ -82,7 +81,7 @@ class CollectionControllerTest
   }
 
   @Nested
-  @DisplayName("CollectionController#getIdSetCollectionsByCollectionId(Long)")
+  @DisplayName("#getIdSetCollectionsByCollectionId(Long)")
   class GetIdSetCollectionsByCollectionId
   {
     @Test

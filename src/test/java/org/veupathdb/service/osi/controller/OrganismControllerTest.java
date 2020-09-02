@@ -16,6 +16,7 @@ import org.veupathdb.service.osi.service.organism.OrganismService;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@DisplayName("OrganismController")
 class OrganismControllerTest
 {
   private static Request mRequest;
@@ -34,7 +35,7 @@ class OrganismControllerTest
 
   @SuppressWarnings("rawtypes")
   @Nested
-  @DisplayName("OrganismController#getOrganisms(String, Long, Long, String)")
+  @DisplayName("#getOrganisms(String, Long, Long, String)")
   class GetOrganisms
   {
     @Test
@@ -59,7 +60,7 @@ class OrganismControllerTest
   }
 
   @Nested
-  @DisplayName("OrganismController#postOrganisms(OrganismPostRequest)")
+  @DisplayName("#postOrganisms(OrganismPostRequest)")
   class PostOrganisms
   {
     @Test
@@ -80,7 +81,7 @@ class OrganismControllerTest
   }
 
   @Nested
-  @DisplayName("OrganismController#getOrganismsByOrganismId(String)")
+  @DisplayName("#getOrganismsByOrganismId(String)")
   class GetOrganismsByOrganismId
   {
     @Test
@@ -101,7 +102,7 @@ class OrganismControllerTest
   }
 
   @Nested
-  @DisplayName("OrganismController#putOrganismsByOrganismId(String, OrganismPutRequest)")
+  @DisplayName("#putOrganismsByOrganismId(String, OrganismPutRequest)")
   class PutOrganismsByOrganismId
   {
     @Test

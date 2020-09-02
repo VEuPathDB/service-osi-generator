@@ -8,6 +8,7 @@ import util.TestBase;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
+@DisplayName("NewGene")
 class NewGeneTest extends TestBase
 {
   private IdSet mIdSet;

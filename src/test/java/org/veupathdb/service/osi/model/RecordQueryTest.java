@@ -7,6 +7,7 @@ import util.TestBase;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("RecordQuery")
 class RecordQueryTest extends TestBase
 {
   private RecordQuery target;

@@ -29,6 +29,12 @@ public class OrganismUtil
     ERR_BAD_PATTERN = "The organism id template field must match the regex"
     + " pattern \"" + TEMPLATE_PATTERN + "\".";
 
+  // ╔════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                    ║ //
+  // ║    Static Access Methods                                           ║ //
+  // ║                                                                    ║ //
+  // ╚════════════════════════════════════════════════════════════════════╝ //
+
   public static OrganismUtil getInstance() {
     return instance;
   }
@@ -49,6 +55,12 @@ public class OrganismUtil
   throws Exception {
     return rs.getLong(Organisms.TRANSCRIPT_COUNTER_CURRENT);
   }
+
+  // ╔════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                    ║ //
+  // ║    Mockable Instance Methods                                       ║ //
+  // ║                                                                    ║ //
+  // ╚════════════════════════════════════════════════════════════════════╝ //
 
   static Organism newOrganismRow(final ResultSet rs) throws Exception {
     return new Organism(
@@ -109,12 +121,12 @@ public class OrganismUtil
     );
   }
 
-  public String enforceOrgPattern(final String name) {
-    Validation.nonEmpty(name);
+  public String enforceOrgPattern(final String template) {
+    Validation.nonEmpty(template);
 
-    if (TEMPLATE_REGEX.matcher(name).matches())
-      throw new InputValidationException(name, ERR_BAD_PATTERN);
+    if (!TEMPLATE_REGEX.matcher(template).matches())
+      throw new InputValidationException(template, ERR_BAD_PATTERN);
 
-    return name;
+    return template;
   }
 }

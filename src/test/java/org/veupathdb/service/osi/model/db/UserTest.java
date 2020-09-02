@@ -11,6 +11,7 @@ import org.veupathdb.service.osi.util.Field;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@DisplayName("User")
 class UserTest extends NewUserTest
 {
   private long userId;
@@ -23,8 +24,6 @@ class UserTest extends NewUserTest
   @BeforeEach
   public void setUp() throws Exception {
     super.setUp();
-
-    System.out.println("RESET");
 
     userId   = random.nextLong();
     created  = randomDate();

@@ -8,6 +8,7 @@ import util.TestBase;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
+@DisplayName("NewIdSetCollection")
 class NewIdSetCollectionTest extends TestBase
 {
   private String name, json;

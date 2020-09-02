@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
+@DisplayName("AuthController")
 class AuthControllerTest
 {
   private static Request mRequest;
@@ -32,7 +33,7 @@ class AuthControllerTest
   }
 
   @Nested
-  @DisplayName("AuthController#postAuth(UserPostRequest)")
+  @DisplayName("#postAuth(UserPostRequest)")
   class PostAuth
   {
     @Test
@@ -52,7 +53,7 @@ class AuthControllerTest
   }
 
   @Nested
-  @DisplayName("AuthController#getAuthByUserIdentifier(String)")
+  @DisplayName("#getAuthByUserIdentifier(String)")
   class GetAuthByUserIdentifier
   {
     @Test
