@@ -22,7 +22,8 @@ public class UserUtil
     return getInstance().createUser(rs);
   }
 
-  public static User newUser(final ResultSet rs, final NewUser user) {
+  public static User newUser(final ResultSet rs, final NewUser user)
+  throws Exception{
     return getInstance().createUser(rs, user);
   }
 
