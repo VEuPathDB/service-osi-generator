@@ -1,5 +1,6 @@
 package org.veupathdb.service.osi.util;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import io.vulpine.lib.query.util.RowParser;
@@ -92,6 +93,9 @@ public class QueryUtil
     final RowParser < R > ps
   ) {
     log.trace("QueryUtil#optionalResult(RowParser)");
+
+    Objects.requireNonNull(ps);
+
     return rs -> {
       if (!rs.next())
         return Optional.empty();
@@ -102,6 +106,9 @@ public class QueryUtil
 
   public < R > RowParser < R > requiredResult(final RowParser < R > ps) {
     log.trace("QueryUtil#requiredResult(RowParser)");
+
+    Objects.requireNonNull(ps);
+
     return rs -> {
       if (!rs.next())
         throw new IllegalStateException(); // TODO: give this an error message
