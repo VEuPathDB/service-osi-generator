@@ -10,5 +10,5 @@ WHERE
   cur.organism_id = old.organism_id
   AND cur.organism_id = ?
 RETURNING
-  old.transcript_counter_current AS old_counter
+  old.transcript_counter_current
 ;
