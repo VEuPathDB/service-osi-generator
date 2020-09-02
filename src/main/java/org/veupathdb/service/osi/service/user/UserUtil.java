@@ -14,14 +14,26 @@ public class UserUtil
 {
   private static final UserUtil instance = new UserUtil();
 
+  // ╔════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                    ║ //
+  // ║    Static Access Methods                                           ║ //
+  // ║                                                                    ║ //
+  // ╚════════════════════════════════════════════════════════════════════╝ //
+
   public static UserUtil getInstance() {
     return instance;
   }
 
+  /**
+   * @see #createUser(ResultSet)
+   */
   public static User newUser(final ResultSet rs) throws Exception {
     return getInstance().createUser(rs);
   }
 
+  /**
+   * @see #createUser(ResultSet, NewUser)
+   */
   public static User newUser(final ResultSet rs, final NewUser user)
   throws Exception{
     return getInstance().createUser(rs, user);
@@ -33,6 +45,12 @@ public class UserUtil
   public static NewUserResponse userToNewRes(final User user) {
     return getInstance().userToNewUserResponse(user);
   }
+
+  // ╔════════════════════════════════════════════════════════════════════╗ //
+  // ║                                                                    ║ //
+  // ║    Mockable Instance Methods                                       ║ //
+  // ║                                                                    ║ //
+  // ╚════════════════════════════════════════════════════════════════════╝ //
 
   public User createUser(final ResultSet rs) throws Exception {
     return new User(
