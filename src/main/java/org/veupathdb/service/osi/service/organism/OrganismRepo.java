@@ -8,6 +8,8 @@ import java.util.Optional;
 import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedWriteQuery;
+import org.apache.logging.log4j.Logger;
+import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
 import org.veupathdb.service.osi.db.SQL;
 import org.veupathdb.service.osi.db.SQL.Select.Osi.Organisms;
 import org.veupathdb.service.osi.model.RecordQuery;
@@ -20,6 +22,8 @@ public class OrganismRepo
 {
   @SuppressWarnings("FieldMayBeFinal")
   private static OrganismRepo instance = new OrganismRepo();
+
+  private final Logger log = LogProvider.logger(getClass());
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                    ║ //
@@ -126,11 +130,14 @@ public class OrganismRepo
     final int count,
     final Connection con
   ) throws Exception {
+    log.trace("OrganismRepo#incrementGeneCounter(long, int, Connection)");
+
     return new BasicPreparedReadQuery <>(
       SQL.Update.Osi.Organisms.GENE_COUNTER,
       con,
       QueryUtil.must(OrganismUtil::parseGeneCounter),
       ps -> {
+        log.trace("OrganismRepo#incrementGeneCounter$prep(PreparedStatement)");
         ps.setInt(1, count);
         ps.setLong(2, id);
       }
@@ -145,24 +152,31 @@ public class OrganismRepo
    *
    * @return first transcript id int value in the allocated block.
    */
-  public long incrementTranscriptCounter(long id, int count) throws Exception {
+  public long incrementTranscriptCounter(final long id, final int count)
+  throws Exception {
+    log.trace("OrganismRepo#incrementTranscriptCounter(long, int)");
+
     return new BasicPreparedReadQuery <>(
       SQL.Update.Osi.Organisms.TRANSCRIPT_COUNTER,
       DbMan::connection,
       QueryUtil.must(OrganismUtil::parseTranscriptCounter),
       ps -> {
+        log.trace("OrganismRepo#incrementTranscriptCounter$prep(PreparedStatement)");
         ps.setInt(1, count);
         ps.setLong(2, id);
       }
     ).execute().getValue();
   }
 
-  public Organism create(NewOrganism organism) throws Exception {
+  public Organism create(final NewOrganism organism) throws Exception {
+    log.trace("OrganismRepo#create(NewOrganism)");
+
     return new BasicPreparedReadQuery <>(
       SQL.Insert.Osi.ORGANISM,
       DbMan::connection,
       QueryUtil.must(rs -> OrganismUtil.newOrganismRow(rs, organism)),
       ps -> {
+        log.trace("OrganismRepo#create$prep(PreparedStatement)");
         ps.setString(1, organism.getTemplate());
         ps.setLong(2, organism.getGeneCounterStart());
         ps.setLong(3, organism.getGeneCounterStart());
@@ -173,15 +187,19 @@ public class OrganismRepo
     ).execute().getValue();
   }
 
-  public Optional < Organism > getById(long organismId)
+  public Optional < Organism > getById(final long organismId)
   throws Exception {
+    log.trace("OrganismRepo#getById(long)");
+
     try (var con = DbMan.connection()) {
       return getById(organismId, con);
     }
   }
 
-  public Optional < Organism > getById(long orgId, Connection con)
+  public Optional < Organism > getById(final long orgId, final Connection con)
   throws Exception {
+    log.trace("OrganismRepo#getById(long, Connection)");
+
     return new BasicPreparedReadQuery <>(
       Organisms.BY_ID,
       con,
@@ -190,15 +208,21 @@ public class OrganismRepo
     ).execute().getValue();
   }
 
-  public Optional < Organism > getByName(String name)
+  public Optional < Organism > getByName(final String name)
   throws Exception {
+    log.trace("OrganismRepo#getByName(String)");
+
     try (var con = DbMan.connection()) {
       return selectByName(name, con);
     }
   }
 
-  public Optional < Organism > getByName(String name, Connection con)
-  throws Exception {
+  public Optional < Organism > getByName(
+    final String name,
+    final Connection con
+  ) throws Exception {
+    log.trace("OrganismRepo#getByName(String, Connection)");
+
     return new BasicPreparedReadQuery <>(
       Organisms.BY_NAME,
       con,
@@ -215,13 +239,17 @@ public class OrganismRepo
    *
    * @return A list of zero or more matched organisms.
    */
-  public List < Organism > getByQuery(RecordQuery query)
+  public List < Organism > getByQuery(final RecordQuery query)
   throws Exception {
+    log.trace("OrganismRepo#getByQuery(RecordQuery)");
+
     return new BasicPreparedListReadQuery <>(
       Organisms.BY_QUERY,
       DbMan::connection,
       OrganismUtil::newOrganismRow,
       ps -> {
+        log.trace("OrganismRepo#getByQuery$prep(PreparedStatement)");
+
         if (query.getName() == null)
           ps.setNull(1, Types.VARCHAR);
         else
@@ -251,14 +279,17 @@ public class OrganismRepo
   }
 
   public void updateTemplate(
-    long orgId,
-    String template,
-    Connection con
+    final long orgId,
+    final String template,
+    final Connection con
   ) throws Exception {
+    log.trace("OrganismRepo#updateTemplate(long, String, Connection)");
+
     new BasicPreparedWriteQuery(
       SQL.Update.Osi.Organisms.TEMPLATE,
       con,
       ps -> {
+        log.trace("OrganismRepo#updateTemplate$prep(PreparedStatement)");
         ps.setLong(1, orgId);
         ps.setString(2, template);
       }
@@ -266,16 +297,19 @@ public class OrganismRepo
   }
 
   public void updateOrganism(
-    long orgId,
-    String template,
-    long geneCounter,
-    long tranCounter,
-    Connection con
+    final long orgId,
+    final String template,
+    final long geneCounter,
+    final long tranCounter,
+    final Connection con
   ) throws Exception {
+    log.trace("OrganismRepo#updateOrganism(long, String, long, long, Connection)");
+
     new BasicPreparedWriteQuery(
       SQL.Update.Osi.Organisms.FULL_RECORD,
       con,
       ps -> {
+        log.trace("OrganismRepo#updateOrganism$prep(PreparedStatement)");
         ps.setLong(1, orgId);
         ps.setString(2, template);
         ps.setLong(3, geneCounter);
