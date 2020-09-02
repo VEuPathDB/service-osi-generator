@@ -161,6 +161,24 @@ public class OrganismService
   // ║                                                                    ║ //
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
+  /**
+   * Attempts to create a new organism record.
+   * <p>
+   * Possible race conditions:
+   * <ul>
+   *   <li>
+   *     Two requests come in simultaneously to create the same organism.
+   *     The result of this will be whichever request hits the database second
+   *     will throw a 500 error.  The only way to prevent this would be to lock
+   *     the table before inserting and verify there are no conflicts before
+   *     attempting the insert.
+   *   </li>
+   * </ul>
+   *
+   * @param body
+   * @param req
+   * @return
+   */
   public long handleCreate(
     final OrganismPostRequest body,
     final Request req

@@ -8,6 +8,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Request;
 
@@ -62,10 +63,7 @@ public class IdSetService
   /**
    * @see #handleCreate(IdSetPostRequest, Request)
    */
-  public static IdSetResponse create(
-    final IdSetPostRequest body,
-    final Request req
-  ) {
+  public static IdSetResponse create(final IdSetPostRequest body, final Request req) {
     return getInstance().handleCreate(body, req);
   }
 
@@ -139,10 +137,37 @@ public class IdSetService
     VAL_BAD_COL_ID = "Invalid '" + Field.IdSet.COLLECTION_ID + "' value.",
     VAL_GEN_COUNT  = "Invalid '" + Field.IdSet.GENERATE_GENES + "' value.";
 
-  public IdSetResponse handleCreate(
-    final IdSetPostRequest body,
-    final Request req
-  ) {
+  /**
+   * Attempts to create a new ID set from the given request.
+   * <p>
+   * Possible race conditions:
+   * <ul>
+   *   <li>
+   *     Simultaneous creations on the same organism may behave weirdly?
+   *     Maybe the organism table should be locked for the duration of the
+   *     transaction to prevent conflicting ids?
+   *   </li>
+   * </ul>
+   * <p>
+   * Other possible issues:
+   * <ul>
+   *   <li>
+   *     If the insert fails after the gene ids have been allocated, that block
+   *     of ids may not be usable anymore.
+   *     </li>
+   * </ul>
+   *
+   * @param body Client request body
+   * @param req  Raw servlet request
+   *
+   * @return the newly created ID Set in a client compatible format.
+   *
+   * @throws BadRequestException          if the input body is null.
+   * @throws UnprocessableEntityException if the input body fails validation.
+   * @throws InternalServerErrorException if any other errors occur while
+   *                                      attempting to process this request.
+   */
+  public IdSetResponse handleCreate(final IdSetPostRequest body, final Request req) {
     log.trace("IdSetService#handleCreate(IdSetPostRequest, User)");
 
     if (body == null)
@@ -268,7 +293,7 @@ public class IdSetService
       var idSet = IdSetRepo.select(idSetId)
         .orElseThrow(NotFoundException::new);
 
-      var geneIds = new String[entries.size()];
+      var geneIds              = new String[entries.size()];
       var totalTranscriptCount = 0;
 
       for (var i = 0; i < entries.size(); i++) {

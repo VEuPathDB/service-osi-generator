@@ -2,7 +2,7 @@
 UPDATE
   osi.organisms AS cur
 SET
-  gene_counter_current = gene_counter_current + ?
+  gene_counter_current = cur.gene_counter_current + ?
 , modified = now()
 FROM
   osi.organisms AS old
