@@ -49,32 +49,51 @@ public class OrganismRepo
   /**
    * @see #incrementTranscriptCounter(long, int)
    */
-  public static long allocateTranscriptIds(long id, int count)
+  public static long allocateTranscriptIds(final long id, final int count)
   throws Exception {
     return getInstance().incrementTranscriptCounter(id, count);
   }
 
-  public static Organism insert(NewOrganism organism) throws Exception {
+  /**
+   * @see #create(NewOrganism)
+   */
+  public static Organism insert(final NewOrganism organism) throws Exception {
     return getInstance().create(organism);
   }
 
-  public static Optional < Organism > selectById(long organismId)
+  /**
+   * @see #selectById(long)
+   */
+  public static Optional < Organism > selectById(final long organismId)
   throws Exception {
     return getInstance().getById(organismId);
   }
 
-  public static Optional < Organism > selectById(long orgId, Connection con)
-  throws Exception {
+  /**
+   * @see #selectById(long, Connection)
+   */
+  public static Optional < Organism > selectById(
+    final long orgId,
+    final Connection con
+  ) throws Exception {
     return getInstance().getById(orgId, con);
   }
 
-  public static Optional < Organism > selectByName(String name)
+  /**
+   * @see #selectByName(String)
+   */
+  public static Optional < Organism > selectByName(final String name)
   throws Exception {
     return getInstance().getByName(name);
   }
 
-  public static Optional < Organism > selectByName(String name, Connection con)
-  throws Exception {
+  /**
+   * @see #selectByName(String, Connection)
+   */
+  public static Optional < Organism > selectByName(
+    final String name,
+    final Connection con
+  ) throws Exception {
     return getInstance().getByName(name, con);
   }
 
@@ -86,20 +105,26 @@ public class OrganismRepo
     return getInstance().getByQuery(query);
   }
 
+  /**
+   * @see #updateTemplate(long, String, Connection)
+   */
   public static void update(
-    long orgId,
-    String template,
-    Connection con
+    final long orgId,
+    final String template,
+    final Connection con
   ) throws Exception {
     getInstance().updateTemplate(orgId, template, con);
   }
 
+  /**
+   * @see #updateOrganism(long, String, long, long, Connection)
+   */
   public static void update(
-    long orgId,
-    String template,
-    long geneCounter,
-    long tranCounter,
-    Connection con
+    final long orgId,
+    final String template,
+    final long geneCounter,
+    final long tranCounter,
+    final Connection con
   ) throws Exception {
     getInstance().updateOrganism(
       orgId,
@@ -177,12 +202,13 @@ public class OrganismRepo
       QueryUtil.must(rs -> OrganismUtil.newOrganismRow(rs, organism)),
       ps -> {
         log.trace("OrganismRepo#create$prep(PreparedStatement)");
-        ps.setString(1, organism.getTemplate());
-        ps.setLong(2, organism.getGeneCounterStart());
+        ps.setString(1, organism.getName());
+        ps.setString(2, organism.getTemplate());
         ps.setLong(3, organism.getGeneCounterStart());
-        ps.setLong(4, organism.getTranscriptCounterStart());
+        ps.setLong(4, organism.getGeneCounterStart());
         ps.setLong(5, organism.getTranscriptCounterStart());
-        ps.setLong(6, organism.getCreatedBy().getUserId());
+        ps.setLong(6, organism.getTranscriptCounterStart());
+        ps.setLong(7, organism.getCreatedBy().getUserId());
       }
     ).execute().getValue();
   }

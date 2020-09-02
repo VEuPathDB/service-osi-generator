@@ -1,6 +1,7 @@
 INSERT INTO
   osi.organisms (
-    template
+    name
+    , template
     , gene_counter_start
     , gene_counter_current
     , transcript_counter_start
@@ -11,12 +12,13 @@ INSERT INTO
   )
 VALUES
   (
-    ? -- 1. template
-  , ? -- 2. gene_counter_start
-  , ? -- 3. gene_counter_current
-  , ? -- 4. transcript_counter_start
-  , ? -- 5. transcript_counter_current
-  , ? -- 6. created_by
+    ? -- 1. name
+  , ? -- 2. template
+  , ? -- 3. gene_counter_start
+  , ? -- 4. gene_counter_current
+  , ? -- 5. transcript_counter_start
+  , ? -- 6. transcript_counter_current
+  , ? -- 7. created_by
   , now()
   , now()
   )
