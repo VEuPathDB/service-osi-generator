@@ -5,7 +5,7 @@ WITH
     FROM
       osi.id_sets
     WHERE
-      id_set_coll_id IN (unnest(?::BIGINT[]))
+      id_set_coll_id IN (SELECT unnest(?::BIGINT[]))
   )
 , genes AS (
     SELECT
@@ -16,7 +16,8 @@ WITH
       id_set_id IN (SELECT id_set_id FROM sets)
   )
 SELECT
-  gene_id
+  transcript_id
+, gene_id
 , counter_start
 , num_issued
 , created

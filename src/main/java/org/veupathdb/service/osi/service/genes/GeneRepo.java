@@ -131,7 +131,7 @@ public class GeneRepo
   ) throws Exception {
     log.trace("GeneRepo#getByIds(String[], Connection)");
     return new BasicPreparedMapReadQuery <>(
-      Genes.BY_ID_SETS,
+      Genes.BY_IDENTIFIERS,
       con,
       GeneUtil::getIdentifier,
       GeneUtil.getInstance()::createGeneRow,
@@ -143,7 +143,7 @@ public class GeneRepo
   throws Exception {
     log.trace("GeneRepo#getBySetIds(long)");
     return new BasicPreparedListReadQuery <>(
-      Genes.BY_ID_SETS,
+      Genes.BY_ID_SET,
       con,
       GeneUtil.getInstance()::createGeneRow,
       QueryUtil.singleId(id)
@@ -185,8 +185,8 @@ public class GeneRepo
   ) throws Exception {
     log.trace("GeneRepo#insertGenes(IdSetRow, String[], Connection)");
 
-    final var si = user.getUserId();
-    final var ui = set.getCreatedBy();
+    final var si = set.getId();
+    final var ui = user.getUserId();
 
     try (final var ps = con.prepareStatement(SQL.Insert.Osi.GENE)) {
       for (var id : ids) {

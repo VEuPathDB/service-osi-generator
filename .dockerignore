@@ -2,6 +2,10 @@
 .git/
 /build/
 /.tools
-/docker/
+
+/docker/SVC.dev.Dockerfile
+/docker/SVC.prod.Dockerfile
+/docker/docker-compose.dev.yml
+/docker/docker-compose.prod.yml
 
 *.adoc

@@ -7,5 +7,5 @@ SELECT
 FROM
   osi.genes
 WHERE
-  id_set_id IN (SELECT unnest(?::BIGINT[])::BIGINT)
+  gene_identifier IN (SELECT unnest(?::VARCHAR[])::VARCHAR)
 ;

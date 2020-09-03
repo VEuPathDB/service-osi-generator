@@ -1,17 +1,12 @@
 SELECT
-  gene_id
+  transcript_id
+, gene_id
 , counter_start
 , num_issued
 , created
 , created_by
-, user_id
-, user_name
-, api_key
-, issued
 FROM
-  osi.transcripts       AS t
-  INNER JOIN auth.users AS u
-    ON t.created_by = u.user_id
+  osi.transcripts
 WHERE
-  gene_id IN (unnest(?::BIGINT[]))
+  gene_id IN (SELECT unnest(?::BIGINT[])::BIGINT)
 ;

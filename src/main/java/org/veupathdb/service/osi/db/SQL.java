@@ -77,7 +77,9 @@ public interface SQL
         String
           BY_COLLECTION  = select(Table.GENES, "by-collection"),
           BY_COLLECTIONS = select(Table.GENES, "by-collections"),
-          BY_ID_SETS     = select(Table.GENES, "by-id-sets");
+          BY_ID_SET      = select(Table.GENES, "by-id-set"),
+          BY_ID_SETS     = select(Table.GENES, "by-id-sets"),
+          BY_IDENTIFIERS = select(Table.GENES, "by-identifiers");
       }
 
       interface IdSets

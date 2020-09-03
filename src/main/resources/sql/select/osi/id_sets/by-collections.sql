@@ -8,5 +8,5 @@ SELECT
 FROM
   osi.id_sets
 WHERE
-  id_set_coll_id IN (unnest(?::BIGINT[]))
+  id_set_coll_id IN (SELECT unnest(?::BIGINT[]))
 ;

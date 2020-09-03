@@ -210,6 +210,8 @@ public class IdSetService
           con
         );
 
+        log.debug("Inserted new ID set record with id " + set.getId());
+
         final var geneIds = GeneUtil.expandGenes(
           oOrg.get(),
           count,
@@ -217,6 +219,8 @@ public class IdSetService
         );
 
         GeneRepo.insert(set, geneIds, con, user);
+
+        log.debug("Inserted {} new gene records", geneIds.length);
 
         final var out = IdSetUtil.setToRes(set);
 
@@ -417,8 +421,8 @@ public class IdSetService
 
     var i = 0;
     for (final var s : sets.values()) {
-      ids[i] = s.getIdSetId();
-      out.set(i++, s);
+      ids[i++] = s.getIdSetId();
+      out.add(s);
     }
 
     final var genes = GeneRepo.selectBySetIds(ids);

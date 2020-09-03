@@ -16,7 +16,8 @@ WITH
       id_set_id IN (SELECT id_set_id FROM sets)
   )
 SELECT
-  gene_id
+  transcript_id
+, gene_id
 , counter_start
 , num_issued
 , created
