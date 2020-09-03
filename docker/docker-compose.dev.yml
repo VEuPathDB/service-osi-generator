@@ -16,7 +16,7 @@ services:
   osi-service:
     build:
       context: ..
-      dockerfile: docker/SVC.Dockerfile
+      dockerfile: docker/SVC.dev.Dockerfile
     ports:
       - 8080:8080
     depends_on:

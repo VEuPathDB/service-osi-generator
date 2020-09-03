@@ -5,3 +5,4 @@ VALUES
 RETURNING
   id_set_coll_id
 , created
+;

@@ -18,7 +18,7 @@ services:
   osi-service:
     build:
       context: ..
-      dockerfile: docker/SVC.Dockerfile
+      dockerfile: docker/SVC.prod.Dockerfile
     depends_on:
     - osi-db
     environment:

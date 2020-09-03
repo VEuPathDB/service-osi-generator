@@ -2,4 +2,6 @@
 .git/
 /build/
 /.tools
-readme.adoc
+/docker/
+
+*.adoc

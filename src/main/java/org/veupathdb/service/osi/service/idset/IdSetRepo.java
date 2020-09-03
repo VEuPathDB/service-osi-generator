@@ -68,6 +68,7 @@ public class IdSetRepo
   public List < IdSet > selectByQuery(final RecordQuery query)
   throws Exception {
     log.trace("IdSetRepo#selectByQuery(RecordQuery)");
+
     var out = new ArrayList < IdSet >();
 
     try (
@@ -104,8 +105,9 @@ public class IdSetRepo
     return out;
   }
 
-  public List < IdSet > selectByCollectionId(final long collectionId)
-  throws Exception {
+  public List < IdSet > selectByCollectionId(final long collectionId) throws Exception {
+    log.trace("IdSetRepo#selectByCollectionId(long)");
+
     return new BasicPreparedListReadQuery<>(
       SQL.Select.Osi.IdSets.BY_COLLECTION,
       DbMan::connection,
@@ -114,8 +116,9 @@ public class IdSetRepo
     ).execute().getValue();
   }
 
-  public List < IdSet > selectByCollectionIds(final long[] collectionIds)
-  throws Exception {
+  public List < IdSet > selectByCollectionIds(final long[] collectionIds) throws Exception {
+    log.trace("IdSetRepo#selectByCollectionIds(long[])");
+
     return new BasicPreparedListReadQuery<>(
       SQL.Select.Osi.IdSets.BY_COLLECTIONS,
       DbMan::connection,
@@ -124,7 +127,9 @@ public class IdSetRepo
     ).execute().getValue();
   }
 
-  public Optional < IdSet > selectById(long id) throws Exception {
+  public Optional < IdSet > selectById(final long id) throws Exception {
+    log.trace("IdSetRepo#selectById(long)");
+
     return new BasicPreparedReadQuery<>(
       IdSets.BY_ID,
       DbMan::connection,
@@ -133,10 +138,9 @@ public class IdSetRepo
     ).execute().getValue();
   }
 
-  public IdSet insertRow(
-    final NewIdSet set,
-    final Connection con
-  ) throws Exception {
+  public IdSet insertRow(final NewIdSet set, final Connection con) throws Exception {
+    log.trace("IdSetRepo#insertRow(NewIdSet, Connection)");
+
     return new BasicPreparedReadQuery<>(
       SQL.Insert.Osi.ID_SET,
       con,

@@ -9,4 +9,7 @@ INSERT INTO
   )
 VALUES
   (?, ?, ?, ?, ?, ?)
+RETURNING
+  id_set_id
+, created
 ;

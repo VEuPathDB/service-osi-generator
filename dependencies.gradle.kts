@@ -77,7 +77,7 @@ dependencies {
   implementation("io.vulpine.lib:Jackfish:1.+")
   implementation("com.devskiller.friendly-id:friendly-id:1.+")
   implementation("io.vulpine.lib:java-sql-import:0.2.0")
-  implementation("io.vulpine.lib:lib-query-util:2.0.0")
+  implementation("io.vulpine.lib:lib-query-util:2.0.1")
   implementation("com.zaxxer:HikariCP:3.4.5")
   implementation("org.postgresql:postgresql:42.2.15")
   implementation("info.picocli:picocli:4.5.0")
