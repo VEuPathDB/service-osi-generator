@@ -92,12 +92,11 @@ public class UserService
       throw new BadRequestException();
 
     if (body.getUsername() == null || body.getUsername().isBlank())
-      throw new UnprocessableEntityException(Collections.singletonMap(
-        "username",
-        Collections.singletonList("username is required")));
+      throw new UnprocessableEntityException(
+        Collections.singletonMap("username", Collections.singletonList("username is required")));
 
     try {
-      return UserUtil.userToRes(UserRepo.insertNewUser(new NewUser(
+      return UserUtil.userToRes(UserRepo.insert(new NewUser(
         body.getUsername(),
         UUID.randomUUID().toString().replaceAll("-", ""))));
     } catch (Exception e) {
@@ -105,16 +104,16 @@ public class UserService
     }
   }
 
-  public NewUserResponse getUserRecord(String userId, Request req) {
+  public NewUserResponse getUserRecord(final String userId, final Request req) {
     enforceAdminUser(req);
 
     var id = Params.stringOrLong(userId);
 
     try {
       return id.isLeft()
-        ? UserUtil.userToRes(UserRepo.selectUser(id.getLeft())
+        ? UserUtil.userToRes(UserManager.lookup(id.getLeft())
           .orElseThrow(NotFoundException::new))
-        : UserUtil.userToRes(UserRepo.selectUser(id.getRight())
+        : UserUtil.userToRes(UserManager.lookup(id.getRight())
           .orElseThrow(NotFoundException::new));
     } catch (Exception e) {
       throw Errors.wrapErr(e);
