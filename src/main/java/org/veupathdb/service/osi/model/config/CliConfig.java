@@ -28,10 +28,8 @@ public class CliConfig extends Options
 
   public static final String
     ERR_NO_DB_PASS    = "Missing required environment variable " + ENV_DB_PASS,
-    ERR_NO_ADMIN_USER = "Missing required environment variable "
-      + ENV_ADMIN_USER,
-    ERR_NO_ADMIN_PASS = "Missing required environment variable "
-      + ENV_ADMIN_PASS;
+    ERR_NO_ADMIN_USER = "Missing required environment variable " + ENV_ADMIN_USER,
+    ERR_NO_ADMIN_PASS = "Missing required environment variable " + ENV_ADMIN_PASS;
 
   @Option(
     arity = "1",

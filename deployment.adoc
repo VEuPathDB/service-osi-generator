@@ -10,6 +10,8 @@ User administration user credentials username.
 The user administration user is a special set of credentials that grant access
 to only the `/auth` endpoints.  These credentials will be sent in requests to
 create new users for the service.
++
+This may also be set on the command line using the flag `--admin-username`.
 
 `ADMIN_PASS` (required)::
 User administration user credentials password.
@@ -17,6 +19,9 @@ User administration user credentials password.
 The user administration user is a special set of credentials that grant access
 to only the `/auth` endpoints.  These credentials will be sent in requests to
 create new users for the service.
++
+While inadvisable it is also possible to set this value on the command line using the
+flag `--admin-password-do-not-use`.
 
 === Database
 
@@ -25,6 +30,9 @@ Postgres database hostname as it is visible to this service.
 +
 If unset, defaults to `osi-db` which is the service name in the docker-compose
 configuration.
++
+This may also be set on the command line using the flag `--db-host`.
+
 
 `DB_USERNAME`::
 Postgres username for the service user.
@@ -33,6 +41,8 @@ If unset, defaults to `osi_service`.
 +
 WARNING: This value cannot be changed without also changing the Postgres
 database schema file.
++
+This may also be set on the command line using the flag `--db-username`.
 
 `DB_PASSWORD` (required)::
 Postgres password for the service user.
@@ -40,23 +50,32 @@ Postgres password for the service user.
 This value controls both the password the service will use to connect to the
 Postgres instance, and the value that is set on the service user when
 created in Postgres.
++
+While inadvisable it is also possible to set this value on the command line using the
+flag `--db-password-do-not-use`.
 
 `DB_PORT`::
 The port the service will use when attempting to connect to the Postgres
 database.
 +
 If unset, defaults to `5432`.
++
+This may also be set on the command line using the flag `--db-port`.
 
 `DB_NAME`::
 The name of the specific database the service will connect to on the Postgres
 server.
 +
 If unset, defaults to `postgres`.
++
+This may also be set on the command line using the flag `--db-name`.
 
 `DB_POOL_SIZE`::
 The max size of the database connection pool that will be used by the service.
 +
 If unset, defaults to `20`.
++
+This may also be set on the command line using the flag `--db-pool-size`.
 
 === Server
 
@@ -64,3 +83,5 @@ If unset, defaults to `20`.
 The port the HTTP server will bind to on startup.
 +
 If unset, defaults to `8080`.
++
+This may also be set on the command line using the flag `--server-port`.
