@@ -3,17 +3,19 @@ CREATE SCHEMA auth;
 CREATE TABLE auth.users
 (
   user_id   BIGSERIAL PRIMARY KEY,
-  user_name VARCHAR     NOT NULL UNIQUE,
+  user_name VARCHAR     NOT NULL,
   api_key   VARCHAR     NOT NULL UNIQUE,
   issued    TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE UNIQUE INDEX user_name_uniq_ind ON auth.users (LOWER(user_name));
 
 CREATE SCHEMA osi;
 
 CREATE TABLE osi.organisms
 (
   organism_id                BIGSERIAL PRIMARY KEY,
-  name                       VARCHAR(32) NOT NULL UNIQUE,
+  name                       VARCHAR(32) NOT NULL,
   template                   VARCHAR(16) NOT NULL UNIQUE,
   gene_counter_start         BIGINT      NOT NULL DEFAULT 1
     CHECK (gene_counter_start >= 1),
@@ -29,13 +31,17 @@ CREATE TABLE osi.organisms
   modified                   TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+CREATE UNIQUE INDEX org_name_uniq_ind ON osi.organisms (LOWER(name));
+
 CREATE TABLE osi.id_set_collections
 (
   id_set_coll_id BIGSERIAL PRIMARY KEY,
-  name           VARCHAR     NOT NULL UNIQUE,
+  name           VARCHAR     NOT NULL,
   created_by     BIGINT      NOT NULL REFERENCES auth.users (user_id),
   created        TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE UNIQUE INDEX coll_name_uniq_ind ON osi.id_set_collections (LOWER(name));
 
 CREATE TABLE osi.id_sets
 (

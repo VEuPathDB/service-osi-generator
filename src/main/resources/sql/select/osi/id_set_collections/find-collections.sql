@@ -23,7 +23,7 @@ WHERE
   -- name wildcard
   (
     $1 IS NULL
-    OR name LIKE $1
+    OR LOWER(name) LIKE LOWER($1)
   )
   -- created date lower bound
   AND (
@@ -43,6 +43,6 @@ WHERE
   -- creation user name
   AND (
     $5 IS NULL
-    OR created_by = (SELECT user_id FROM auth.users WHERE user_name = $5)
+    OR created_by = (SELECT user_id FROM auth.users WHERE LOWER(user_name) = LOWER($5))
   )
 ;

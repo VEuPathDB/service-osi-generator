@@ -47,8 +47,17 @@ public class TestBase
     return UUID.randomUUID().toString();
   }
 
+  protected long randomTimestamp() {
+    return Math.abs(random.nextInt());
+  }
+
   protected OffsetDateTime randomDate() {
-    return OffsetDateTime.ofInstant(Instant.ofEpochMilli(Math.abs(
-      random.nextLong())), ZoneId.systemDefault());
+    return stampToDate(randomTimestamp());
+  }
+
+  protected OffsetDateTime stampToDate(final long stamp) {
+    return OffsetDateTime.ofInstant(
+      Instant.ofEpochSecond(stamp),
+      ZoneId.systemDefault());
   }
 }

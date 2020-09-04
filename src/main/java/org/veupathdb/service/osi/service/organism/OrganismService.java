@@ -108,15 +108,10 @@ public class OrganismService
       UserService.requireUser(req);
 
       var query = new RecordQuery()
-        .setStart(Params.nullableTimestamp(createdAfter))
-        .setEnd(Params.nullableTimestamp(createdBefore))
-        .setName(organismName);
-
-      if (createdBy != null)
-        Params.stringOrLong(createdBy)
-          .ifLeft(query::setCreatedByName)
-          .ifRight(query::setCreatedById);
-
+        .setStart(createdAfter)
+        .setEnd(createdBefore)
+        .setName(organismName)
+        .setCreatedBy(createdBy);
 
       return OrganismRepo.search(Objects.requireNonNull(query))
         .stream()

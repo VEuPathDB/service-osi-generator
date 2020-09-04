@@ -41,16 +41,17 @@ class RecordQueryTest extends TestBase
   @Test
   @DisplayName("Start date field getter returns the set value")
   void start() {
-    var value = randomDate();
-    assertSame(target, target.setStart(value));
-    assertSame(value, target.getStart());
+    var stamp = randomTimestamp();
+    var value = stampToDate(stamp);
+    assertSame(target, target.setStart(stamp));
+    assertEquals(value, target.getStart());
   }
 
   @Test
   @DisplayName("Start date field state getter returns the expected value")
   void hasStart() {
     assertFalse(target.hasStart());
-    assertSame(target, target.setStart(randomDate()));
+    assertSame(target, target.setStart(randomTimestamp()));
     assertTrue(target.hasStart());
     assertSame(target, target.setStart(null));
     assertFalse(target.hasStart());
@@ -59,16 +60,17 @@ class RecordQueryTest extends TestBase
   @Test
   @DisplayName("End date field getter returns the set value")
   void end() {
-    var value = randomDate();
-    assertSame(target, target.setEnd(value));
-    assertSame(value, target.getEnd());
+    var stamp = randomTimestamp();
+    var value = stampToDate(stamp);
+    assertSame(target, target.setEnd(stamp));
+    assertEquals(value, target.getEnd());
   }
 
   @Test
   @DisplayName("End date field state getter returns the expected value")
   void hasEnd() {
     assertFalse(target.hasEnd());
-    assertSame(target, target.setEnd(randomDate()));
+    assertSame(target, target.setEnd(randomTimestamp()));
     assertTrue(target.hasEnd());
     assertSame(target, target.setEnd(null));
     assertFalse(target.hasEnd());
@@ -77,18 +79,18 @@ class RecordQueryTest extends TestBase
   @Test
   @DisplayName("User ID field getter returns the set value")
   void createdById() {
-    var value = Long.valueOf(random.nextLong());
-    assertSame(target, target.setCreatedById(value));
-    assertSame(value, target.getCreatedById());
+    var value = random.nextLong();
+    assertSame(target, target.setCreatedBy(String.valueOf(value)));
+    assertEquals(value, target.getCreatedById());
   }
 
   @Test
   @DisplayName("User ID field state getter returns the expected value")
   void hasCreatedById() {
     assertFalse(target.hasCreatedById());
-    assertSame(target, target.setCreatedById(random.nextLong()));
+    assertSame(target, target.setCreatedBy(String.valueOf(random.nextLong())));
     assertTrue(target.hasCreatedById());
-    assertSame(target, target.setCreatedById(null));
+    assertSame(target, target.setCreatedBy(null));
     assertFalse(target.hasCreatedById());
   }
 
@@ -97,7 +99,7 @@ class RecordQueryTest extends TestBase
   @DisplayName("User Name field getter returns the set value")
   void createdByName() {
     var value = randomString();
-    assertSame(target, target.setCreatedByName(value));
+    assertSame(target, target.setCreatedBy(value));
     assertSame(value, target.getCreatedByName());
   }
 
@@ -105,9 +107,9 @@ class RecordQueryTest extends TestBase
   @DisplayName("User name field state getter returns the expected value")
   void hasCreatedByName() {
     assertFalse(target.hasCreatedByName());
-    assertSame(target, target.setCreatedByName(randomString()));
+    assertSame(target, target.setCreatedBy(randomString()));
     assertTrue(target.hasCreatedByName());
-    assertSame(target, target.setCreatedByName(null));
+    assertSame(target, target.setCreatedBy(null));
     assertFalse(target.hasCreatedByName());
   }
 }

@@ -105,11 +105,9 @@ public class IdSetService
     UserService.requireUser(request);
 
     var query = new RecordQuery()
-      .setStart(Params.nullableTimestamp(start))
-      .setEnd(Params.nullableTimestamp(end));
-    Params.stringOrLong(user)
-      .ifLeft(query::setCreatedByName)
-      .ifRight(query::setCreatedById);
+      .setStart(start)
+      .setEnd(end)
+      .setCreatedBy(user);
 
     try {
       var sets = IdSetRepo.select(query)

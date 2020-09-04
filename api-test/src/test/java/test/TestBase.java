@@ -37,7 +37,6 @@ public class TestBase
 
   @BeforeEach
   void setUp() throws Exception {
-    System.out.println("Clearing database");
     clearDB();
   }
 

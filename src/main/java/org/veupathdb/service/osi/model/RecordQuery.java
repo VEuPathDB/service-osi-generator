@@ -2,6 +2,8 @@ package org.veupathdb.service.osi.model;
 
 import java.time.OffsetDateTime;
 
+import org.veupathdb.service.osi.util.Params;
+
 public class RecordQuery
 {
   private String name;
@@ -19,7 +21,7 @@ public class RecordQuery
   }
 
   public RecordQuery setName(final String name) {
-    this.name = name;
+    this.name = name == null ? null : name.toLowerCase().replaceAll("\\*", "%");
     return this;
   }
 
@@ -31,8 +33,8 @@ public class RecordQuery
     return start;
   }
 
-  public RecordQuery setStart(final OffsetDateTime start) {
-    this.start = start;
+  public RecordQuery setStart(final Long start) {
+    this.start = Params.nullableTimestamp(start);
     return this;
   }
 
@@ -44,8 +46,8 @@ public class RecordQuery
     return end;
   }
 
-  public RecordQuery setEnd(final OffsetDateTime end) {
-    this.end = end;
+  public RecordQuery setEnd(final Long end) {
+    this.end = Params.nullableTimestamp(end);
     return this;
   }
 
@@ -57,11 +59,6 @@ public class RecordQuery
     return createdById;
   }
 
-  public RecordQuery setCreatedById(final Long createdById) {
-    this.createdById = createdById;
-    return this;
-  }
-
   public boolean hasCreatedById() {
     return createdById != null;
   }
@@ -70,8 +67,17 @@ public class RecordQuery
     return createdByName;
   }
 
-  public RecordQuery setCreatedByName(final String createdByName) {
-    this.createdByName = createdByName;
+  public RecordQuery setCreatedBy(final String createdBy) {
+    if (createdBy != null) {
+      var either = Params.stringOrLong(createdBy);
+      if (either.isLeft())
+        createdByName = either.getLeft();
+      else if (either.isRight())
+        createdById = either.getRight();
+    } else {
+      createdByName = null;
+      createdById = null;
+    }
     return this;
   }
 

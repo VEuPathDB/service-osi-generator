@@ -110,12 +110,9 @@ public class CollectionService
 
     var query = new RecordQuery()
       .setName(orgName)
-      .setStart(Params.nullableTimestamp(start))
-      .setEnd(Params.nullableTimestamp(end));
-
-    Params.stringOrLong(user)
-      .ifLeft(query::setCreatedByName)
-      .ifRight(query::setCreatedById);
+      .setStart(start)
+      .setEnd(end)
+      .setCreatedBy(user);
 
     try {
       var res = CollectionUtil.toCollectionResponse(

@@ -21,7 +21,7 @@ WHERE
   -- by name
   (
     $1 IS NULL
-    OR o.name LIKE $1
+    OR LOWER(o.name) LIKE LOWER($1)
   )
   -- by creation date begin
   AND (
@@ -41,7 +41,7 @@ WHERE
     )
     OR (
       $5 IS NULL
-      OR u.user_name = $5
+      OR LOWER(u.user_name) = LOWER($5)
     )
   )
 ;

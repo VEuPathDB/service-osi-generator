@@ -6,5 +6,5 @@ SELECT
 FROM
   auth.users
 WHERE
-  user_name = ?
+  LOWER(user_name) = LOWER(?)
 ;
