@@ -96,6 +96,9 @@ public class UserService
         Collections.singletonMap("username", Collections.singletonList("username is required")));
 
     try {
+      if(UserManager.lookup(body.getUsername()).isPresent())
+        throw new BadRequestException("A user with this name already exists");
+
       return UserUtil.userToRes(UserRepo.insert(new NewUser(
         body.getUsername(),
         UUID.randomUUID().toString().replaceAll("-", ""))));

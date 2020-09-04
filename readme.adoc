@@ -78,3 +78,14 @@ This will build and start both the service and database containers.
 The services will be made available from your host machine at `localhost:5432` for postgres and
 `localhost:8080` for the HTTP server.
 
+== Docker
+
+This project includes 2 Docker Compose configs as well as 2 Docker configs for the HTTP service.
+One of each for production and development.  The postgres Docker config is used for both development
+and production.
+
+=== Production Docker
+
+`docker/DB.Dockerfile`:: Postgres instance
+`docker/docker-compose.prod.yml`:: Docker Compose configuration.
+`docker/SVC.prod.Dockerfile`:: Docker configuration.

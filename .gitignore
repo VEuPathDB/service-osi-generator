@@ -3,6 +3,7 @@
 /build/
 /vendor/
 /.tools/
+/.version
 
 
 *.jar

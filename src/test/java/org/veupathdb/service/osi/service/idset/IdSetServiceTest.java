@@ -399,7 +399,7 @@ class IdSetServiceTest extends ServiceTestBase
       );
 
       verify(mIdUtil).setToResponse(mSet);
-      verify(mSet).getId();
+      verify(mSet, atLeastOnce()).getId();
       verify(mGeneRepo).getBySetId(setId, mConn);
       verify(mConn).commit();
     }
