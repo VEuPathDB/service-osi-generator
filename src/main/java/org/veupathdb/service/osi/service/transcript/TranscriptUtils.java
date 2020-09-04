@@ -21,7 +21,7 @@ public class TranscriptUtils
 
   public static final String
     PROTEIN_PAT    = "%s.P%d",
-    TRANSCRIPT_PAT = "%s.P%d";
+    TRANSCRIPT_PAT = "%s.R%d";
 
   private static final String
     ERR_GENE_TRAN_MISMATCH = "Attempted to expand a transcript record against"

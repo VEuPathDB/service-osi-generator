@@ -357,7 +357,7 @@ class IdSetServiceTest extends ServiceTestBase
       verify(mGeneUtil).expandGeneIds(mOrg, incStart, genCount);
       verify(mGeneRepo).insertGenes(mSet, geneIds, mConn, mUser);
       verify(mIdUtil).setToResponse(mSet);
-      verify(mSet).getId();
+      verify(mSet, atLeastOnce()).getId();
       verify(mGeneRepo).getBySetId(setId, mConn);
     }
 

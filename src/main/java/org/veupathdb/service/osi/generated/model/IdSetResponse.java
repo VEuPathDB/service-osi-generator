@@ -1,10 +1,9 @@
 package org.veupathdb.service.osi.generated.model;
 
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.Date;
+import java.util.List;
 
 @JsonDeserialize(
     as = IdSetResponseImpl.class

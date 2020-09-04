@@ -103,4 +103,4 @@ merge-raml:
 
 build/libs/service.jar: gen-jaxrs gen-docs vendor/fgputil-accountdb-1.0.0.jar  vendor/fgputil-core-1.0.0.jar vendor/fgputil-db-1.0.0.jar vendor/fgputil-web-1.0.0.jar build.gradle.kts service.properties
 	@echo "$(C_BLUE)Building application jar$(C_NONE)"
-	@./gradlew clean test jar
+	@./gradlew clean test --fail-fast jar
