@@ -1,13 +1,11 @@
 package test.auth;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.restassured.http.ContentType;
 import test.Assert;
 import test.TestBase;
 
-import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static test.TestUtil.*;
+import static test.TestUtil.Json;
 
 public class AuthUtil
 {

@@ -5,7 +5,6 @@ import java.time.OffsetDateTime;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Assert
 {

@@ -2,18 +2,20 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent.*
 
 plugins {
-    java
+  java
 }
 
 group = "org.veupathdb.service"
 version = "1.0.0"
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-  testImplementation("com.fasterxml.jackson.core:jackson-databind:2.+")
+  implementation("com.fasterxml.jackson.core:jackson-databind:2.11.2")
+  implementation("com.fasterxml.jackson.core:jackson-annotations:2.11.2")
+  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.2")
 
   testImplementation("com.zaxxer:HikariCP:3.4.5")
   testImplementation("org.postgresql:postgresql:42.2.15")

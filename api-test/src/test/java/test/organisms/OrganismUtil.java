@@ -4,6 +4,8 @@ import test.TestBase;
 
 public class OrganismUtil
 {
+  public static final String API_PATH = "/organisms";
+
   private static final String
     INSERT_SQL = "INSERT INTO osi.organisms (name, template, created_by) VALUES (?, ?, ?) RETURNING organism_id;";
 

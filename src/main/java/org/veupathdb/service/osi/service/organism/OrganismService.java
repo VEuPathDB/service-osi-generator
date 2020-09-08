@@ -18,9 +18,7 @@ import org.veupathdb.service.osi.generated.model.OrganismPutRequest;
 import org.veupathdb.service.osi.generated.model.OrganismResponse;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.service.user.UserService;
-import org.veupathdb.service.osi.util.Errors;
-import org.veupathdb.service.osi.util.Field;
-import org.veupathdb.service.osi.util.Params;
+import org.veupathdb.service.osi.util.*;
 
 import static org.veupathdb.service.osi.service.organism.OrganismUtil.TEMPLATE_PATTERN;
 import static org.veupathdb.service.osi.service.organism.OrganismUtil.TEMPLATE_REGEX;
@@ -29,6 +27,8 @@ import static org.veupathdb.service.osi.util.Params.orStr;
 
 public class OrganismService
 {
+  private static final int NAME_MIN_LEN = 3;
+
   @SuppressWarnings("FieldMayBeFinal")
   private static OrganismService instance = new OrganismService();
 
@@ -170,9 +170,10 @@ public class OrganismService
    *   </li>
    * </ul>
    *
-   * @param body
-   * @param req
-   * @return
+   * @param body Organism creation request payload
+   * @param req  Raw Jersey request object
+   *
+   * @return Primary key ID of the created organism record.
    */
   public long handleCreate(
     final OrganismPostRequest body,
@@ -196,10 +197,7 @@ public class OrganismService
   }
 
   private static final String
-    VAL_BLANK_NAME = "The organism name field cannot be blank.",
-    VAL_BLANK_TEMP = "The organism id template field cannot be blank.",
-    VAL_BAD_TEMP   = "The organism id template field must match the regex"
-      + " pattern \"" + TEMPLATE_PATTERN + "\".";
+    VAL_BAD_TEMP = "Value must match the regex pattern \"" + TEMPLATE_PATTERN + "\".";
 
   void validateOrgCreateRequest(final OrganismPostRequest req) {
     log.trace("OrganismService#validateOrgCreateRequest(OrganismPostRequest)");
@@ -209,19 +207,18 @@ public class OrganismService
 
     var errs = new HashMap < String, List < String > >();
 
-    if (req.getOrganismName() == null || req.getOrganismName().isBlank())
-      errs.put(Field.Organism.NAME, Collections.singletonList(VAL_BLANK_NAME));
+    RequestValidation.minLength(Field.Organism.NAME, req.getOrganismName(), NAME_MIN_LEN, errs);
 
-    if (req.getTemplate() == null || req.getTemplate().isBlank())
-      errs.put(
-        Field.Organism.TEMPLATE,
-        Collections.singletonList(VAL_BLANK_TEMP)
-      );
-    else if (!TEMPLATE_REGEX.matcher(req.getTemplate()).matches())
-      errs.put(
-        Field.Organism.TEMPLATE,
-        Collections.singletonList(VAL_BAD_TEMP)
-      );
+    if (RequestValidation.notEmpty(Field.Organism.TEMPLATE, req.getTemplate(), errs))
+      if (!TEMPLATE_REGEX.matcher(req.getTemplate()).matches())
+        errs.put(Field.Organism.TEMPLATE, Collections.singletonList(VAL_BAD_TEMP));
+
+    RequestValidation.atLeast(Field.Organism.GENE_INT_START, req.getGeneIntStart(), 1, errs);
+    RequestValidation.atLeast(
+      Field.Organism.TRAN_INT_START,
+      req.getTranscriptIntStart(),
+      req.getGeneIntStart(),
+      errs);
 
     if (!errs.isEmpty())
       throw new UnprocessableEntityException(errs);
@@ -363,19 +360,25 @@ public class OrganismService
     );
   }
 
-  private static final String
-    VAL_EMPTY_PUT = "Organism put requests must contain at least one value.";
-
   private void prevalidatePutReq(final OrganismPutRequest req) {
     log.trace("OrganismService#prevalidatePutReq(OrganismPutRequest)");
 
-    if (req.getTemplate() == null
-      && req.getGeneIntStart() == null
-      && req.getTranscriptIntStart() == null
-    )
-      throw new UnprocessableEntityException(
-        Collections.singletonList(VAL_EMPTY_PUT),
-        Collections.emptyMap()
+    var errs = new HashMap < String, List < String > >();
+
+    RequestValidation.notEmpty(Field.Organism.TEMPLATE, req.getTemplate(), errs);
+    if (!TEMPLATE_REGEX.matcher(req.getTemplate()).matches())
+      errs.put(
+        Field.Organism.TEMPLATE,
+        Collections.singletonList(VAL_BAD_TEMP)
       );
+    RequestValidation.greaterThan(Field.Organism.GENE_INT_START, req.getGeneIntStart(), 0, errs);
+    RequestValidation.greaterThan(
+      Field.Organism.TRAN_INT_START,
+      req.getTranscriptIntStart(),
+      req.getGeneIntStart() - 1,
+      errs);
+
+    if (!errs.isEmpty())
+      throw new UnprocessableEntityException(errs);
   }
 }

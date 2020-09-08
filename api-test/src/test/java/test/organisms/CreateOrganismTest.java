@@ -1,21 +1,46 @@
 package test.organisms;
 
-import org.junit.jupiter.api.Disabled;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.NullNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import test.OrganismPostRequest;
+import test.TestBase;
+import test.TestUtil;
+import test.auth.AuthUtil;
+
+import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static test.TestUtil.Json;
 
 @DisplayName("POST /organisms")
-public class CreateOrganismTest
+public class CreateOrganismTest extends TestBase
 {
+  public static final String API_PATH = OrganismUtil.API_PATH;
+
   @Nested
   @DisplayName("given a null request body")
   class Null
   {
     @Test
-    @Disabled
     @DisplayName("returns a 400 error")
-    void test1() {
+    void test1() throws Exception {
+      var username = TestUtil.randStr();
+      var password = TestUtil.randStr();
+      AuthUtil.createUser(username, password);
+
+      given()
+        .header("Authorization", authHeader(username, password))
+        .contentType(ContentType.JSON)
+        .body(NullNode.getInstance())
+      .when()
+        .post(makeUrl(API_PATH))
+      .then()
+        .statusCode(400)
+        .contentType(ContentType.JSON);
     }
   }
 
@@ -32,9 +57,29 @@ public class CreateOrganismTest
       class T1
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          var bodyJson = Json.convertValue(
+            new OrganismPostRequest()
+              .setTemplate("someTemplate%d")
+              .setGeneIntStart(1L)
+              .setTranscriptIntStart(1L),
+            ObjectNode.class);
+          bodyJson.remove(OrganismPostRequest.KEY_ORG_NAME);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(bodyJson)
+          .when()
+            .post(makeUrl(API_PATH))
+          .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
 
@@ -43,9 +88,26 @@ public class CreateOrganismTest
       class T2
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(Json.convertValue(
+              new OrganismPostRequest()
+                .setTemplate("someTemplate%d")
+                .setGeneIntStart(1L)
+                .setTranscriptIntStart(1L),
+              ObjectNode.class))
+          .when()
+            .post(makeUrl(API_PATH))
+          .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
 
@@ -54,9 +116,27 @@ public class CreateOrganismTest
       class T3
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(Json.convertValue(
+              new OrganismPostRequest()
+                .setOrganismName("hi")
+                .setTemplate("someTemplate%d")
+                .setGeneIntStart(1L)
+                .setTranscriptIntStart(1L),
+              ObjectNode.class))
+            .when()
+            .post(makeUrl(API_PATH))
+            .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
 
@@ -65,9 +145,27 @@ public class CreateOrganismTest
       class T4
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(Json.convertValue(
+              new OrganismPostRequest()
+                .setOrganismName("")
+                .setTemplate("someTemplate%d")
+                .setGeneIntStart(1L)
+                .setTranscriptIntStart(1L),
+              ObjectNode.class))
+            .when()
+            .post(makeUrl(API_PATH))
+            .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
 
@@ -76,9 +174,27 @@ public class CreateOrganismTest
       class T5
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(Json.convertValue(
+              new OrganismPostRequest()
+                .setOrganismName("    ")
+                .setTemplate("someTemplate%d")
+                .setGeneIntStart(1L)
+                .setTranscriptIntStart(1L),
+              ObjectNode.class))
+            .when()
+            .post(makeUrl(API_PATH))
+            .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
     }
@@ -92,9 +208,29 @@ public class CreateOrganismTest
       class T1
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          var bodyJson = Json.convertValue(
+            new OrganismPostRequest()
+              .setOrganismName("someName")
+              .setGeneIntStart(1L)
+              .setTranscriptIntStart(1L),
+            ObjectNode.class);
+          bodyJson.remove(OrganismPostRequest.KEY_TEMPLATE);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(bodyJson)
+          .when()
+            .post(makeUrl(API_PATH))
+          .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
 
@@ -103,20 +239,26 @@ public class CreateOrganismTest
       class T2
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
-        }
-      }
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
 
-      @Nested
-      @DisplayName("too short")
-      class T3
-      {
-        @Test
-        @Disabled
-        @DisplayName("returns a 422 error")
-        void test1() {
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(Json.convertValue(
+              new OrganismPostRequest()
+                .setOrganismName("someName")
+                .setGeneIntStart(1L)
+                .setTranscriptIntStart(1L),
+              ObjectNode.class))
+          .when()
+            .post(makeUrl(API_PATH))
+          .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
 
@@ -125,9 +267,27 @@ public class CreateOrganismTest
       class T4
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(Json.convertValue(
+              new OrganismPostRequest()
+                .setOrganismName("someName")
+                .setTemplate("")
+                .setGeneIntStart(1L)
+                .setTranscriptIntStart(1L),
+              ObjectNode.class))
+          .when()
+            .post(makeUrl(API_PATH))
+          .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
 
@@ -136,9 +296,27 @@ public class CreateOrganismTest
       class T5
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(Json.convertValue(
+              new OrganismPostRequest()
+                .setOrganismName("someName")
+                .setTemplate("   ")
+                .setGeneIntStart(1L)
+                .setTranscriptIntStart(1L),
+              ObjectNode.class))
+            .when()
+            .post(makeUrl(API_PATH))
+            .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
 
@@ -147,9 +325,27 @@ public class CreateOrganismTest
       class T6
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(Json.convertValue(
+              new OrganismPostRequest()
+                .setOrganismName("someName")
+                .setTemplate("noPattern")
+                .setGeneIntStart(1L)
+                .setTranscriptIntStart(1L),
+              ObjectNode.class))
+            .when()
+            .post(makeUrl(API_PATH))
+            .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
     }
@@ -163,9 +359,29 @@ public class CreateOrganismTest
       class T1
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          var bodyJson = Json.convertValue(
+            new OrganismPostRequest()
+              .setOrganismName("someName")
+              .setTemplate("template%s")
+              .setTranscriptIntStart(1L),
+            ObjectNode.class);
+          bodyJson.remove(OrganismPostRequest.KEY_GENE_START);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(bodyJson)
+            .when()
+            .post(makeUrl(API_PATH))
+            .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
 
@@ -174,9 +390,26 @@ public class CreateOrganismTest
       class T2
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(Json.convertValue(
+              new OrganismPostRequest()
+                .setOrganismName("someName")
+                .setTemplate("template%s")
+                .setTranscriptIntStart(1L),
+              ObjectNode.class))
+            .when()
+            .post(makeUrl(API_PATH))
+            .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
 
@@ -185,9 +418,27 @@ public class CreateOrganismTest
       class T3
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(Json.convertValue(
+              new OrganismPostRequest()
+                .setOrganismName("someName")
+                .setTemplate("template%d")
+                .setGeneIntStart(0L)
+                .setTranscriptIntStart(1L),
+              ObjectNode.class))
+            .when()
+            .post(makeUrl(API_PATH))
+            .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
     }
@@ -201,9 +452,29 @@ public class CreateOrganismTest
       class T1
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          var bodyJson = Json.convertValue(
+            new OrganismPostRequest()
+              .setOrganismName("someName")
+              .setTemplate("template%s")
+              .setGeneIntStart(1L),
+            ObjectNode.class);
+          bodyJson.remove(OrganismPostRequest.KEY_TRAN_START);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(bodyJson)
+            .when()
+            .post(makeUrl(API_PATH))
+            .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
 
@@ -212,9 +483,26 @@ public class CreateOrganismTest
       class T2
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(Json.convertValue(
+              new OrganismPostRequest()
+                .setOrganismName("someName")
+                .setTemplate("template%s")
+                .setGeneIntStart(1L),
+              ObjectNode.class))
+            .when()
+            .post(makeUrl(API_PATH))
+            .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
 
@@ -223,9 +511,27 @@ public class CreateOrganismTest
       class T3
       {
         @Test
-        @Disabled
         @DisplayName("returns a 422 error")
-        void test1() {
+        void test1() throws Exception {
+          var username = TestUtil.randStr();
+          var password = TestUtil.randStr();
+          AuthUtil.createUser(username, password);
+
+          given()
+            .header("Authorization", authHeader(username, password))
+            .contentType(ContentType.JSON)
+            .body(Json.convertValue(
+              new OrganismPostRequest()
+                .setOrganismName("someName")
+                .setTemplate("template%d")
+                .setGeneIntStart(1L)
+                .setTranscriptIntStart(0L),
+              ObjectNode.class))
+            .when()
+            .post(makeUrl(API_PATH))
+            .then()
+            .statusCode(422)
+            .contentType(ContentType.JSON);
         }
       }
     }
@@ -240,9 +546,26 @@ public class CreateOrganismTest
     class T1
     {
       @Test
-      @Disabled
       @DisplayName("returns a 401 error")
-      void test1() {
+      void test1() throws Exception {
+        var username = TestUtil.randStr();
+        var password = TestUtil.randStr();
+        AuthUtil.createUser(username, password);
+
+        given()
+          .contentType(ContentType.JSON)
+          .body(Json.convertValue(
+            new OrganismPostRequest()
+              .setOrganismName("someName")
+              .setTemplate("template%d")
+              .setGeneIntStart(1L)
+              .setTranscriptIntStart(1L),
+            ObjectNode.class))
+          .when()
+          .post(makeUrl(API_PATH))
+          .then()
+          .statusCode(401)
+          .contentType(ContentType.JSON);
       }
     }
 
@@ -251,9 +574,29 @@ public class CreateOrganismTest
     class T2
     {
       @Test
-      @Disabled
       @DisplayName("returns a 401 error")
-      void test1() {
+      void test1() throws Exception {
+        var username = TestUtil.randStr();
+        var password = TestUtil.randStr();
+        AuthUtil.createUser(username, password);
+
+        given()
+          .auth()
+          .basic(TestUtil.randStr(), TestUtil.randStr())
+          .contentType(ContentType.JSON)
+          .body(Json.convertValue(
+            new OrganismPostRequest()
+              .setOrganismName("someName")
+              .setTemplate("template%d")
+              .setGeneIntStart(1L)
+              .setTranscriptIntStart(1L),
+            ObjectNode.class
+          ))
+          .when()
+          .post(makeUrl(API_PATH))
+          .then()
+          .statusCode(401)
+          .contentType(ContentType.JSON);
       }
     }
 
@@ -262,9 +605,34 @@ public class CreateOrganismTest
     class T3
     {
       @Test
-      @Disabled
       @DisplayName("returns the id of the new record")
-      void test1() {
+      void test1() throws Exception {
+        var username = TestUtil.randStr();
+        var password = TestUtil.randStr();
+        AuthUtil.createUser(username, password);
+
+        var res = given()
+          .header("Authorization", authHeader(username, password))
+          .contentType(ContentType.JSON)
+          .body(Json.convertValue(
+            new OrganismPostRequest()
+              .setOrganismName("someName")
+              .setTemplate("template%d")
+              .setGeneIntStart(1L)
+              .setTranscriptIntStart(1L),
+            ObjectNode.class
+          ))
+          .when()
+          .post(makeUrl(API_PATH));
+
+        res.then()
+          .statusCode(200)
+          .contentType(ContentType.JSON);
+
+        var body = res.as(JsonNode.class);
+
+        assertTrue(body.isIntegralNumber());
+        assertTrue(1L <= body.asLong());
       }
     }
   }
