@@ -7,4 +7,4 @@ RUN ./gradlew getDeps
 
 COPY [ "src/", "src/" ]
 
-CMD ./gradlew test # --tests '*GetOrganismTest$ValidName$GoodUser*'
+CMD ./gradlew test --tests '*SearchOrganismsTest$T5$T54'
