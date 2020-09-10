@@ -97,6 +97,12 @@ gen-docs: api.raml merge-raml
 merge-raml:
 	@$(BIN_DIR)/merge-raml schema > schema/library.raml
 
+.PHONY: api-test
+api-test:
+	docker-compose -f docker/docker-compose.test.yml down
+	docker-compose -f docker/docker-compose.test.yml build
+	docker-compose -f docker/docker-compose.test.yml run test
+
 #
 # File based targets
 #

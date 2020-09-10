@@ -128,10 +128,6 @@ public class GetUserTest extends TestBase
 
         AuthUtil.verifyUserType(body);
 
-        System.out.println(body);
-        System.out.println(name);
-        System.out.println(key);
-
         assertEquals(id,   body.get(AuthUtil.USER_ID).asLong());
         assertEquals(name, body.get(AuthUtil.USERNAME).textValue());
         assertEquals(key,  body.get(AuthUtil.API_KEY).textValue());

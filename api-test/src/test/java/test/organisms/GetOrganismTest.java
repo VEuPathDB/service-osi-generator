@@ -28,7 +28,9 @@ public class GetOrganismTest extends TestBase
   private long orgId;
 
   @BeforeEach
-  void setUp() throws Exception {
+  protected void setUp() throws Exception {
+    super.setUp();
+
     username = TestUtil.randStr();
     password = TestUtil.randStr();
     userId   = AuthUtil.createUser(username, password);

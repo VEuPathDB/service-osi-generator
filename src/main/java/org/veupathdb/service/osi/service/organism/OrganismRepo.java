@@ -316,8 +316,8 @@ public class OrganismRepo
       con,
       ps -> {
         log.trace("OrganismRepo#updateTemplate$prep(PreparedStatement)");
-        ps.setLong(1, orgId);
-        ps.setString(2, template);
+        ps.setString(1, template);
+        ps.setLong(2, orgId);
       }
     ).execute();
   }

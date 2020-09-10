@@ -1,7 +1,7 @@
 //
 // Version Numbers
 //
-val coreLib = "2.5.3" // Container core lib version
+val coreLib = "2.6.0" // Container core lib version
 
 val jersey  = "2.+"   // Jersey/JaxRS version
 val jackson = "2.+"   // FasterXML Jackson version
@@ -52,7 +52,7 @@ dependencies {
   ))
 
   // Core lib, prefers local checkout if available
-  implementation(findProject(":core") ?: "org.veupathdb.lib:jaxrs-container-core:${coreLib}")
+  implementation(/*findProject(":core") ?: */"org.veupathdb.lib:jaxrs-container-core:${coreLib}")
 
   // Jersey
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:${jersey}")
@@ -77,7 +77,7 @@ dependencies {
   implementation("io.vulpine.lib:Jackfish:1.+")
   implementation("com.devskiller.friendly-id:friendly-id:1.+")
   implementation("io.vulpine.lib:java-sql-import:0.2.0")
-  implementation("io.vulpine.lib:lib-query-util:2.0.1")
+  implementation("io.vulpine.lib:lib-query-util:2.0.2")
   implementation("com.zaxxer:HikariCP:3.4.5")
   implementation("org.postgresql:postgresql:42.2.15")
   implementation("info.picocli:picocli:4.5.0")

@@ -1,32 +1,29 @@
+WITH query AS (
+  SELECT
+    ?::TIMESTAMPTZ    AS after
+  , ?::TIMESTAMPTZ    AS before
+  , ?::BIGINT         AS user_id
+  , LOWER(?::VARCHAR) AS user_name
+)
 SELECT
-  id_set_id
-, id_set_coll_id
-, organism_id
-, template
-, num_issued
-, created
-, created_by
+  s.id_set_id
+, s.id_set_coll_id
+, s.organism_id
+, s.template
+, s.num_issued
+, s.created
+, s.created_by
 FROM
-  osi.id_sets
-WHERE
-  -- creation date lower bound
-  (
-    $1 IS NULL
-    OR created >= $1
-  )
-  -- creation date upper bound
-  AND (
-    $2 IS NULL
-    OR created <= $2
-  )
-  -- user id
-  AND (
-    $3 IS NULL
-    OR created_by = $3
-  )
-  -- user name
-  AND (
-    $4 IS NULL
-    OR created_by = (SELECT user_id FROM auth.users WHERE user_name = $4)
-    )
+  osi.id_sets AS s
+  INNER JOIN auth.users AS u
+    ON s.created_by = u.user_id
+  INNER JOIN query AS q
+    ON
+      -- by creation date begin
+      (q.after IS NULL OR s.created >= q.after)
+      -- by creation date end
+      AND (q.before IS NULL OR s.created <= q.before)
+      -- by creation user
+      AND (q.user_id IS NULL OR s.created_by = q.user_id)
+      AND (q.user_name IS NULL OR LOWER(u.user_name) = q.user_name)
 ;

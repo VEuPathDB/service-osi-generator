@@ -1,12 +1,12 @@
 -- Update an organism's template pattern
 --
 -- Expected inputs:
---   1. int32  Organism ID
---   2. string New template string
+--   1. string New template string
+--   2. int32  Organism ID
 UPDATE
   osi.organisms
 SET
-  template = $2
+  template = ?
 WHERE
-  organism_id = $1
+  organism_id = ?
 ;

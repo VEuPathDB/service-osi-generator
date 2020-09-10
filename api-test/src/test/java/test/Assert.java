@@ -8,6 +8,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class Assert
 {
+  public static void datesSimilar(final OffsetDateTime a, final OffsetDateTime b) {
+    assertEquals(a.getYear(), b.getYear());
+    assertEquals(a.getMonth(), b.getMonth());
+    assertEquals(a.getDayOfMonth(), b.getDayOfMonth());
+    assertEquals(a.getHour(), b.getHour());
+    assertTrue(Math.abs(a.getMinute() - b.getMinute()) < 3);
+  }
+
   public static class Json {
     public static void stringNotEmpty(final String name, final JsonNode node) {
       assertFalse(node.textValue().isBlank(), "JSON field " + name + " must not be blank.");
@@ -32,14 +40,6 @@ public class Assert
 
     public static void isIntegral(final String name, final JsonNode node) {
       assertTrue(node.isIntegralNumber(), "Response field " + name + " must be an integral value.");
-    }
-
-    public static void isArray(final String name, final JsonNode node) {
-      assertTrue(node.isArray(), "Response field " + name + " must be an array.");
-    }
-
-    public static void isObject(final String name, final JsonNode node) {
-      assertTrue(node.isObject(), "Response field " + name + " must be an object.");
     }
 
     public static void isGreaterThan(final String name, final JsonNode node, final long min) {

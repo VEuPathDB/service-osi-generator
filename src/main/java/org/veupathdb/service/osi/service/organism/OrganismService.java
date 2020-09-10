@@ -1,6 +1,5 @@
 package org.veupathdb.service.osi.service.organism;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +19,8 @@ import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.service.user.UserService;
 import org.veupathdb.service.osi.util.*;
 
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonList;
 import static org.veupathdb.service.osi.service.organism.OrganismUtil.TEMPLATE_PATTERN;
 import static org.veupathdb.service.osi.service.organism.OrganismUtil.TEMPLATE_REGEX;
 import static org.veupathdb.service.osi.util.Params.or;
@@ -211,14 +212,15 @@ public class OrganismService
 
     if (RequestValidation.notEmpty(Field.Organism.TEMPLATE, req.getTemplate(), errs))
       if (!TEMPLATE_REGEX.matcher(req.getTemplate()).matches())
-        errs.put(Field.Organism.TEMPLATE, Collections.singletonList(VAL_BAD_TEMP));
+        errs.put(Field.Organism.TEMPLATE, singletonList(VAL_BAD_TEMP));
 
     RequestValidation.atLeast(Field.Organism.GENE_INT_START, req.getGeneIntStart(), 1, errs);
     RequestValidation.atLeast(
       Field.Organism.TRAN_INT_START,
       req.getTranscriptIntStart(),
       req.getGeneIntStart(),
-      errs);
+      errs
+    );
 
     if (!errs.isEmpty())
       throw new UnprocessableEntityException(errs);
@@ -229,6 +231,13 @@ public class OrganismService
   // ║    Organism Update Handling                                        ║ //
   // ║                                                                    ║ //
   // ╚════════════════════════════════════════════════════════════════════╝ //
+
+  /**
+   * PUT request validation error messages.
+   */
+  private static final String
+    VAL_NO_VALUES = "PUT requests to this endpoint require at least one value to overwrite.",
+    VAL_ORG_UP    = "Cannot change the organism id counters after ids have been issued.";
 
   public void handleUpdate(
     final String identifier,
@@ -306,9 +315,6 @@ public class OrganismService
     }
   }
 
-  private static final String
-    VAL_ORG_UP = "Cannot organism id counters after ids have been issued.";
-
   private void handleOrgFullUpdate(
     final String name,
     final OrganismPutRequest req
@@ -334,20 +340,37 @@ public class OrganismService
     }
   }
 
+  /**
+   * Attempts to update one or more of an organism record's properties.
+   *
+   * @param up  Organism updater instance containing the record to update and
+   *            various details about the record that will assist in validating
+   *            then performing the update
+   * @param req The user request body containing the properties the user wants
+   *            to overwrite.
+   *
+   * @throws UnprocessableEntityException if the user is attempting to change
+   * the gene or transcript counters on an organism record that has already been
+   * used to generate new gene or transcript ids.
+   *
+   * @throws Exception if any other process failure occurs when attempting to
+   * write the updates to the database.
+   */
   private void handleOrgFullUpdate(
     final OrganismUpdater up,
     final OrganismPutRequest req
   ) throws Exception {
     log.trace("OrganismService#handleOrgFullUpdate(OrganismUpdater, OrganismPutRequest)");
 
+    // If we cannot update the counters due to IDs already having been issued,
+    // and the request is attempting to change those counter values, throw a
+    // user error and stop here.
     if (!up.canUpdateCounters()) {
       var errs = new HashMap < String, List < String > >();
       if (req.getGeneIntStart() != null)
-        errs.put(Field.Organism.GENE_INT_START, Collections.singletonList(
-          VAL_ORG_UP));
+        errs.put(Field.Organism.GENE_INT_START, singletonList(VAL_ORG_UP));
       if (req.getTranscriptIntStart() != null)
-        errs.put(Field.Organism.TRAN_INT_START, Collections.singletonList(
-          VAL_ORG_UP));
+        errs.put(Field.Organism.TRAN_INT_START, singletonList(VAL_ORG_UP));
       throw new UnprocessableEntityException(errs);
     }
 
@@ -360,23 +383,63 @@ public class OrganismService
     );
   }
 
+  /**
+   * Performs lightweight validations against the input that do not require
+   * access to the database.
+   * <p>
+   * If the <code>template</code> property is set, ensures that it is not blank
+   * and it validates against the template string regex.
+   * <p>
+   * If the <code>geneIntStart</code> property is set, ensures that it is
+   * greater than 0.
+   * <p>
+   * If the <code>transcriptIntStart</code> property is set, ensures that it is
+   * greater than 0.
+   *
+   * @param req Request to validate.
+   *
+   * @throws UnprocessableEntityException if the input fails one or more of the
+   * validations described above.
+   */
   private void prevalidatePutReq(final OrganismPutRequest req) {
     log.trace("OrganismService#prevalidatePutReq(OrganismPutRequest)");
 
-    var errs = new HashMap < String, List < String > >();
+    var errs        = new HashMap < String, List < String > >();
+    var hasTemplate = req.getTemplate() != null;
+    var hasGene     = req.getGeneIntStart() != null;
+    var hasTrans    = req.getTranscriptIntStart() != null;
 
-    RequestValidation.notEmpty(Field.Organism.TEMPLATE, req.getTemplate(), errs);
-    if (!TEMPLATE_REGEX.matcher(req.getTemplate()).matches())
-      errs.put(
-        Field.Organism.TEMPLATE,
-        Collections.singletonList(VAL_BAD_TEMP)
+    // If we have a template in the input validate it
+    if (hasTemplate) {
+      log.debug("Validating new organism template.");
+
+      RequestValidation.notEmpty(Field.Organism.TEMPLATE, req.getTemplate(), errs);
+      if (!TEMPLATE_REGEX.matcher(req.getTemplate()).matches())
+        errs.put(Field.Organism.TEMPLATE, singletonList(VAL_BAD_TEMP));
+    }
+
+    // if we have a gene-start value in the input, validate it
+    if (hasGene) {
+      log.debug("Validating new gene start value.");
+
+      RequestValidation.atLeast(Field.Organism.GENE_INT_START, req.getGeneIntStart(), 1, errs);
+    }
+
+    // if we have a transcript-start value in the input, validate it
+    if (hasTrans) {
+      log.debug("Validating new transcript start value.");
+
+      RequestValidation.atLeast(
+        Field.Organism.TRAN_INT_START,
+        req.getTranscriptIntStart(),
+        1,
+        errs
       );
-    RequestValidation.greaterThan(Field.Organism.GENE_INT_START, req.getGeneIntStart(), 0, errs);
-    RequestValidation.greaterThan(
-      Field.Organism.TRAN_INT_START,
-      req.getTranscriptIntStart(),
-      req.getGeneIntStart() - 1,
-      errs);
+    }
+
+    // verify that _something_ was set in the input
+    if (!hasTemplate && !hasGene && !hasTrans)
+      throw new UnprocessableEntityException(singletonList(VAL_NO_VALUES), emptyMap());
 
     if (!errs.isEmpty())
       throw new UnprocessableEntityException(errs);

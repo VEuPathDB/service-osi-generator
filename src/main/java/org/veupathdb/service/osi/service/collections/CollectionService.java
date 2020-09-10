@@ -21,7 +21,6 @@ import org.veupathdb.service.osi.service.transcript.TranscriptUtils;
 import org.veupathdb.service.osi.service.user.UserService;
 import org.veupathdb.service.osi.util.Errors;
 import org.veupathdb.service.osi.util.Field;
-import org.veupathdb.service.osi.util.Params;
 import org.veupathdb.service.osi.util.RequestValidation;
 
 import static java.util.Collections.singletonMap;
@@ -122,7 +121,7 @@ public class CollectionService
 
       int i = 0;
       for (var c : res.values()) {
-        out.set(i, c);
+        out.add(c);
         ids[i++] = c.getCollectionId();
       }
 
@@ -156,7 +155,7 @@ public class CollectionService
 
     final var user = UserService.requireUser(req);
 
-    RequestValidation.notEmpty(Field.Collection.NAME, body.getName());
+    RequestValidation.minLength(Field.Collection.NAME, body.getName(), 3);
 
     try {
       return CollectionUtil.toCollectionResponse(

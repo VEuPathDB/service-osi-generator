@@ -1,9 +1,6 @@
 package org.veupathdb.service.osi.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
@@ -20,10 +17,6 @@ public class RequestValidation
     ERR_SHORT = "Value must be at least %d characters in length.";
 
   private final Logger log = LogProvider.logger(getClass());
-
-  private static Map < String, List < String > > newErrMap() {
-    return new HashMap <>();
-  }
 
   // ╔════════════════════════════════════════════════════════════════════╗ //
   // ║                                                                    ║ //
@@ -62,6 +55,14 @@ public class RequestValidation
     final Map < String, List < String > > errs
   ) {
     return getInstance().hasMinLength(key, val, len, errs);
+  }
+
+  public static boolean minLength(
+    final String key,
+    final String val,
+    final int len
+  ) {
+    return getInstance().hasMinLength(key, val, len);
   }
 
   public static boolean greaterThan(
@@ -171,6 +172,22 @@ public class RequestValidation
       errs.computeIfAbsent(key, this::makeErrList).add(String.format(ERR_SHORT, len));
       return false;
     }
+
+    return true;
+  }
+
+  public boolean hasMinLength(
+    final String key,
+    final String value,
+    final int len
+  ) {
+    log.trace("RequestValidation#hasMinLength(String, String, int)");
+
+    isNotEmpty(key, value);
+
+    if (value.length() < len)
+      throw new UnprocessableEntityException(
+        Collections.singletonMap(key, Collections.singletonList(String.format(ERR_SHORT, len))));
 
     return true;
   }

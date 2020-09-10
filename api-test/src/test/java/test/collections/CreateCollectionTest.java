@@ -1,18 +1,22 @@
 package test.collections;
 
+import java.time.OffsetDateTime;
+
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.NullNode;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.*;
-import test.TestBase;
-import test.TestUtil;
+import test.*;
 import test.auth.AuthUtil;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("POST /idSetCollections")
 public class CreateCollectionTest extends TestBase
 {
+  private static final String API_URL = makeUrl(CollectionUtil.API_PATH);
+
   @Nested
   @DisplayName("given a valid request body")
   class Valid
@@ -28,9 +32,9 @@ public class CreateCollectionTest extends TestBase
 
         given()
           .contentType(ContentType.JSON)
-          .body(CollectionUtil.createRequest(name))
+          .body(new CollectionPostRequest().setName(name))
           .when()
-          .post(makeUrl(CollectionUtil.API_PATH))
+          .post(API_URL)
           .then()
           .statusCode(401)
           .contentType(ContentType.JSON);
@@ -50,9 +54,9 @@ public class CreateCollectionTest extends TestBase
         given()
           .contentType(ContentType.JSON)
           .header("Authorization", authHeader("some user", "some api key"))
-          .body(CollectionUtil.createRequest(name))
+          .body(new CollectionPostRequest().setName(name))
           .when()
-          .post(makeUrl(CollectionUtil.API_PATH))
+          .post(API_URL)
           .then()
           .statusCode(401)
           .contentType(ContentType.JSON);
@@ -82,17 +86,26 @@ public class CreateCollectionTest extends TestBase
         var res = given()
           .contentType(ContentType.JSON)
           .header("Authorization", authHeader(userName, userPass))
-          .body(CollectionUtil.createRequest(name))
-          .when()
-          .post(makeUrl(CollectionUtil.API_PATH));
+          .body(new CollectionPostRequest().setName(name))
+        .when()
+          .post(API_URL);
+
         res.then()
           .statusCode(200)
           .contentType(ContentType.JSON);
-        var body = res.as(JsonNode.class);
 
-        CollectionUtil.validateCollection(body);
-        assertEquals(name, body.get(CollectionUtil.KEY_NAME).textValue());
-        assertEquals(userId, body.get(CollectionUtil.KEY_CREATED_BY).asLong());
+        var body = res.as(CollectionResponse.class);
+        var now  = OffsetDateTime.now();
+
+        assertTrue(0 < body.getCollectionId());
+        assertEquals(name, body.getName());
+        assertEquals(userId, body.getCreatedBy());
+        assertEquals(now.getYear(), body.getCreatedOn().getYear());
+        assertEquals(now.getMonth(), body.getCreatedOn().getMonth());
+        assertEquals(now.getDayOfMonth(), body.getCreatedOn().getDayOfMonth());
+        assertEquals(now.getHour(), body.getCreatedOn().getHour());
+        assertTrue(Math.abs(now.getMinute() - body.getCreatedOn().getMinute()) < 3);
+        assertEquals(0, body.getIdSets().length);
       }
     }
   }
@@ -101,10 +114,110 @@ public class CreateCollectionTest extends TestBase
   @DisplayName("given an invalid request body")
   class Invalid
   {
-    @Test
-    @Disabled
-    @DisplayName("returns a 422 error")
-    void test1() {
+    private String userName;
+    private String userPass;
+
+    @BeforeEach
+    void setUp() throws Exception {
+      userName = TestUtil.randStr();
+      userPass = TestUtil.randStr();
+      AuthUtil.createUser(userName, userPass);
+    }
+
+    @Nested
+    @DisplayName("due to a name value that is too short")
+    class Name1 {
+      @Test
+      @DisplayName("returns a 422 error")
+      void test1() {
+        var res = given().
+          contentType(ContentType.JSON).
+          header("Authorization", authHeader(userName, userPass)).
+          body(new CollectionPostRequest().setName("12")).
+        when().
+          post(API_URL);
+
+        res.then().
+          statusCode(422).
+          contentType(ContentType.JSON);
+
+        var body = res.as(Error422Response.class);
+
+        assertNotNull(body);
+
+        var errs = body.getErrors();
+
+        assertNotNull(errs);
+        assertNotNull(errs.getByKey());
+        assertTrue(errs.getByKey().containsKey(CollectionPostRequest.JSON_KEY_NAME));
+        assertNotNull(errs.getByKey().get(CollectionPostRequest.JSON_KEY_NAME));
+        assertNotEquals(0, errs.getByKey().get(CollectionPostRequest.JSON_KEY_NAME).length);
+        assertFalse(errs.getByKey().get(CollectionPostRequest.JSON_KEY_NAME)[0].isBlank());
+      }
+    }
+
+    @Nested
+    @DisplayName("due to a name value that is null")
+    class Name2 {
+      @Test
+      @DisplayName("returns a 422 error")
+      void test1() {
+        var res = given().
+          contentType(ContentType.JSON).
+          header("Authorization", authHeader(userName, userPass)).
+          body(new CollectionPostRequest().setName(null)).
+          when().
+          post(API_URL);
+
+        res.then().
+          statusCode(422).
+          contentType(ContentType.JSON);
+
+        var body = res.as(Error422Response.class);
+
+        assertNotNull(body);
+
+        var errs = body.getErrors();
+
+        assertNotNull(errs);
+        assertNotNull(errs.getByKey());
+        assertTrue(errs.getByKey().containsKey(CollectionPostRequest.JSON_KEY_NAME));
+        assertNotNull(errs.getByKey().get(CollectionPostRequest.JSON_KEY_NAME));
+        assertNotEquals(0, errs.getByKey().get(CollectionPostRequest.JSON_KEY_NAME).length);
+        assertFalse(errs.getByKey().get(CollectionPostRequest.JSON_KEY_NAME)[0].isBlank());
+      }
+    }
+
+    @Nested
+    @DisplayName("due to a name value that is blank")
+    class Name3 {
+      @Test
+      @DisplayName("returns a 422 error")
+      void test1() {
+        var res = given().
+          contentType(ContentType.JSON).
+          header("Authorization", authHeader(userName, userPass)).
+          body(new CollectionPostRequest().setName("          ")).
+          when().
+          post(API_URL);
+
+        res.then().
+          statusCode(422).
+          contentType(ContentType.JSON);
+
+        var body = res.as(Error422Response.class);
+
+        assertNotNull(body);
+
+        var errs = body.getErrors();
+
+        assertNotNull(errs);
+        assertNotNull(errs.getByKey());
+        assertTrue(errs.getByKey().containsKey(CollectionPostRequest.JSON_KEY_NAME));
+        assertNotNull(errs.getByKey().get(CollectionPostRequest.JSON_KEY_NAME));
+        assertNotEquals(0, errs.getByKey().get(CollectionPostRequest.JSON_KEY_NAME).length);
+        assertFalse(errs.getByKey().get(CollectionPostRequest.JSON_KEY_NAME)[0].isBlank());
+      }
     }
   }
 
@@ -112,10 +225,28 @@ public class CreateCollectionTest extends TestBase
   @DisplayName("given a null request body")
   class Null
   {
+    private String userName;
+    private String userPass;
+
+    @BeforeEach
+    void setUp() throws Exception {
+      userName = TestUtil.randStr();
+      userPass = TestUtil.randStr();
+      AuthUtil.createUser(userName, userPass);
+    }
+
     @Test
-    @Disabled
     @DisplayName("returns a 400 error")
     void test1() {
+      given().
+        contentType(ContentType.JSON).
+        header("Authorization", authHeader(userName, userPass)).
+        body(NullNode.getInstance()).
+      when().
+        post(API_URL).
+      then().
+        statusCode(400).
+        contentType(ContentType.JSON);
     }
   }
 }

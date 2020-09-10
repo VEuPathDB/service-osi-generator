@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.*;
-import test.Assert;
-import test.TestBase;
-import test.TestUtil;
+import test.*;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("POST /auth")
 public class CreateUserTest extends TestBase
@@ -155,19 +153,27 @@ public class CreateUserTest extends TestBase
         var res1 = given()
           .header("Authorization", adminAuthHeader())
           .contentType(ContentType.JSON)
-          .with()
-          .body(AuthUtil.newUserRequest(null))
-          .when()
+        .with()
+          .body(new UserPostRequest().setUsername(null))
+        .when()
           .post(makeUrl(AuthUtil.API_PATH));
+
         res1.then()
           .statusCode(422)
           .contentType(ContentType.JSON);
-        var body = res1.as(JsonNode.class);
 
-        Assert.Json.contains(body, "byKey");
-        Assert.Json.isObject("byKey", body.get("byKey"));
-        Assert.Json.contains("byKey", body.get("byKey"), AuthUtil.USERNAME);
-        Assert.Json.isArray("byKey." + AuthUtil.USERNAME, body.get("byKey").get(AuthUtil.USERNAME));
+        var body = res1.as(Error422Response.class);
+
+        assertNotNull(body);
+        assertNotNull(body.getErrors());
+
+        var errs = body.getErrors();
+
+        assertNotNull(errs.getByKey());
+        assertFalse(errs.getByKey().isEmpty());
+        assertNotNull(errs.getByKey().get(UserPostRequest.JSON_KEY_USERNAME));
+        assertNotEquals(0, errs.getByKey().get(UserPostRequest.JSON_KEY_USERNAME).length);
+        assertFalse(errs.getByKey().get(UserPostRequest.JSON_KEY_USERNAME)[0].isBlank());
       }
     }
 
@@ -181,19 +187,25 @@ public class CreateUserTest extends TestBase
         var res1 = given()
           .header("Authorization", adminAuthHeader())
           .contentType(ContentType.JSON)
-          .with()
+        .with()
           .body(AuthUtil.newUserRequest(""))
-          .when()
+        .when()
           .post(makeUrl(AuthUtil.API_PATH));
         res1.then()
           .statusCode(422)
           .contentType(ContentType.JSON);
-        var body = res1.as(JsonNode.class);
+        var body = res1.as(Error422Response.class);
 
-        Assert.Json.contains(body, "byKey");
-        Assert.Json.isObject("byKey", body.get("byKey"));
-        Assert.Json.contains("byKey", body.get("byKey"), AuthUtil.USERNAME);
-        Assert.Json.isArray("byKey." + AuthUtil.USERNAME, body.get("byKey").get(AuthUtil.USERNAME));
+        assertNotNull(body);
+        assertNotNull(body.getErrors());
+
+        var errs = body.getErrors();
+
+        assertNotNull(errs.getByKey());
+        assertFalse(errs.getByKey().isEmpty());
+        assertNotNull(errs.getByKey().get(UserPostRequest.JSON_KEY_USERNAME));
+        assertNotEquals(0, errs.getByKey().get(UserPostRequest.JSON_KEY_USERNAME).length);
+        assertFalse(errs.getByKey().get(UserPostRequest.JSON_KEY_USERNAME)[0].isBlank());
       }
     }
 
@@ -214,12 +226,18 @@ public class CreateUserTest extends TestBase
         res1.then()
           .statusCode(422)
           .contentType(ContentType.JSON);
-        var body = res1.as(JsonNode.class);
+        var body = res1.as(Error422Response.class);
 
-        Assert.Json.contains(body, "byKey");
-        Assert.Json.isObject("byKey", body.get("byKey"));
-        Assert.Json.contains("byKey", body.get("byKey"), AuthUtil.USERNAME);
-        Assert.Json.isArray("byKey." + AuthUtil.USERNAME, body.get("byKey").get(AuthUtil.USERNAME));
+        assertNotNull(body);
+        assertNotNull(body.getErrors());
+
+        var errs = body.getErrors();
+
+        assertNotNull(errs.getByKey());
+        assertFalse(errs.getByKey().isEmpty());
+        assertNotNull(errs.getByKey().get(UserPostRequest.JSON_KEY_USERNAME));
+        assertNotEquals(0, errs.getByKey().get(UserPostRequest.JSON_KEY_USERNAME).length);
+        assertFalse(errs.getByKey().get(UserPostRequest.JSON_KEY_USERNAME)[0].isBlank());
       }
     }
   }

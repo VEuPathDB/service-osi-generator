@@ -35,7 +35,7 @@ public class TestBase
   }
 
   @BeforeEach
-  void setUp() throws Exception {
+  protected void setUp() throws Exception {
     clearDB();
   }
 

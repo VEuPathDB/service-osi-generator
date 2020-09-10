@@ -23,8 +23,9 @@ public class SearchOrganismsTest extends TestBase
   private long   userId;
 
   @BeforeEach
-  void setUp() throws Exception {
-    clearDB();
+  protected void setUp() throws Exception {
+    super.setUp();
+
     username = TestUtil.randStr();
     password = TestUtil.randStr();
     userId   = AuthUtil.createUser(username, password);
