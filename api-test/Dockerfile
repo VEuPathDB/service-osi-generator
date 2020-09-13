@@ -7,4 +7,4 @@ RUN ./gradlew getDeps
 
 COPY [ "src/", "src/" ]
 
-CMD ./gradlew test # --tests '*SearchCollectionsTest'
+CMD ./gradlew test # --tests '*UpdateIdSetTest$When$Valid$T4'

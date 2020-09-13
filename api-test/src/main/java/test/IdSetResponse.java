@@ -10,6 +10,7 @@ public class IdSetResponse
   public static final String
     JSON_KEY_ID_SET_ID            = "idSetId",
     JSON_KEY_COLLECTION_ID        = "collectionId",
+    JSON_KEY_ORGANISM_ID          = "organismId",
     JSON_KEY_TEMPLATE             = "template",
     JSON_KEY_GENE_INT_START       = "geneIntStart",
     JSON_KEY_GENERATED_GENE_COUNT = "generatedGeneCount",
@@ -20,6 +21,8 @@ public class IdSetResponse
   private Long idSetId;
 
   private Long collectionId;
+
+  private Long organismId;
 
   private String template;
 
@@ -52,6 +55,17 @@ public class IdSetResponse
   @JsonSetter(JSON_KEY_COLLECTION_ID)
   public IdSetResponse setCollectionId(Long collectionId) {
     this.collectionId = collectionId;
+    return this;
+  }
+
+  @JsonGetter(JSON_KEY_ORGANISM_ID)
+  public Long getOrganismId() {
+    return organismId;
+  }
+
+  @JsonSetter(JSON_KEY_ORGANISM_ID)
+  public IdSetResponse setOrganismId(Long organismId) {
+    this.organismId = organismId;
     return this;
   }
 

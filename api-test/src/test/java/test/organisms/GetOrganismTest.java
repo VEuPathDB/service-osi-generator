@@ -1,13 +1,15 @@
 package test.organisms;
 
-import java.time.*;
+import java.time.OffsetDateTime;
 
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import test.AuthTestBase;
 import test.OrganismResponse;
-import test.TestBase;
 import test.TestUtil;
-import test.auth.AuthUtil;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
@@ -15,13 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("GET /organisms/{id}")
-public class GetOrganismTest extends TestBase
+public class GetOrganismTest extends AuthTestBase
 {
   private static final String API_PATH = OrganismUtil.API_PATH + "/{id}";
-
-  private String username;
-  private String password;
-  private long userId;
 
   private String orgName;
   private String orgTemp;
@@ -31,13 +29,9 @@ public class GetOrganismTest extends TestBase
   protected void setUp() throws Exception {
     super.setUp();
 
-    username = TestUtil.randStr();
-    password = TestUtil.randStr();
-    userId   = AuthUtil.createUser(username, password);
-
     orgName = TestUtil.randStr();
     orgTemp = TestUtil.randStr().substring(0, 30) + "%d";
-    orgId   = OrganismUtil.createOrganism(orgName, orgTemp, userId);
+    orgId   = OrganismUtil.createOrganism(orgName, orgTemp, user.getUserId());
   }
 
   @Nested
@@ -48,7 +42,7 @@ public class GetOrganismTest extends TestBase
     @DisplayName("returns a 404 error")
     void test1() {
       given()
-        .header("Authorization", authHeader(username, password))
+        .header("Authorization", authHeader())
       .when()
         .get(makeUrl(API_PATH), TestUtil.randStr())
       .then()
@@ -101,7 +95,7 @@ public class GetOrganismTest extends TestBase
       @DisplayName("returns the requested record")
       void test1() {
         var res = given()
-          .header("Authorization", authHeader(username, password))
+          .header("Authorization", authHeader())
         .when()
           .get(makeUrl(API_PATH), orgName);
 
@@ -123,7 +117,7 @@ public class GetOrganismTest extends TestBase
         assertEquals(OffsetDateTime.now().getMonthValue(), body.getCreatedOn().getMonth().getValue());
         assertEquals(OffsetDateTime.now().getDayOfMonth(), body.getCreatedOn().getDayOfMonth());
         assertEquals(OffsetDateTime.now().getHour(), body.getCreatedOn().getHour());
-        assertEquals(userId, body.getCreatedBy());
+        assertEquals(user.getUserId(), body.getCreatedBy());
       }
     }
   }
@@ -136,7 +130,7 @@ public class GetOrganismTest extends TestBase
     @DisplayName("returns a 404 error")
     void test1() {
       given()
-        .header("Authorization", authHeader(username, password))
+        .header("Authorization", authHeader())
         .when()
         .get(makeUrl(API_PATH), 0)
         .then()
@@ -189,7 +183,7 @@ public class GetOrganismTest extends TestBase
       @DisplayName("returns the requested record")
       void test1() {
         var res = given()
-          .header("Authorization", authHeader(username, password))
+          .header("Authorization", authHeader())
           .when()
           .get(makeUrl(API_PATH), orgId);
 
@@ -211,7 +205,7 @@ public class GetOrganismTest extends TestBase
         assertEquals(OffsetDateTime.now().getMonthValue(), body.getCreatedOn().getMonth().getValue());
         assertEquals(OffsetDateTime.now().getDayOfMonth(), body.getCreatedOn().getDayOfMonth());
         assertEquals(OffsetDateTime.now().getHour(), body.getCreatedOn().getHour());
-        assertEquals(userId, body.getCreatedBy());
+        assertEquals(user.getUserId(), body.getCreatedBy());
       }
     }
   }

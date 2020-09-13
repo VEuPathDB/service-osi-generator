@@ -4,22 +4,28 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import test.AuthTestBase;
 import test.OrganismPostRequest;
-import test.TestBase;
 import test.TestUtil;
-import test.auth.AuthUtil;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static test.TestUtil.Json;
 
 @DisplayName("POST /organisms")
-public class CreateOrganismTest extends TestBase
+public class CreateOrganismTest extends AuthTestBase
 {
   public static final String API_PATH = OrganismUtil.API_PATH;
+
+  @Override
+  @BeforeEach
+  protected void setUp() throws Exception {
+    super.setUp();
+  }
 
   @Nested
   @DisplayName("given a null request body")
@@ -28,12 +34,8 @@ public class CreateOrganismTest extends TestBase
     @Test
     @DisplayName("returns a 400 error")
     void test1() throws Exception {
-      var username = TestUtil.randStr();
-      var password = TestUtil.randStr();
-      AuthUtil.createUser(username, password);
-
       given()
-        .header("Authorization", authHeader(username, password))
+        .header("Authorization", authHeader())
         .contentType(ContentType.JSON)
         .body(NullNode.getInstance())
       .when()
@@ -59,9 +61,6 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
 
           var bodyJson = Json.convertValue(
             new OrganismPostRequest()
@@ -72,7 +71,7 @@ public class CreateOrganismTest extends TestBase
           bodyJson.remove(OrganismPostRequest.KEY_ORG_NAME);
 
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(bodyJson)
           .when()
@@ -90,12 +89,8 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(Json.convertValue(
               new OrganismPostRequest()
@@ -118,12 +113,8 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(Json.convertValue(
               new OrganismPostRequest()
@@ -147,12 +138,8 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(Json.convertValue(
               new OrganismPostRequest()
@@ -176,12 +163,8 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(Json.convertValue(
               new OrganismPostRequest()
@@ -210,10 +193,6 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           var bodyJson = Json.convertValue(
             new OrganismPostRequest()
               .setOrganismName("someName")
@@ -223,7 +202,7 @@ public class CreateOrganismTest extends TestBase
           bodyJson.remove(OrganismPostRequest.KEY_TEMPLATE);
 
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(bodyJson)
           .when()
@@ -241,12 +220,8 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(Json.convertValue(
               new OrganismPostRequest()
@@ -269,12 +244,8 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(Json.convertValue(
               new OrganismPostRequest()
@@ -298,12 +269,8 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(Json.convertValue(
               new OrganismPostRequest()
@@ -327,12 +294,8 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(Json.convertValue(
               new OrganismPostRequest()
@@ -361,10 +324,6 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           var bodyJson = Json.convertValue(
             new OrganismPostRequest()
               .setOrganismName("someName")
@@ -374,7 +333,7 @@ public class CreateOrganismTest extends TestBase
           bodyJson.remove(OrganismPostRequest.KEY_GENE_START);
 
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(bodyJson)
             .when()
@@ -392,12 +351,8 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(Json.convertValue(
               new OrganismPostRequest()
@@ -420,12 +375,8 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(Json.convertValue(
               new OrganismPostRequest()
@@ -454,10 +405,6 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           var bodyJson = Json.convertValue(
             new OrganismPostRequest()
               .setOrganismName("someName")
@@ -467,7 +414,7 @@ public class CreateOrganismTest extends TestBase
           bodyJson.remove(OrganismPostRequest.KEY_TRAN_START);
 
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(bodyJson)
             .when()
@@ -485,12 +432,8 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(Json.convertValue(
               new OrganismPostRequest()
@@ -513,12 +456,8 @@ public class CreateOrganismTest extends TestBase
         @Test
         @DisplayName("returns a 422 error")
         void test1() throws Exception {
-          var username = TestUtil.randStr();
-          var password = TestUtil.randStr();
-          AuthUtil.createUser(username, password);
-
           given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .contentType(ContentType.JSON)
             .body(Json.convertValue(
               new OrganismPostRequest()
@@ -548,10 +487,6 @@ public class CreateOrganismTest extends TestBase
       @Test
       @DisplayName("returns a 401 error")
       void test1() throws Exception {
-        var username = TestUtil.randStr();
-        var password = TestUtil.randStr();
-        AuthUtil.createUser(username, password);
-
         given()
           .contentType(ContentType.JSON)
           .body(Json.convertValue(
@@ -576,13 +511,8 @@ public class CreateOrganismTest extends TestBase
       @Test
       @DisplayName("returns a 401 error")
       void test1() throws Exception {
-        var username = TestUtil.randStr();
-        var password = TestUtil.randStr();
-        AuthUtil.createUser(username, password);
-
         given()
-          .auth()
-          .basic(TestUtil.randStr(), TestUtil.randStr())
+          .header("Authorization", authHeader(TestUtil.randStr(), TestUtil.randStr()))
           .contentType(ContentType.JSON)
           .body(Json.convertValue(
             new OrganismPostRequest()
@@ -607,12 +537,8 @@ public class CreateOrganismTest extends TestBase
       @Test
       @DisplayName("returns the id of the new record")
       void test1() throws Exception {
-        var username = TestUtil.randStr();
-        var password = TestUtil.randStr();
-        AuthUtil.createUser(username, password);
-
         var res = given()
-          .header("Authorization", authHeader(username, password))
+          .header("Authorization", authHeader())
           .contentType(ContentType.JSON)
           .body(Json.convertValue(
             new OrganismPostRequest()

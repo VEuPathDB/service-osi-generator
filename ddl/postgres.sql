@@ -167,7 +167,7 @@ CREATE TABLE osi.transcripts
 -- ║    Procedures                                                          ║ --
 -- ╚════════════════════════════════════════════════════════════════════════╝ --
 
--- Verify that the given `old_start` and `old_curr` values are currently equal.
+-- Verify that the given "old_start" and "old_curr" values are currently equal.
 --
 -- This is to enforce that the starting value cannot be changed once the current
 -- value has been incremented (meaning IDs have been issued).
@@ -190,8 +190,8 @@ CREATE FUNCTION organism_validate_start_update() RETURNS TRIGGER AS
   END;
 ' LANGUAGE plpgsql;
 
--- Verify that the given `new_curr` counter value is not less than the previous
--- counter value _IF_ the `old_curr` value has already been incremented.
+-- Verify that the given "new_curr" counter value is not less than the previous
+-- counter value _IF_ the "old_curr" value has already been incremented.
 --
 -- This is to enforce that the current value cannot be set to something lower
 -- than it's prior value once the start and current values have diverged
@@ -252,7 +252,7 @@ GRANT USAGE ON SCHEMA "osi" TO osi_service;
 -- INSERT and SELECT are universally allowed in the osi schema
 GRANT INSERT, SELECT ON ALL TABLES IN SCHEMA osi TO osi_service;
 
--- Updates are only allowed on the organisms table and the `name` column of the
+-- Updates are only allowed on the organisms table and the "name" column of the
 -- collections table.
 GRANT UPDATE ON osi.organisms TO osi_service;
 GRANT UPDATE (name) ON osi.id_set_collections TO osi_service;

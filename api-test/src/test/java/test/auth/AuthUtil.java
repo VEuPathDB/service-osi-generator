@@ -1,8 +1,9 @@
 package test.auth;
 
+import java.time.OffsetDateTime;
+
 import com.fasterxml.jackson.databind.JsonNode;
-import test.Assert;
-import test.TestBase;
+import test.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static test.TestUtil.Json;
@@ -26,7 +27,7 @@ public class AuthUtil
     INSERT_USER = "INSERT INTO auth.users (user_name, api_key) VALUES (?, ?) RETURNING user_id;";
   public static long createUser(final String name, final String key) throws Exception {
     try (
-      var con = TestBase.dataSource.getConnection();
+      var con = DbUtil.getServiceDataSource().getConnection();
       var ps  = con.prepareStatement(INSERT_USER)
     ) {
       ps.setString(1, name);
@@ -35,6 +36,44 @@ public class AuthUtil
       try (var rs = ps.executeQuery()) {
         rs.next();
         return rs.getLong(1);
+      }
+    }
+  }
+
+  private static final String SELECT = "SELECT * FROM auth.users WHERE user_id = ?;";
+
+  public static UserRecord getUser(final long userId) throws Exception {
+    try (
+      var con = DbUtil.getServiceDataSource().getConnection();
+      var ps  = con.prepareStatement(SELECT);
+    ) {
+      ps.setLong(1, userId);
+
+      try (var rs = ps.executeQuery()) {
+        rs.next();
+
+        var meta  = rs.getMetaData();
+        var count = meta.getColumnCount();
+        var out   = new UserRecord();
+
+        for (var i = 1; i <= count; i++) {
+          var name = meta.getColumnName(i);
+
+          var field = UserRecord.class.getDeclaredField(name);
+          field.setAccessible(true);
+
+          var type = field.getType();
+          if (type.equals(Long.class) || type.equals(long.class))
+            field.set(out, rs.getLong(i));
+          else if (type.equals(String.class))
+            field.set(out, rs.getString(i));
+          else if (type.equals(OffsetDateTime.class))
+            field.set(out, rs.getObject(i, OffsetDateTime.class));
+          else
+            throw new IllegalStateException("Unrecognized type for field " + name);
+        }
+
+        return out;
       }
     }
   }

@@ -2,6 +2,7 @@ package test.organisms;
 
 import java.time.OffsetDateTime;
 
+import test.DbUtil;
 import test.OrganismResponse;
 import test.TestBase;
 
@@ -24,7 +25,7 @@ public class OrganismUtil
     final OffsetDateTime created
   ) throws Exception {
     try (
-      var con = TestBase.dataSource.getConnection();
+      var con = DbUtil.getServiceDataSource().getConnection();
       var ps = con.prepareStatement(INSERT_SQL)
     ) {
       ps.setString(1, name);
@@ -47,7 +48,7 @@ public class OrganismUtil
 
   public static void incrementCounters(final long orgId) throws Exception {
     try (
-      var con = TestBase.dataSource.getConnection();
+      var con = DbUtil.getServiceDataSource().getConnection();
       var ps = con.prepareStatement(UPDATE_SQL);
     ) {
       ps.setLong(1, orgId);
@@ -60,7 +61,7 @@ public class OrganismUtil
 
   public static OrganismResponse getOrganism(final long orgId) throws Exception {
     try (
-      var con = TestBase.dataSource.getConnection();
+      var con = DbUtil.getServiceDataSource().getConnection();
       var ps = con.prepareStatement(SELECT_SQL);
     ) {
       ps.setLong(1, orgId);

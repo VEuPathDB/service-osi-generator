@@ -288,6 +288,9 @@ public class IdSetService
   ) {
     log.trace("IdSetService#handleSearch(List, User)");
 
+    if (entries == null)
+      throw new BadRequestException();
+
     final var user = UserService.requireUser(req);
     validatePatchEntries(entries);
 

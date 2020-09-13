@@ -5,8 +5,8 @@ import java.time.ZoneOffset;
 
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.*;
+import test.AuthTestBase;
 import test.OrganismResponse;
-import test.TestBase;
 import test.TestUtil;
 import test.auth.AuthUtil;
 
@@ -14,21 +14,13 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("GET /organisms")
-public class SearchOrganismsTest extends TestBase
+public class SearchOrganismsTest extends AuthTestBase
 {
   private static final String API_PATH = OrganismUtil.API_PATH;
-
-  private String username;
-  private String password;
-  private long   userId;
 
   @BeforeEach
   protected void setUp() throws Exception {
     super.setUp();
-
-    username = TestUtil.randStr();
-    password = TestUtil.randStr();
-    userId   = AuthUtil.createUser(username, password);
   }
 
   @Nested
@@ -45,7 +37,7 @@ public class SearchOrganismsTest extends TestBase
         orgIds[i] = OrganismUtil.createOrganism(
           orgNames[i],
           templates[i] = orgNames[i] + "%d",
-          userId
+          user.getUserId()
         );
       }
     }
@@ -115,7 +107,7 @@ public class SearchOrganismsTest extends TestBase
         @DisplayName("returns the expected results")
         void test1() {
           var res = given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .queryParam("organismName", "test*")
             .when()
             .get(makeUrl(API_PATH));
@@ -154,7 +146,7 @@ public class SearchOrganismsTest extends TestBase
             body[0].getCreatedOn().getDayOfMonth()
           );
           assertEquals(OffsetDateTime.now().getHour(), body[0].getCreatedOn().getHour());
-          assertEquals(userId, body[0].getCreatedBy());
+          assertEquals(user.getUserId(), body[0].getCreatedBy());
 
           assertEquals(orgNames[B], body[1].getOrganismName());
           assertEquals(templates[B], body[1].getTemplate());
@@ -173,7 +165,7 @@ public class SearchOrganismsTest extends TestBase
             body[1].getCreatedOn().getDayOfMonth()
           );
           assertEquals(OffsetDateTime.now().getHour(), body[1].getCreatedOn().getHour());
-          assertEquals(userId, body[1].getCreatedBy());
+          assertEquals(user.getUserId(), body[1].getCreatedBy());
         }
       }
 
@@ -185,7 +177,7 @@ public class SearchOrganismsTest extends TestBase
         @DisplayName("returns the expected results")
         void test1() {
           var res = given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .queryParam("organismName", "*1")
             .when()
             .get(makeUrl(API_PATH));
@@ -224,7 +216,7 @@ public class SearchOrganismsTest extends TestBase
             body[0].getCreatedOn().getDayOfMonth()
           );
           assertEquals(OffsetDateTime.now().getHour(), body[0].getCreatedOn().getHour());
-          assertEquals(userId, body[0].getCreatedBy());
+          assertEquals(user.getUserId(), body[0].getCreatedBy());
 
           assertEquals(orgNames[B], body[1].getOrganismName());
           assertEquals(templates[B], body[1].getTemplate());
@@ -243,7 +235,7 @@ public class SearchOrganismsTest extends TestBase
             body[1].getCreatedOn().getDayOfMonth()
           );
           assertEquals(OffsetDateTime.now().getHour(), body[1].getCreatedOn().getHour());
-          assertEquals(userId, body[1].getCreatedBy());
+          assertEquals(user.getUserId(), body[1].getCreatedBy());
         }
       }
     }
@@ -268,7 +260,7 @@ public class SearchOrganismsTest extends TestBase
         orgIds[i] = OrganismUtil.createOrganism(
           orgNames[i],
           templates[i] = orgNames[i] + "%d",
-          userId,
+          user.getUserId(),
           dates[i]
         );
       }
@@ -344,7 +336,7 @@ public class SearchOrganismsTest extends TestBase
       @DisplayName("returns the expected results")
       void test1() {
         var res = given()
-          .header("Authorization", authHeader(username, password))
+          .header("Authorization", authHeader())
           .queryParam(
             "createdAfter",
             OffsetDateTime.of(2018, 12, 18, 3, 12, 14, 0, ZoneOffset.UTC).toEpochSecond()
@@ -380,7 +372,7 @@ public class SearchOrganismsTest extends TestBase
         assertEquals(dates[A].getMonthValue(), body[0].getCreatedOn().getMonth().getValue());
         assertEquals(dates[A].getDayOfMonth(), body[0].getCreatedOn().getDayOfMonth());
         assertEquals(dates[A].getHour(), body[0].getCreatedOn().getHour());
-        assertEquals(userId, body[0].getCreatedBy());
+        assertEquals(user.getUserId(), body[0].getCreatedBy());
 
         assertEquals(orgNames[B], body[1].getOrganismName());
         assertEquals(templates[B], body[1].getTemplate());
@@ -393,7 +385,7 @@ public class SearchOrganismsTest extends TestBase
         assertEquals(dates[B].getMonthValue(), body[1].getCreatedOn().getMonth().getValue());
         assertEquals(dates[B].getDayOfMonth(), body[1].getCreatedOn().getDayOfMonth());
         assertEquals(dates[B].getHour(), body[1].getCreatedOn().getHour());
-        assertEquals(userId, body[1].getCreatedBy());
+        assertEquals(user.getUserId(), body[1].getCreatedBy());
       }
     }
   }
@@ -417,7 +409,7 @@ public class SearchOrganismsTest extends TestBase
         orgIds[i] = OrganismUtil.createOrganism(
           orgNames[i],
           templates[i] = orgNames[i] + "%d",
-          userId,
+          user.getUserId(),
           dates[i]
         );
       }
@@ -493,7 +485,7 @@ public class SearchOrganismsTest extends TestBase
       @DisplayName("returns the expected results")
       void test1() {
         var res = given()
-          .header("Authorization", authHeader(username, password))
+          .header("Authorization", authHeader())
           .queryParam(
             "createdBefore",
             OffsetDateTime.of(2020, 9, 18, 3, 12, 14, 0, ZoneOffset.UTC).toEpochSecond()
@@ -529,7 +521,7 @@ public class SearchOrganismsTest extends TestBase
         assertEquals(dates[A].getMonthValue(), body[0].getCreatedOn().getMonth().getValue());
         assertEquals(dates[A].getDayOfMonth(), body[0].getCreatedOn().getDayOfMonth());
         assertEquals(dates[A].getHour(), body[0].getCreatedOn().getHour());
-        assertEquals(userId, body[0].getCreatedBy());
+        assertEquals(user.getUserId(), body[0].getCreatedBy());
 
         assertEquals(orgNames[B], body[1].getOrganismName());
         assertEquals(templates[B], body[1].getTemplate());
@@ -542,7 +534,7 @@ public class SearchOrganismsTest extends TestBase
         assertEquals(dates[B].getMonthValue(), body[1].getCreatedOn().getMonth().getValue());
         assertEquals(dates[B].getDayOfMonth(), body[1].getCreatedOn().getDayOfMonth());
         assertEquals(dates[B].getHour(), body[1].getCreatedOn().getHour());
-        assertEquals(userId, body[1].getCreatedBy());
+        assertEquals(user.getUserId(), body[1].getCreatedBy());
       }
     }
   }
@@ -562,8 +554,8 @@ public class SearchOrganismsTest extends TestBase
       var user2pass = TestUtil.randStr();
       var user2id   = AuthUtil.createUser(user2name, user2pass);
 
-      userIds[0] = userId;
-      userIds[1] = userId;
+      userIds[0] = user.getUserId();
+      userIds[1] = user.getUserId();
       userIds[2] = user2id;
 
       for (var i = 0; i < orgNames.length; i++) {
@@ -583,7 +575,7 @@ public class SearchOrganismsTest extends TestBase
       @DisplayName("returns a 401 error")
       void test1() {
         given()
-          .queryParam("createdBy", userId)
+          .queryParam("createdBy", user.getUserId())
           .when()
           .get(makeUrl(API_PATH))
           .then()
@@ -601,7 +593,7 @@ public class SearchOrganismsTest extends TestBase
       void test1() {
         given()
           .header("Authorization", authHeader(TestUtil.randStr(), TestUtil.randStr()))
-          .queryParam("createdBy", userId)
+          .queryParam("createdBy", user.getUserId())
           .when()
           .get(makeUrl(API_PATH))
           .then()
@@ -619,7 +611,7 @@ public class SearchOrganismsTest extends TestBase
       void test1() {
         given()
           .header("Authorization", adminAuthHeader())
-          .queryParam("createdBy", userId)
+          .queryParam("createdBy", user.getUserId())
           .when()
           .get(makeUrl(API_PATH))
           .then()
@@ -636,8 +628,8 @@ public class SearchOrganismsTest extends TestBase
       @DisplayName("returns the expected results")
       void test1() {
         var res = given()
-          .header("Authorization", authHeader(username, password))
-          .queryParam("createdBy", userId)
+          .header("Authorization", authHeader())
+          .queryParam("createdBy", user.getUserId())
           .when()
           .get(makeUrl(API_PATH));
 
@@ -694,7 +686,7 @@ public class SearchOrganismsTest extends TestBase
   }
 
   @Nested
-  @DisplayName("filtered by records created by user id")
+  @DisplayName("filtered by records created by user name")
   class T5
   {
     private final String[] orgNames  = {"test1", "test2", "unmatch1"};
@@ -710,8 +702,8 @@ public class SearchOrganismsTest extends TestBase
       var user2pass = TestUtil.randStr();
       var user2id   = AuthUtil.createUser(user2name, user2pass);
 
-      userIds[0]   = userId;
-      userNames[0] = username;
+      userIds[0]   = user.getUserId();
+      userNames[0] = user.getUserName();
 
       userIds[1]   = user2id;
       userNames[1] = user2name;
@@ -736,7 +728,7 @@ public class SearchOrganismsTest extends TestBase
       @DisplayName("returns a 401 error")
       void test1() {
         given()
-          .queryParam("createdBy", username)
+          .queryParam("createdBy", user.getUserName())
           .when()
           .get(makeUrl(API_PATH))
           .then()
@@ -754,7 +746,7 @@ public class SearchOrganismsTest extends TestBase
       void test1() {
         given()
           .header("Authorization", authHeader(TestUtil.randStr(), TestUtil.randStr()))
-          .queryParam("createdBy", username)
+          .queryParam("createdBy", user.getUserName())
           .when()
           .get(makeUrl(API_PATH))
           .then()
@@ -772,7 +764,7 @@ public class SearchOrganismsTest extends TestBase
       void test1() {
         given()
           .header("Authorization", adminAuthHeader())
-          .queryParam("createdBy", username)
+          .queryParam("createdBy", user.getUserName())
           .when()
           .get(makeUrl(API_PATH))
           .then()
@@ -789,7 +781,7 @@ public class SearchOrganismsTest extends TestBase
       @DisplayName("returns the expected results")
       void test1() {
         var res = given()
-          .header("Authorization", authHeader(username, password))
+          .header("Authorization", authHeader())
           .queryParam("createdBy", user2name)
           .when()
           .get(makeUrl(API_PATH));

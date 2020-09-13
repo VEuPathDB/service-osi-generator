@@ -1,26 +1,24 @@
 package test.collections;
 
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import test.AuthTestBase;
 import test.CollectionResponse;
-import test.TestBase;
 import test.TestUtil;
-import test.auth.AuthUtil;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("GET /idSetCollections/{id}")
-public class GetCollectionTest extends TestBase
+public class GetCollectionTest extends AuthTestBase
 {
   public static final String API_PATH = CollectionUtil.API_PATH + "/{id}";
 
   private static final String API_URL = makeUrl(API_PATH);
-
-  private String username;
-  private String password;
-  private long   userId;
 
   private String collectionName;
   private long   collectionId;
@@ -30,12 +28,8 @@ public class GetCollectionTest extends TestBase
   protected void setUp() throws Exception {
     super.setUp();
 
-    username = TestUtil.randStr();
-    password = TestUtil.randStr();
-    userId   = AuthUtil.createUser(username, password);
-
     collectionName = TestUtil.randStr();
-    collectionId   = CollectionUtil.createCollection(collectionName, userId);
+    collectionId   = CollectionUtil.createCollection(collectionName, user.getUserId());
   }
 
   @Nested
@@ -50,7 +44,7 @@ public class GetCollectionTest extends TestBase
       @DisplayName("returns a 404 error")
       void test1() {
         given()
-          .header("Authorization", authHeader(username, password))
+          .header("Authorization", authHeader())
           .when()
           .get(API_URL, 0)
           .then()
@@ -120,7 +114,7 @@ public class GetCollectionTest extends TestBase
         @DisplayName("returns the requested ID set collection")
         void test1() {
           var res = given()
-            .header("Authorization", authHeader(username, password))
+            .header("Authorization", authHeader())
             .when()
             .get(API_URL, collectionId);
 
@@ -132,7 +126,7 @@ public class GetCollectionTest extends TestBase
 
           assertEquals(collectionId, body.getCollectionId());
           assertEquals(collectionName, body.getName());
-          assertEquals(userId, body.getCreatedBy());
+          assertEquals(user.getUserId(), body.getCreatedBy());
         }
       }
     }

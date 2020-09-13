@@ -25,10 +25,6 @@ public class Assert
       assertTrue(node.has(key), "Response object missing required field " + key);
     }
 
-    public static void contains(final String name, final JsonNode node, final String key) {
-      assertTrue(node.has(key), "Response field " + name + " missing required field " + key);
-    }
-
     public static void isString(final String name, final JsonNode node) {
       assertTrue(node.isTextual(), "Response field " + name + " must be a string value.");
     }

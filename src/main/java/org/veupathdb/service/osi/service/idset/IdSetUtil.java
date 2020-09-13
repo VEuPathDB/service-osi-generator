@@ -62,14 +62,14 @@ public class IdSetUtil
 
   public IdSet parseIdSet(final ResultSet rs) throws Exception {
     return new IdSet(
-      rs.getInt(IdSets.ID_SET_ID),
-      rs.getInt(IdSets.COLLECTION_ID),
-      rs.getInt(IdSets.ORGANISM_ID),
+      rs.getLong(IdSets.ID_SET_ID),
+      rs.getLong(IdSets.COLLECTION_ID),
+      rs.getLong(IdSets.ORGANISM_ID),
       rs.getString(IdSets.TEMPLATE),
       rs.getLong(IdSets.COUNTER_START),
       rs.getInt(IdSets.NUM_ISSUED),
       rs.getObject(IdSets.CREATED_ON, OffsetDateTime.class),
-      rs.getInt(IdSets.CREATED_BY)
+      rs.getLong(IdSets.CREATED_BY)
     );
   }
   public IdSet parseIdSet(
@@ -108,6 +108,7 @@ public class IdSetUtil
 
     out.setIdSetId(set.getId());
     out.setCollectionId(set.getCollectionId());
+    out.setOrganismId(set.getOrganismId());
     out.setTemplate(set.getTemplate());
     out.setGeneIntStart(set.getCounterStart());
     out.setGeneratedGeneCount(set.getNumIssued());

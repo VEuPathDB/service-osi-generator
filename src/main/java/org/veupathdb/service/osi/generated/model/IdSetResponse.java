@@ -21,6 +21,12 @@ public interface IdSetResponse {
   @JsonProperty("collectionId")
   void setCollectionId(long collectionId);
 
+  @JsonProperty("organismId")
+  long getOrganismId();
+
+  @JsonProperty("organismId")
+  void setOrganismId(long organismId);
+
   @JsonProperty("template")
   String getTemplate();
 

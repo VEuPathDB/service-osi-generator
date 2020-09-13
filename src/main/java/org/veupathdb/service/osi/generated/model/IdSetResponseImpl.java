@@ -12,6 +12,7 @@ import java.util.List;
 @JsonPropertyOrder({
     "idSetId",
     "collectionId",
+    "organismId",
     "template",
     "geneIntStart",
     "generatedGeneCount",
@@ -26,6 +27,9 @@ public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("collectionId")
   private long collectionId;
 
+  @JsonProperty("organismId")
+  private long organismId;
+
   @JsonProperty("template")
   private String template;
 
@@ -38,6 +42,7 @@ public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("generatedIds")
   private List<GeneratedTranscriptEntry> generatedIds;
 
+  @JsonProperty("createdOn")
   @JsonFormat(
       shape = JsonFormat.Shape.STRING,
       pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
@@ -45,7 +50,6 @@ public class IdSetResponseImpl implements IdSetResponse {
   @JsonDeserialize(
       using = TimestampDeserializer.class
   )
-  @JsonProperty("createdOn")
   private Date createdOn;
 
   @JsonProperty("createdBy")
@@ -69,6 +73,16 @@ public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("collectionId")
   public void setCollectionId(long collectionId) {
     this.collectionId = collectionId;
+  }
+
+  @JsonProperty("organismId")
+  public long getOrganismId() {
+    return this.organismId;
+  }
+
+  @JsonProperty("organismId")
+  public void setOrganismId(long organismId) {
+    this.organismId = organismId;
   }
 
   @JsonProperty("template")

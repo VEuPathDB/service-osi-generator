@@ -2,7 +2,9 @@ package test.collections;
 
 import java.time.OffsetDateTime;
 
-import test.TestBase;
+import test.*;
+
+import static io.restassured.RestAssured.with;
 
 public class CollectionUtil
 {
@@ -26,7 +28,7 @@ public class CollectionUtil
 
   public static long createCollection(final String name, final long user, final OffsetDateTime date) throws Exception {
     try (
-      var con = TestBase.dataSource.getConnection();
+      var con = DbUtil.getServiceDataSource().getConnection();
       var ps = con.prepareStatement(INSERT_COLLECTION)
     ) {
       ps.setString(1, name);
@@ -38,5 +40,12 @@ public class CollectionUtil
         return rs.getLong(1);
       }
     }
+  }
+
+  public static CollectionResponse getCollection(final UserRecord user, final long collectionId) {
+    return with()
+      .header("Authorization", TestBase.authHeader(user.getUserName(), user.getApiKey()))
+      .get(TestBase.makeUrl(API_PATH + "/" + collectionId))
+      .as(CollectionResponse.class);
   }
 }

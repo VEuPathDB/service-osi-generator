@@ -2,20 +2,24 @@ package test.collections;
 
 import java.time.OffsetDateTime;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.*;
 import test.*;
-import test.auth.AuthUtil;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("POST /idSetCollections")
-public class CreateCollectionTest extends TestBase
+public class CreateCollectionTest extends AuthTestBase
 {
   private static final String API_URL = makeUrl(CollectionUtil.API_PATH);
+
+  @Override
+  @BeforeEach
+  protected void setUp() throws Exception {
+    super.setUp();
+  }
 
   @Nested
   @DisplayName("given a valid request body")
@@ -46,7 +50,6 @@ public class CreateCollectionTest extends TestBase
     class BadCreds
     {
       @Test
-      @Disabled
       @DisplayName("returns a 401 error")
       void test1() {
         var name = TestUtil.randStr();
@@ -67,17 +70,6 @@ public class CreateCollectionTest extends TestBase
     @DisplayName("and valid user credentials")
     class GoodCreds
     {
-      private String userName;
-      private String userPass;
-      private long   userId;
-
-      @BeforeEach
-      void setUp() throws Exception {
-        userName = TestUtil.randStr();
-        userPass = TestUtil.randStr();
-        userId   = AuthUtil.createUser(userName, userPass);
-      }
-
       @Test
       @DisplayName("returns the created record")
       void test1() {
@@ -85,7 +77,7 @@ public class CreateCollectionTest extends TestBase
 
         var res = given()
           .contentType(ContentType.JSON)
-          .header("Authorization", authHeader(userName, userPass))
+          .header("Authorization", authHeader())
           .body(new CollectionPostRequest().setName(name))
         .when()
           .post(API_URL);
@@ -99,7 +91,7 @@ public class CreateCollectionTest extends TestBase
 
         assertTrue(0 < body.getCollectionId());
         assertEquals(name, body.getName());
-        assertEquals(userId, body.getCreatedBy());
+        assertEquals(user.getUserId(), body.getCreatedBy());
         assertEquals(now.getYear(), body.getCreatedOn().getYear());
         assertEquals(now.getMonth(), body.getCreatedOn().getMonth());
         assertEquals(now.getDayOfMonth(), body.getCreatedOn().getDayOfMonth());
@@ -114,16 +106,6 @@ public class CreateCollectionTest extends TestBase
   @DisplayName("given an invalid request body")
   class Invalid
   {
-    private String userName;
-    private String userPass;
-
-    @BeforeEach
-    void setUp() throws Exception {
-      userName = TestUtil.randStr();
-      userPass = TestUtil.randStr();
-      AuthUtil.createUser(userName, userPass);
-    }
-
     @Nested
     @DisplayName("due to a name value that is too short")
     class Name1 {
@@ -132,7 +114,7 @@ public class CreateCollectionTest extends TestBase
       void test1() {
         var res = given().
           contentType(ContentType.JSON).
-          header("Authorization", authHeader(userName, userPass)).
+          header("Authorization", authHeader()).
           body(new CollectionPostRequest().setName("12")).
         when().
           post(API_URL);
@@ -164,7 +146,7 @@ public class CreateCollectionTest extends TestBase
       void test1() {
         var res = given().
           contentType(ContentType.JSON).
-          header("Authorization", authHeader(userName, userPass)).
+          header("Authorization", authHeader()).
           body(new CollectionPostRequest().setName(null)).
           when().
           post(API_URL);
@@ -196,7 +178,7 @@ public class CreateCollectionTest extends TestBase
       void test1() {
         var res = given().
           contentType(ContentType.JSON).
-          header("Authorization", authHeader(userName, userPass)).
+          header("Authorization", authHeader()).
           body(new CollectionPostRequest().setName("          ")).
           when().
           post(API_URL);
@@ -225,22 +207,12 @@ public class CreateCollectionTest extends TestBase
   @DisplayName("given a null request body")
   class Null
   {
-    private String userName;
-    private String userPass;
-
-    @BeforeEach
-    void setUp() throws Exception {
-      userName = TestUtil.randStr();
-      userPass = TestUtil.randStr();
-      AuthUtil.createUser(userName, userPass);
-    }
-
     @Test
     @DisplayName("returns a 400 error")
     void test1() {
       given().
         contentType(ContentType.JSON).
-        header("Authorization", authHeader(userName, userPass)).
+        header("Authorization", authHeader()).
         body(NullNode.getInstance()).
       when().
         post(API_URL).

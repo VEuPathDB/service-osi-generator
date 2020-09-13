@@ -1,9 +1,15 @@
 package test.sets;
 
-import test.TestBase;
+import org.apiguardian.api.API;
+import test.DbUtil;
+import test.IdSetResponse;
+
+import static io.restassured.RestAssured.given;
 
 public class IdSetUtil
 {
+  public static final String API_PATH = "/idSets";
+
   private static final String
     INSERT_SQL = "INSERT INTO osi.id_sets "
     + "(id_set_coll_id, organism_id, template, counter_start, num_issued, created_by) "
@@ -18,7 +24,7 @@ public class IdSetUtil
     final long user
   ) throws Exception {
     try (
-      var con = TestBase.dataSource.getConnection();
+      var con = DbUtil.getServiceDataSource().getConnection();
       var ps  = con.prepareStatement(INSERT_SQL)
     ) {
       ps.setLong(1, collection);
