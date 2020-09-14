@@ -102,6 +102,7 @@ api-test:
 	docker-compose -f docker/docker-compose.test.yml down
 	docker-compose -f docker/docker-compose.test.yml build
 	docker-compose -f docker/docker-compose.test.yml run test
+	docker-compose -f docker/docker-compose.test.yml down
 
 #
 # File based targets

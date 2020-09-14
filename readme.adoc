@@ -89,3 +89,20 @@ and production.
 `docker/DB.Dockerfile`:: Postgres instance
 `docker/docker-compose.prod.yml`:: Docker Compose configuration.
 `docker/SVC.prod.Dockerfile`:: Docker configuration.
+
+== Testing the Service
+
+=== Unit Tests
+
+Unit tests are run automatically as part of the build, but can be run locally using the command
+`./gradlew test`.  All unit tests can be found under `./src/test/java/`.
+
+=== API Tests
+
+Running the API tests requires both Docker and Docker Compose.
+
+The API tests can be run using the command `make api-test`.  This will spin up a temporary instance
+of both the HTTP service and the Postgres instance then run the battery of tests against the running
+instances.
+
+The API tests are defined under the `./api-test` sub project.
