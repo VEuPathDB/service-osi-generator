@@ -1,10 +1,8 @@
 version: "3.8"
 
 services:
-  osi-db:
-    build:
-      context: ..
-      dockerfile: docker/DB.Dockerfile
+  postgres:
+    image: veupathdb/osi-generator-database
     volumes:
     - postgres_data:/var/lib/postgresql/data
     networks:
@@ -15,22 +13,20 @@ services:
 
       # Service user password
       DB_PASSWORD:
-  osi-service:
-    build:
-      context: ..
-      dockerfile: docker/SVC.prod.Dockerfile
+  service:
+    image: veupathdb/osi-generator-service
     depends_on:
-    - osi-db
+    - postgres
     environment:
       # Postgres connection details
       #
-      # DB_PASSWORD here must match DB_PASSWORD in the osi-db environment
+      # DB_PASSWORD here must match DB_PASSWORD in the postgres environment
       # settings.
       DB_PASSWORD:
 #      DB_USERNAME: osi_service
 #      DB_PORT: 5432
 #      DB_POOL_SIZE: 20
-#      DB_HOST: osi-db
+#      DB_HOST: postgres
 #      DB_NAME: postgres
 
       # User administration user credentials
@@ -39,7 +35,7 @@ services:
 
       SERVER_PORT: 80
     command: >-
-      sh -c "while ! nc -z osi-db 5432; do
+      sh -c "while ! nc -z postgres 5432; do
         echo 'waiting for postgres';
         sleep 1;
       done;

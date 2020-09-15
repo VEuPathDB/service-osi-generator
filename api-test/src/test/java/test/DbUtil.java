@@ -12,7 +12,7 @@ public class DbUtil
     DB_ADMIN_PASS = System.getenv("POSTGRES_PASSWORD"),
     DB_PASSWORD   = System.getenv("DB_PASSWORD"),
     DB_USERNAME   = "osi_service",
-    DB_HOST       = "osi-db",
+    DB_HOST       = "postgres",
     DB_NAME       = "postgres";
 
   private static final int DB_PORT = 5432;

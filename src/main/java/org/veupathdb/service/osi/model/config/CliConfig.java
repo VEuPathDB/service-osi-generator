@@ -7,7 +7,7 @@ public class CliConfig extends Options
 {
   public static final String
     DEFAULT_USERNAME = "osi_service",
-    DEFAULT_DB_HOST  = "osi-db",
+    DEFAULT_DB_HOST  = "postgres",
     DEFAULT_DB_NAME  = "postgres";
 
   public static final short

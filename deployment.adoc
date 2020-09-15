@@ -28,7 +28,7 @@ flag `--admin-password-do-not-use`.
 `DB_HOST`::
 Postgres database hostname as it is visible to this service.
 +
-If unset, defaults to `osi-db` which is the service name in the docker-compose
+If unset, defaults to `postgres` which is the service name in the docker-compose
 configuration.
 +
 This may also be set on the command line using the flag `--db-host`.

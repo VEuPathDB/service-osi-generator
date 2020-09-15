@@ -6,7 +6,7 @@
 /docker/SVC.dev.Dockerfile
 /docker/SVC.prod.Dockerfile
 /docker/docker-compose.dev.yml
-/docker/docker-compose.prod.yml
+/docker/docker-compose.yml
 /api-test
 
 *.adoc

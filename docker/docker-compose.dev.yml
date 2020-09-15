@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  osi-db:
+  postgres:
     build:
       context: ..
       dockerfile: docker/DB.Dockerfile
@@ -13,31 +13,31 @@ services:
 
       # Service user password
       DB_PASSWORD:
-  osi-service:
+  service:
     build:
       context: ..
       dockerfile: docker/SVC.dev.Dockerfile
     ports:
       - 8080:8080
     depends_on:
-      - osi-db
+      - postgres
     environment:
       # Postgres connection details
       #
-      # DB_PASSWORD here must match DB_PASSWORD in the osi-db environment
+      # DB_PASSWORD here must match DB_PASSWORD in the postgres environment
       # settings.
       DB_PASSWORD:
 #      DB_USERNAME: osi_service
 #      DB_PORT: 5432
 #      DB_POOL_SIZE: 20
-#      DB_HOST: osi-db
+#      DB_HOST: postgres
 #      DB_NAME: postgres
 
       # User administration user credentials
       ADMIN_USER:
       ADMIN_PASS:
     command: >-
-      sh -c "while ! nc -z osi-db 5432; do
+      sh -c "while ! nc -z postgres 5432; do
         echo 'waiting for postgres';
         sleep 1;
       done;
