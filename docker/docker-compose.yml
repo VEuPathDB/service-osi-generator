@@ -2,37 +2,39 @@ version: "3.5"
 
 services:
   postgres:
-    image: veupathdb/osi-generator-database
+    image: veupathdb/osi-generator-database:${POSTGRES_TAG:-latest}
     volumes:
     - postgres_data:/var/lib/postgresql/data
     networks:
     - internal
     environment:
       # Admin user password
-      POSTGRES_PASSWORD: ${DATABASE_ADMINPASSWD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
       # Service user password
-      DB_PASSWORD: ${DATABASE_PASSWORD}
+      DB_PASSWORD: ${DB_PASSWORD}
+    labels:
+    - "com.centurylinklabs.watchtower.enable=${POSTGRES_WATCHTOWER:-false}"
   service:
-    image: veupathdb/osi-generator-service
+    image: veupathdb/osi-generator-service:${SERVICE_TAG:-latest}
     depends_on:
     - postgres
     environment:
       # Postgres connection details
-      DB_PASSWORD: ${DATABASE_PASSWORD}
-      DB_USERNAME: ${DATABASE_USER:-osi_service}
-      DB_PORT: ${DATABASE_PORT:-5432}
-      DB_POOL_SIZE: ${DATABASE_POOLSIZE:-20}
-      DB_HOST: ${DATABASE_HOST:-postgres}
-      DB_NAME: ${DATABASE_NAME:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USERNAME: ${DB_USERNAME:-osi_service}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_POOL_SIZE: ${DB_POOL_SIZE:-20}
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_NAME: ${DB_NAME:-postgres}
 
       # User administration user credentials
-      ADMIN_USER: ${SERVICE_ADMIN}
-      ADMIN_PASS: ${SERVICE_PASSWORD}
+      ADMIN_USER: ${ADMIN_USER}
+      ADMIN_PASS: ${ADMIN_PASS}
 
-      SERVER_PORT: ${SERVICE_PORT:-80}
+      SERVER_PORT: ${SERVER_PORT:-80}
     command: >-
-      sh -c "while ! nc -z ${DATABASE_HOST:-postgres} ${DATABASE_PORT:-5432}; do
+      sh -c "while ! nc -z ${DB_HOST:-postgres} ${DB_PORT:-5432}; do
         echo 'waiting for postgres';
         sleep 1;
       done;
@@ -41,7 +43,8 @@ services:
     - internal
     - traefik
     labels:
-    - "traefik.http.routers.${TRAEFIK_ROUTER:-osigen-dev}.rule=Host(`${TRAEFIK_ROUTER:-osigen-dev.local.apidb.org}`)"
+    - "com.centurylinklabs.watchtower.enable=${SERVICE_WATCHTOWER:-false}"
+    - "traefik.http.routers.${TRAEFIK_ROUTER:-osigen-dev}.rule=Host(`${TRAEFIK_HOST:-osigen-dev.local.apidb.org}`)"
     - "traefik.http.routers.${TRAEFIK_ROUTER:-osigen-dev}.tls=true"
     - "traefik.http.routers.${TRAEFIK_ROUTER:-osigen-dev}.entrypoints=${TRAEFIK_ENTRYPOINTS:-local}"
     - "traefik.http.services.${TRAEFIK_ROUTER:-osigen-dev}.loadbalancer.server.port=${SERVICE_PORT:-80}"
