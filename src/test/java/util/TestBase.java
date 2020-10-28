@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.veupathdb.service.osi.util.Format;
 import org.veupathdb.service.osi.util.Validation;
@@ -41,6 +42,17 @@ public class TestBase
 
     mJson = mock(ObjectMapper.class);
     doReturn(mJson).when(mFormat).getJson();
+  }
+
+  @AfterEach
+  void tearDown() throws Exception {
+    var vInst = Validation.class.getDeclaredField("instance");
+    vInst.setAccessible(true);
+    vInst.set(null, null);
+
+    var fInst = Format.class.getDeclaredField("instance");
+    fInst.setAccessible(true);
+    fInst.set(null, null);
   }
 
   protected String randomString() {

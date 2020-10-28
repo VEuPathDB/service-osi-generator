@@ -30,16 +30,6 @@ public class ResponseDelegate extends Response {
   }
 
   @Override
-  public Date getLastModified() {
-    return this.delegate.getLastModified();
-  }
-
-  @Override
-  public Date getDate() {
-    return this.delegate.getDate();
-  }
-
-  @Override
   public int getLength() {
     return this.delegate.getLength();
   }
@@ -60,6 +50,16 @@ public class ResponseDelegate extends Response {
   }
 
   @Override
+  public Date getLastModified() {
+    return this.delegate.getLastModified();
+  }
+
+  @Override
+  public Date getDate() {
+    return this.delegate.getDate();
+  }
+
+  @Override
   public Object getEntity() {
     return this.entity;}
 
@@ -74,7 +74,12 @@ public class ResponseDelegate extends Response {
   }
 
   @Override
-  public <T> T readEntity(Class<T> p0) {
+  public <T> T readEntity(Class<T> p0, Annotation[] p1) {
+    return this.delegate.readEntity(p0,p1);
+  }
+
+  @Override
+  public <T> T readEntity(GenericType<T> p0) {
     return this.delegate.readEntity(p0);
   }
 
@@ -84,12 +89,7 @@ public class ResponseDelegate extends Response {
   }
 
   @Override
-  public <T> T readEntity(Class<T> p0, Annotation[] p1) {
-    return this.delegate.readEntity(p0,p1);
-  }
-
-  @Override
-  public <T> T readEntity(GenericType<T> p0) {
+  public <T> T readEntity(Class<T> p0) {
     return this.delegate.readEntity(p0);
   }
 

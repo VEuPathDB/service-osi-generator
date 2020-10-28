@@ -3,7 +3,7 @@ package org.veupathdb.service.osi.util;
 public class Validation
 {
   @SuppressWarnings("FieldMayBeFinal")
-  private static Validation instance = new Validation();
+  private static Validation instance;
 
   private static final String
     ERR_EMPTY = "Given value must be non-empty.",
@@ -18,6 +18,9 @@ public class Validation
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
   public static Validation getInstance() {
+    if (instance == null)
+      instance = new Validation();
+
     return instance;
   }
 
@@ -104,7 +107,7 @@ public class Validation
     return value;
   }
 
-  public < R > R enforceNonNull(R value) {
+  public < R > R enforceNonNull(final R value) {
     if (value == null)
       throw new InputValidationException(null, ERR_NULL);
     return value;

@@ -215,12 +215,7 @@ public class OrganismService
         errs.put(Field.Organism.TEMPLATE, singletonList(VAL_BAD_TEMP));
 
     RequestValidation.atLeast(Field.Organism.GENE_INT_START, req.getGeneIntStart(), 1, errs);
-    RequestValidation.atLeast(
-      Field.Organism.TRAN_INT_START,
-      req.getTranscriptIntStart(),
-      req.getGeneIntStart(),
-      errs
-    );
+    RequestValidation.atLeast(Field.Organism.TRAN_INT_START, req.getTranscriptIntStart(), 1, errs);
 
     if (!errs.isEmpty())
       throw new UnprocessableEntityException(errs);

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class Format
 {
-  private static Format instance = new Format();
+  private static Format instance;
 
   private final ObjectMapper json = new ObjectMapper();
 
@@ -20,6 +20,9 @@ public class Format
   }
 
   public static ObjectMapper Json() {
+    if (instance == null)
+      instance = new Format();
+
     return getInstance().getJson();
   }
 }

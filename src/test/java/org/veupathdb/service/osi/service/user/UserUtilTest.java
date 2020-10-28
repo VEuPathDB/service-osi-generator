@@ -95,12 +95,17 @@ class UserUtilTest
   @DisplayName("#userToResponse(User)")
   class UserToNewUserResponse
   {
-    private final User user = new User(
-      123456,
-      "some user",
-      "some api key",
-      OffsetDateTime.now()
-    );
+    private User user;
+
+    @BeforeEach
+    void setUp() {
+      user = new User(
+        123456,
+        "some user",
+        "some api key",
+        OffsetDateTime.now()
+      );
+    }
 
     @Test
     @DisplayName("accurately copies the given user instance")
