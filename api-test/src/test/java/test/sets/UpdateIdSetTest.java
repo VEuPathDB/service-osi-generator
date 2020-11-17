@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -22,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("PATCH " + IdSetTestBase.ID_PATH)
 public class UpdateIdSetTest extends IdSetTestBase
 {
-  private int geneCount;
 
   private IdSetResponse response;
 
@@ -33,7 +31,7 @@ public class UpdateIdSetTest extends IdSetTestBase
 
     var rand = new Random();
 
-    geneCount = rand.nextInt(95) + 5;
+    int geneCount = rand.nextInt(95) + 5;
     response  = createIdSet(geneCount);
 
     Arrays.sort(response.getGeneratedIds(), this::geneIdComparator);
@@ -381,6 +379,69 @@ public class UpdateIdSetTest extends IdSetTestBase
 
         }
       }
+    }
+  }
+
+  @Nested
+  @DisplayName("When patching an empty idSet with a gene previously patched into another idSet")
+  class Issue2 // In response to bug ticket #2
+  {
+    IdSetResponse response1;
+    IdSetResponse response2;
+
+    @BeforeEach
+    void setUp() {
+      response1 = createIdSet(0);
+      response2 = createIdSet(0);
+    }
+
+    @Test
+    @DisplayName("creates a new copy of the external gene for the second idSet")
+    void test1() {
+      final var geneId = "helloWorld123";
+
+      var requestBody = new IdSetPatchRequest();
+      requestBody.add(new IdSetPatchRequest.Entry()
+        .setGeneId(geneId)
+        .setTranscripts(1));
+
+      // IdSet 1
+
+      var res1 = given()
+        .contentType(ContentType.JSON)
+        .header("Authorization", authHeader())
+        .body(requestBody)
+        .when()
+        .patch(ID_URL, response1.getIdSetId());
+
+      res1.then()
+        .statusCode(200)
+        .contentType(ContentType.JSON);
+
+      var actual1 = res1.as(IdSetResponse.class).getGeneratedIds();
+
+      assertEquals(1, actual1.length);
+      assertEquals(geneId, actual1[0].getGeneId());
+      assertEquals(1, actual1[0].getTranscripts().length);
+
+      // IdSet 2
+
+      var res2 = given()
+        .contentType(ContentType.JSON)
+        .header("Authorization", authHeader())
+        .body(requestBody)
+        .when()
+        .patch(ID_URL, response2.getIdSetId());
+
+      res2.then()
+        .statusCode(200)
+        .contentType(ContentType.JSON);
+
+      var actual2 = res2.as(IdSetResponse.class).getGeneratedIds();
+
+      assertEquals(1, actual2.length);
+      assertEquals(geneId, actual2[0].getGeneId());
+      assertEquals(1, actual2[0].getTranscripts().length);
     }
   }
 }

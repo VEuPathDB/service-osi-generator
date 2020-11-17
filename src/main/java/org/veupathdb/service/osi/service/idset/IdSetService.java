@@ -30,7 +30,6 @@ import org.veupathdb.service.osi.service.transcript.TranscriptUtils;
 import org.veupathdb.service.osi.service.user.UserService;
 import org.veupathdb.service.osi.util.Errors;
 import org.veupathdb.service.osi.util.Field;
-import org.veupathdb.service.osi.util.Params;
 
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
@@ -51,7 +50,7 @@ public class IdSetService
   /**
    * @see #handleSearch(Long, Long, String, Request)
    */
-  public static List < IdSetResponse > search(
+  public static List<IdSetResponse> search(
     final Long start,
     final Long end,
     final String user,
@@ -79,7 +78,7 @@ public class IdSetService
    */
   public static IdSetResponse update(
     final long idSetId,
-    final List < IdSetPatchEntry > entries,
+    final List<IdSetPatchEntry> entries,
     final Request req
   ) {
     return getInstance().handleUpdate(idSetId, entries, req);
@@ -95,7 +94,7 @@ public class IdSetService
   // ║                                                                    ║ //
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
-  public List < IdSetResponse > handleSearch(
+  public List<IdSetResponse> handleSearch(
     final Long start,
     final Long end,
     final String user,
@@ -176,7 +175,7 @@ public class IdSetService
     validateNewIdSetRequest(body);
 
     try {
-      final var errs = new HashMap < String, List < String > >();
+      final var errs = new HashMap<String, List<String>>();
       final var oOrg = OrganismRepo.selectById(body.getOrganismId());
       final var oCol = CollectionRepo.select(body.getCollectionId());
 
@@ -198,8 +197,8 @@ public class IdSetService
 
         final var set = IdSetRepo.insert(
           new NewIdSet(
-            oCol.get(),
-            oOrg.get(),
+            oCol.orElseThrow(),
+            oOrg.orElseThrow(),
             oOrg.get().getTemplate(),
             count,
             body.getGenerateGenes(),
@@ -239,7 +238,7 @@ public class IdSetService
   private void validateNewIdSetRequest(final IdSetPostRequest req) {
     log.trace("IdSetService#validateNewIdSetRequest(IdSetPostRequest)");
 
-    final var errs = new HashMap < String, List < String > >();
+    final var errs = new HashMap<String, List<String>>();
 
     if (req.getOrganismId() < 1)
       errs.put(Field.IdSet.ORGANISM_ID, singletonList(VAL_BAD_ORG_ID));
@@ -283,7 +282,7 @@ public class IdSetService
 
   public IdSetResponse handleUpdate(
     final long idSetId,
-    final List < IdSetPatchEntry > entries,
+    final List<IdSetPatchEntry> entries,
     final Request req
   ) {
     log.trace("IdSetService#handleSearch(List, User)");
@@ -291,16 +290,22 @@ public class IdSetService
     if (entries == null)
       throw new BadRequestException();
 
+    // Retrieve request user.
     final var user = UserService.requireUser(req);
+
+    // Perform light validation (checks not requiring a db connection)
     validatePatchEntries(entries);
 
     try {
+      // Lookup id set by id, throw a 404 if it wasn't found.
       var idSet = IdSetRepo.select(idSetId)
         .orElseThrow(NotFoundException::new);
 
       var geneIds              = new String[entries.size()];
       var totalTranscriptCount = 0;
 
+      // For each patch entry, record the gene ID into the geneIds array and
+      // sum the total new transcript IDs to allocate.
       for (var i = 0; i < entries.size(); i++) {
         var entry = entries.get(i);
 
@@ -308,14 +313,18 @@ public class IdSetService
         totalTranscriptCount += entry.getTranscripts();
       }
 
-      final var genes = GeneRepo.select(geneIds);
+      // Select known genes from the array of patch entry gene ids.
+      final var genes = GeneRepo.select(idSetId, geneIds);
+      // Allocate the new transcript IDs.
       final var start = OrganismRepo.allocateTranscriptIds(
         idSet.getOrganismId(),
         totalTranscriptCount
       );
 
+      // Insert any genes that were not previously known to the OSID service.
       doGeneInsert(idSet, entries, geneIds, genes, start, user);
 
+      // Convert the ID set to an external type.
       var out = IdSetUtil.setToRes(idSet);
 
       populateIdSets(
@@ -333,15 +342,32 @@ public class IdSetService
     }
   }
 
+  /**
+   * Insert new Gene and transcript IDs. (TODO: why is this one function?)
+   *
+   * New Gene IDs are those that appear in the {@code geneIds} array but do
+   * not also appear in the {@code genes} map.
+   *
+   * Additionally, this method mutates the {@code genes} map by appending the
+   * newly created genes to the map.
+   *
+   * @param idSet    Parent {@code IdSet} for the new gene and transcript ids.
+   * @param entries  Patch request entries.
+   * @param geneIds  Array of Gene IDs referenced in the patch request.
+   * @param genes    Mapping of known gene IDs.
+   * @param startPos Transcript ID counter start position.
+   * @param user     User making the patch request.
+   */
   void doGeneInsert(
     final IdSet idSet,
-    final List < IdSetPatchEntry > entries,
+    final List<IdSetPatchEntry> entries,
     final String[] geneIds,
-    final Map < String, Gene > genes,
+    final Map<String, Gene> genes,
     final long startPos,
     final User user
   ) throws Exception {
     log.trace("IdSetService#doGeneInsert(IdSet, List, String[] Map, long, User)");
+
     try (final var con = DbMan.connection()) {
       if (genes.size() != entries.size()) {
         log.debug("Unrecognized gene ids in patch.  Inserting new genes.");
@@ -353,7 +379,7 @@ public class IdSetService
 
         GeneRepo.insert(idSet, toInsert, con, user);
         genes.clear();
-        genes.putAll(GeneRepo.select(geneIds, con));
+        genes.putAll(GeneRepo.select(idSet.getId(), geneIds, con));
 
         if (genes.size() != entries.size())
           throw new IllegalStateException(); // TODO: error message
@@ -379,7 +405,7 @@ public class IdSetService
     }
   }
 
-  void validatePatchEntries(final List < IdSetPatchEntry > entries) {
+  void validatePatchEntries(final List<IdSetPatchEntry> entries) {
     log.trace("IdSetService#validatePatchEntries(List)");
     for (var i = 0; i < entries.size(); i++) {
       try {
@@ -395,7 +421,7 @@ public class IdSetService
 
   void validatePatchEntry(final IdSetPatchEntry entry) {
     log.trace("IdSetService#validatePatchEntry(IdSetPatchEntry)");
-    final var errs = new HashMap < String, List < String > >();
+    final var errs = new HashMap<String, List<String>>();
 
     if (entry.getGeneId() == null || entry.getGeneId().isBlank())
       errs.put(Field.Gene.ID, singletonList(VAL_EMPTY));
@@ -412,13 +438,13 @@ public class IdSetService
   // ║                                                                    ║ //
   // ╚════════════════════════════════════════════════════════════════════╝ //
 
-  public List < IdSetResponse > populateIdSets(
-    final Map < Long, IdSetResponse > sets
+  public List<IdSetResponse> populateIdSets(
+    final Map<Long, IdSetResponse> sets
   ) throws Exception {
     log.trace("IdSetService#populateIdSets(Map)");
 
     final var ids = new long[sets.size()];
-    final var out = new ArrayList < IdSetResponse >(sets.size());
+    final var out = new ArrayList<IdSetResponse>(sets.size());
 
     var i = 0;
     for (final var s : sets.values()) {
@@ -431,10 +457,10 @@ public class IdSetService
     return populateIdSets(sets, genes, out);
   }
 
-  public List < IdSetResponse > populateIdSets(
-    final Map < Long, IdSetResponse > sets,
-    final Map < Long, Gene > genes,
-    final List < IdSetResponse > out
+  public List<IdSetResponse> populateIdSets(
+    final Map<Long, IdSetResponse> sets,
+    final Map<Long, Gene> genes,
+    final List<IdSetResponse> out
   ) throws Exception {
     log.trace("IdSetService#populateIdSets(Map, Map, long[], List)");
 

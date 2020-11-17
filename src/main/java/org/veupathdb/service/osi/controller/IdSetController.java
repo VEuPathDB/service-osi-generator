@@ -14,7 +14,7 @@ import static org.veupathdb.service.osi.service.idset.IdSetService.*;
 
 public class IdSetController implements IdSets
 {
-  private final Logger  log = LogProvider.logger(getClass());
+  private final Logger log = LogProvider.logger(getClass());
 
   private final Request req;
 
@@ -50,7 +50,7 @@ public class IdSetController implements IdSets
   @Override
   public PatchIdSetsByIdSetIdResponse patchIdSetsByIdSetId(
     final Long setId,
-    final List < IdSetPatchEntry > entity
+    final List<IdSetPatchEntry> entity
   ) {
     log.trace("IdSetController#patchIdSetsByIdSetId(Long, List)");
     return PatchIdSetsByIdSetIdResponse.respond200WithApplicationJson(

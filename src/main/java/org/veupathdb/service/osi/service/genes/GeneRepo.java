@@ -42,21 +42,22 @@ public class GeneRepo
   }
 
   /**
-   * @see #getByIds(String[])
+   * @see #getByIds(long, String[])
    */
-  public static Map < String, Gene > select(final String[] ids)
+  public static Map < String, Gene > select(final long idSetId, final String[] geneIdentifiers)
   throws Exception {
-    return getInstance().getByIds(ids);
+    return getInstance().getByIds(idSetId, geneIdentifiers);
   }
 
   /**
-   * @see #getByIds(String[], Connection)
+   * @see #getByIds(long, String[], Connection)
    */
   public static Map < String, Gene > select(
-    final String[] ids,
+    final long idSetId,
+    final String[] geneIdentifiers,
     final Connection con
   ) throws Exception {
-    return getInstance().getByIds(ids, con);
+    return getInstance().getByIds(idSetId, geneIdentifiers, con);
   }
 
   /**
@@ -117,16 +118,17 @@ public class GeneRepo
     ).execute().getValue();
   }
 
-  public Map < String, Gene > getByIds(final String[] ids)
+  public Map < String, Gene > getByIds(final long idSetId, final String[] geneIdentifiers)
   throws Exception {
     log.trace("GeneRepo#getByIds(String[])");
     try (final var con = DbMan.connection()) {
-      return getByIds(ids, con);
+      return getByIds(idSetId, geneIdentifiers, con);
     }
   }
 
   public Map < String, Gene > getByIds(
-    final String[] ids,
+    final long idSetId,
+    final String[] geneIdentifiers,
     final Connection con
   ) throws Exception {
     log.trace("GeneRepo#getByIds(String[], Connection)");
@@ -135,7 +137,10 @@ public class GeneRepo
       con,
       GeneUtil::getIdentifier,
       GeneUtil.getInstance()::createGeneRow,
-      QueryUtil.stringSet(ids)
+      ps -> {
+        ps.setLong(1, idSetId);
+        ps.setObject(2, geneIdentifiers);
+      }
     ).execute().getValue();
   }
 
