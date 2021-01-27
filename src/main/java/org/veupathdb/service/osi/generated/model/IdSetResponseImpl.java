@@ -42,6 +42,7 @@ public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("generatedIds")
   private List<GeneratedTranscriptEntry> generatedIds;
 
+  @JsonProperty("createdOn")
   @JsonFormat(
       shape = JsonFormat.Shape.STRING,
       pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
@@ -49,7 +50,6 @@ public class IdSetResponseImpl implements IdSetResponse {
   @JsonDeserialize(
       using = TimestampDeserializer.class
   )
-  @JsonProperty("createdOn")
   private Date createdOn;
 
   @JsonProperty("createdBy")

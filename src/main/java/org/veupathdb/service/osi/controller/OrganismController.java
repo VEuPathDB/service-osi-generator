@@ -5,6 +5,7 @@ import javax.ws.rs.core.Request;
 
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
+import org.veupathdb.service.osi.Main;
 import org.veupathdb.service.osi.generated.model.OrganismPostRequest;
 import org.veupathdb.service.osi.generated.model.OrganismPutRequest;
 import org.veupathdb.service.osi.generated.resources.Organisms;
@@ -36,6 +37,11 @@ public class OrganismController implements Organisms
   @Override
   public PostOrganismsResponse postOrganisms(final OrganismPostRequest entity) {
     log.trace("OrganismController#postOrganisms(OrganismPostRequest)");
+
+    if (entity.getTranscriptIntStart() == null) {
+      entity.setTranscriptIntStart(Main.config.getDefaultTranscriptStart());
+    }
+
     return PostOrganismsResponse.respond200WithApplicationJson(
       create(entity, req));
   }

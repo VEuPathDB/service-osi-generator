@@ -41,11 +41,11 @@ default:
 	@echo ""
 
 .PHONY: compile
-compile: install-dev-env gen-jaxrs gen-docs
+compile: install-dev-env
 	@./gradlew clean compileJava
 
 .PHONY: test
-test: install-dev-env gen-jaxrs gen-docs
+test: install-dev-env
 	@./gradlew clean test
 
 .PHONY: jar
@@ -108,6 +108,6 @@ api-test:
 # File based targets
 #
 
-build/libs/service.jar: gen-jaxrs gen-docs vendor/fgputil-accountdb-1.0.0.jar  vendor/fgputil-core-1.0.0.jar vendor/fgputil-db-1.0.0.jar vendor/fgputil-web-1.0.0.jar build.gradle.kts service.properties
+build/libs/service.jar: vendor/fgputil-accountdb-1.0.0.jar  vendor/fgputil-core-1.0.0.jar vendor/fgputil-db-1.0.0.jar vendor/fgputil-web-1.0.0.jar build.gradle.kts service.properties
 	@echo "$(C_BLUE)Building application jar$(C_NONE)"
 	@./gradlew clean test --fail-fast jar

@@ -416,7 +416,7 @@ types:
       * `07` = left pad the number with zeros for a total length of 7 digits
       * `d` = format as an int
 
-      **NOTE**: When used, this template string will be passed exactly int64
+      **NOTE**: When used, this template string will be passed exactly one int64
       value and nothing else.  Templates should only include `%d` based formats.
       If the template needs more than one instance of the counter int64 value,
       positional parameters may be used.
@@ -530,6 +530,8 @@ types:
       transcriptIntStart:
         description: Starting point for the transcript ID integer counter.
         type: OneBasedLong
+        required: false
+        default: 1
     additionalProperties: false
     example:
       organismName: Plasmodium falciparum 3D7

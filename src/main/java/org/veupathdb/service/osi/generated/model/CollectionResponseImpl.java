@@ -26,7 +26,6 @@ public class CollectionResponseImpl implements CollectionResponse {
   @JsonProperty("createdBy")
   private long createdBy;
 
-  @JsonProperty("createdOn")
   @JsonFormat(
       shape = JsonFormat.Shape.STRING,
       pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
@@ -34,6 +33,7 @@ public class CollectionResponseImpl implements CollectionResponse {
   @JsonDeserialize(
       using = TimestampDeserializer.class
   )
+  @JsonProperty("createdOn")
   private Date createdOn;
 
   @JsonProperty("idSets")

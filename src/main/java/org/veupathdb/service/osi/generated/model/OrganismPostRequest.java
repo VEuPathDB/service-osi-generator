@@ -25,9 +25,15 @@ public interface OrganismPostRequest {
   @JsonProperty("geneIntStart")
   void setGeneIntStart(long geneIntStart);
 
-  @JsonProperty("transcriptIntStart")
-  long getTranscriptIntStart();
+  @JsonProperty(
+      value = "transcriptIntStart",
+      defaultValue = "1"
+  )
+  Long getTranscriptIntStart();
 
-  @JsonProperty("transcriptIntStart")
-  void setTranscriptIntStart(long transcriptIntStart);
+  @JsonProperty(
+      value = "transcriptIntStart",
+      defaultValue = "1"
+  )
+  void setTranscriptIntStart(Long transcriptIntStart);
 }

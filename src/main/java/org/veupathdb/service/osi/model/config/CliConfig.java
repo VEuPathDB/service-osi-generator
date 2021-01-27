@@ -107,6 +107,14 @@ public class CliConfig extends Options
   )
   private String adminPass;
 
+  @Option(
+    names = "--default-transcript-start",
+    arity = "1",
+    defaultValue = "${env:DEFAULT_TRANSCRIPT_START}",
+    description = "Default counter start value for transcript IDs when a new organism record is created."
+  )
+  private Long defaultTranscriptStart;
+
   public String getDbUsername() {
     if (dbUsername == null)
       dbUsername = DEFAULT_USERNAME;
@@ -161,5 +169,12 @@ public class CliConfig extends Options
       throw new RuntimeException(ERR_NO_ADMIN_PASS);
 
     return adminPass;
+  }
+
+  public long getDefaultTranscriptStart() {
+    if (defaultTranscriptStart == null || defaultTranscriptStart == 0)
+      return defaultTranscriptStart = 2345L;
+
+    return defaultTranscriptStart;
   }
 }
