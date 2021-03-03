@@ -17,7 +17,7 @@ class IdSetTest extends TestBase
 {
   private OrganismUtil mOrgUtil;
 
-  private long idSetId, collectionId, organismId, counterStart, createdBy;
+  private long idSetId, organismId, counterStart, createdBy;
 
   private String template, json;
 
@@ -38,7 +38,6 @@ class IdSetTest extends TestBase
     orgInst.set(null, mOrgUtil);
 
     idSetId      = random.nextLong();
-    collectionId = random.nextLong();
     organismId   = random.nextLong();
     counterStart = random.nextLong();
     createdBy    = random.nextLong();
@@ -48,7 +47,6 @@ class IdSetTest extends TestBase
     json         = randomString();
 
     doReturn(idSetId).when(mValidation).enforceOneMinimum(idSetId);
-    doReturn(collectionId).when(mValidation).enforceOneMinimum(collectionId);
     doReturn(organismId).when(mValidation).enforceOneMinimum(organismId);
     doReturn(counterStart).when(mValidation).enforceOneMinimum(counterStart);
     doReturn(createdBy).when(mValidation).enforceOneMinimum(createdBy);
@@ -60,7 +58,6 @@ class IdSetTest extends TestBase
 
     target = new IdSet(
       idSetId,
-      collectionId,
       organismId,
       template,
       counterStart,
@@ -76,7 +73,6 @@ class IdSetTest extends TestBase
   @DisplayName("constructor validates inputs")
   void constructor() {
     verify(mValidation).enforceOneMinimum(idSetId);
-    verify(mValidation).enforceOneMinimum(collectionId);
     verify(mValidation).enforceOneMinimum(organismId);
     verify(mOrgUtil).enforceOrgPattern(template);
     verify(mValidation).enforceOneMinimum(counterStart);
@@ -89,12 +85,6 @@ class IdSetTest extends TestBase
   @DisplayName("ID set ID getter returns expected value")
   void getId() {
     assertEquals(idSetId, target.getId());
-  }
-
-  @Test
-  @DisplayName("Collection ID getter returns expected value")
-  void getCollectionId() {
-    assertEquals(collectionId, target.getCollectionId());
   }
 
   @Test

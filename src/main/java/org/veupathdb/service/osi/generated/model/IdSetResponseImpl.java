@@ -11,7 +11,6 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "idSetId",
-    "collectionId",
     "organismId",
     "template",
     "geneIntStart",
@@ -23,9 +22,6 @@ import java.util.List;
 public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("idSetId")
   private long idSetId;
-
-  @JsonProperty("collectionId")
-  private long collectionId;
 
   @JsonProperty("organismId")
   private long organismId;
@@ -42,7 +38,6 @@ public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("generatedIds")
   private List<GeneratedTranscriptEntry> generatedIds;
 
-  @JsonProperty("createdOn")
   @JsonFormat(
       shape = JsonFormat.Shape.STRING,
       pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
@@ -50,6 +45,7 @@ public class IdSetResponseImpl implements IdSetResponse {
   @JsonDeserialize(
       using = TimestampDeserializer.class
   )
+  @JsonProperty("createdOn")
   private Date createdOn;
 
   @JsonProperty("createdBy")
@@ -63,16 +59,6 @@ public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("idSetId")
   public void setIdSetId(long idSetId) {
     this.idSetId = idSetId;
-  }
-
-  @JsonProperty("collectionId")
-  public long getCollectionId() {
-    return this.collectionId;
-  }
-
-  @JsonProperty("collectionId")
-  public void setCollectionId(long collectionId) {
-    this.collectionId = collectionId;
   }
 
   @JsonProperty("organismId")

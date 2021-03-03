@@ -21,7 +21,6 @@ import org.veupathdb.service.osi.generated.model.IdSetResponse;
 import org.veupathdb.service.osi.model.RecordQuery;
 import org.veupathdb.service.osi.model.db.*;
 import org.veupathdb.service.osi.service.DbMan;
-import org.veupathdb.service.osi.service.collections.CollectionRepo;
 import org.veupathdb.service.osi.service.genes.GeneRepo;
 import org.veupathdb.service.osi.service.genes.GeneUtil;
 import org.veupathdb.service.osi.service.organism.OrganismRepo;
@@ -131,7 +130,6 @@ public class IdSetService
 
   private static final String
     VAL_BAD_ORG_ID = "Invalid '" + Field.IdSet.ORGANISM_ID + "' value.",
-    VAL_BAD_COL_ID = "Invalid '" + Field.IdSet.COLLECTION_ID + "' value.",
     VAL_GEN_COUNT  = "Invalid '" + Field.IdSet.GENERATE_GENES + "' value.";
 
   /**
@@ -177,12 +175,9 @@ public class IdSetService
     try {
       final var errs = new HashMap<String, List<String>>();
       final var oOrg = OrganismRepo.selectById(body.getOrganismId());
-      final var oCol = CollectionRepo.select(body.getCollectionId());
 
       if (oOrg.isEmpty())
         errs.put(Field.IdSet.ORGANISM_ID, singletonList(VAL_BAD_ORG_ID));
-      if (oCol.isEmpty())
-        errs.put(Field.IdSet.COLLECTION_ID, singletonList(VAL_BAD_COL_ID));
       if (!errs.isEmpty())
         throw new UnprocessableEntityException(errs);
 
@@ -197,7 +192,6 @@ public class IdSetService
 
         final var set = IdSetRepo.insert(
           new NewIdSet(
-            oCol.orElseThrow(),
             oOrg.orElseThrow(),
             oOrg.get().getTemplate(),
             count,
@@ -242,8 +236,6 @@ public class IdSetService
 
     if (req.getOrganismId() < 1)
       errs.put(Field.IdSet.ORGANISM_ID, singletonList(VAL_BAD_ORG_ID));
-    if (req.getCollectionId() < 1)
-      errs.put(Field.IdSet.COLLECTION_ID, singletonList(VAL_BAD_COL_ID));
     if (req.getGenerateGenes() < 0)
       errs.put(Field.IdSet.GENERATE_GENES, singletonList(VAL_GEN_COUNT));
 

@@ -51,7 +51,6 @@ class BasicAuthFilterTest
     ADMIN_ENDPOINTS   = {"auth", "auth/123", "auth/username"},
     AUTH_ENDPOINTS    = {
       "organisms", "organisms/123", "organisms/456",
-      "idSetCollections", "idSetCollections/123",
       "idSets", "idSets/123"
     };
 

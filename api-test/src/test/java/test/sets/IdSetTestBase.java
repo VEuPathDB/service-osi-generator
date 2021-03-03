@@ -3,7 +3,6 @@ package test.sets;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import test.*;
-import test.collections.CollectionUtil;
 import test.organisms.OrganismUtil;
 
 import static io.restassured.RestAssured.with;
@@ -16,7 +15,6 @@ public class IdSetTestBase extends AuthTestBase
   protected static final String FLAT_URL = makeUrl(FLAT_PATH);
   protected static final String ID_URL   = makeUrl(ID_PATH);
 
-  protected long collectionId;
   protected long organismId;
   protected String template;
 
@@ -26,7 +24,6 @@ public class IdSetTestBase extends AuthTestBase
     super.setUp();
 
     template     = TestUtil.randStr().substring(0, 28) + "%d";
-    collectionId = CollectionUtil.createCollection(TestUtil.randStr(), user.getUserId());
     organismId   = OrganismUtil.createOrganism("organism", template, user.getUserId());
   }
 
@@ -46,7 +43,6 @@ public class IdSetTestBase extends AuthTestBase
 
   protected IdSetResponse createIdSet(final int genCount) {
     return createIdSet(new IdSetPostRequest().
-        setCollectionId(collectionId).
         setOrganismId(organismId).
         setGenerateGenes(genCount));
   }

@@ -9,12 +9,6 @@ public final class Field
       CREATED_ON = "createdOn";
   }
 
-  public static final class Collection
-  {
-    public static final String
-      NAME = "name";
-  }
-
   public static final class Gene
   {
     public static final String
@@ -24,7 +18,6 @@ public final class Field
   public static final class IdSet
   {
     public static final String
-      COLLECTION_ID   = "collectionId",
       CREATED_BY      = Common.CREATED_BY,
       CREATED_ON      = Common.CREATED_ON,
       GENE_INT_START  = "geneIntStart",

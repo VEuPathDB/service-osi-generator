@@ -1,5 +1,6 @@
 package org.veupathdb.service.osi.controller;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
@@ -37,6 +38,10 @@ public class OrganismController implements Organisms
   @Override
   public PostOrganismsResponse postOrganisms(final OrganismPostRequest entity) {
     log.trace("OrganismController#postOrganisms(OrganismPostRequest)");
+
+    if (entity == null) {
+      throw new BadRequestException();
+    }
 
     if (entity.getTranscriptIntStart() == null) {
       entity.setTranscriptIntStart(Main.config.getDefaultTranscriptStart());

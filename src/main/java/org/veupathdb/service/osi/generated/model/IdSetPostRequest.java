@@ -7,12 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
     as = IdSetPostRequestImpl.class
 )
 public interface IdSetPostRequest {
-  @JsonProperty("collectionId")
-  long getCollectionId();
-
-  @JsonProperty("collectionId")
-  void setCollectionId(long collectionId);
-
   @JsonProperty("organismId")
   long getOrganismId();
 

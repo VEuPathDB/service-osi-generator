@@ -17,12 +17,9 @@ import org.veupathdb.lib.container.jaxrs.errors.UnprocessableEntityException;
 import org.veupathdb.service.osi.generated.model.IdSetPostRequest;
 import org.veupathdb.service.osi.generated.model.IdSetResponse;
 import org.veupathdb.service.osi.model.db.IdSet;
-import org.veupathdb.service.osi.model.db.IdSetCollection;
 import org.veupathdb.service.osi.model.db.NewIdSet;
 import org.veupathdb.service.osi.model.db.Organism;
-import org.veupathdb.service.osi.service.DbMan;
 import org.veupathdb.service.osi.service.ServiceTestBase;
-import org.veupathdb.service.osi.service.genes.GeneRepo;
 import org.veupathdb.service.osi.util.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,27 +52,20 @@ class IdSetServiceTest extends ServiceTestBase
 
     private Organism mOrg;
 
-    private IdSetCollection mColl;
-
     private long orgId;
-
-    private long collId;
 
     private int genCount;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
       mPost    = mock(IdSetPostRequest.class);
       mOrg     = mock(Organism.class);
-      mColl    = mock(IdSetCollection.class);
       orgId    = positiveLong();
-      collId   = positiveLong();
       genCount = positiveInt();
     }
 
     void prepBody() {
       doReturn(orgId).when(mPost).getOrganismId();
-      doReturn(collId).when(mPost).getCollectionId();
       doReturn(genCount).when(mPost).getGenerateGenes();
     }
 
@@ -109,7 +99,6 @@ class IdSetServiceTest extends ServiceTestBase
     @DisplayName("throws 422 error if organism id value is < 1")
     void err422_1() {
       doReturn(0L).when(mPost).getOrganismId();
-      doReturn(collId).when(mPost).getCollectionId();
       doReturn(genCount).when(mPost).getGenerateGenes();
 
       var excep = assertThrows(
@@ -119,25 +108,6 @@ class IdSetServiceTest extends ServiceTestBase
       assertTrue(excep.getByKey().containsKey(Field.IdSet.ORGANISM_ID));
       verify(mUserService).requireRequestUser(mRequest);
       verify(mPost, atLeastOnce()).getOrganismId();
-      verify(mPost, atLeastOnce()).getCollectionId();
-      verify(mPost, atLeastOnce()).getGenerateGenes();
-    }
-
-    @Test
-    @DisplayName("throws 422 error if collection id value is < 1")
-    void err422_2() {
-      doReturn(orgId).when(mPost).getOrganismId();
-      doReturn(0L).when(mPost).getCollectionId();
-      doReturn(genCount).when(mPost).getGenerateGenes();
-
-      var excep = assertThrows(
-        UnprocessableEntityException.class,
-        () -> target.handleCreate(mPost, mRequest)
-      );
-      assertTrue(excep.getByKey().containsKey(Field.IdSet.COLLECTION_ID));
-      verify(mUserService).requireRequestUser(mRequest);
-      verify(mPost, atLeastOnce()).getOrganismId();
-      verify(mPost, atLeastOnce()).getCollectionId();
       verify(mPost, atLeastOnce()).getGenerateGenes();
     }
 
@@ -145,7 +115,6 @@ class IdSetServiceTest extends ServiceTestBase
     @DisplayName("throws 422 error if generate gene id count value is < 0")
     void err422_3() {
       doReturn(orgId).when(mPost).getOrganismId();
-      doReturn(collId).when(mPost).getCollectionId();
       doReturn(-1).when(mPost).getGenerateGenes();
 
       var excep = assertThrows(
@@ -155,7 +124,6 @@ class IdSetServiceTest extends ServiceTestBase
       assertTrue(excep.getByKey().containsKey(Field.IdSet.GENERATE_GENES));
       verify(mUserService).requireRequestUser(mRequest);
       verify(mPost, atLeastOnce()).getOrganismId();
-      verify(mPost, atLeastOnce()).getCollectionId();
       verify(mPost, atLeastOnce()).getGenerateGenes();
     }
 
@@ -165,7 +133,6 @@ class IdSetServiceTest extends ServiceTestBase
       prepBody();
 
       doReturn(Optional.empty()).when(mOrgRepo).getById(orgId);
-      doReturn(Optional.of(mColl)).when(mCollRepo).selectById(collId);
 
       var excep = assertThrows(
         UnprocessableEntityException.class,
@@ -176,30 +143,11 @@ class IdSetServiceTest extends ServiceTestBase
     }
 
     @Test
-    @DisplayName("throws 422 error if the given collection id is invalid")
-    void err422_5() throws Exception {
-      prepBody();
-
-      doReturn(Optional.of(mOrg)).when(mOrgRepo).getById(orgId);
-      doReturn(Optional.empty()).when(mCollRepo).selectById(collId);
-
-      var excep = assertThrows(
-        UnprocessableEntityException.class,
-        () -> target.handleCreate(mPost, mRequest)
-      );
-      assertTrue(excep.getByKey().containsKey(Field.IdSet.COLLECTION_ID));
-      verify(mOrgRepo).getById(orgId);
-      verify(mCollRepo).selectById(collId);
-    }
-
-    @Test
     @DisplayName("throws 500 error if the db connection cannot be retrieved")
     void err500_1() throws Exception {
       prepBody();
 
       doReturn(Optional.of(mOrg)).when(mOrgRepo).getById(orgId);
-      doReturn(Optional.of(mColl)).when(mCollRepo)
-        .selectById(collId);
 
       reset(mDbMan);
       doThrow(SQLException.class).when(mDbMan).getConnection();
@@ -209,7 +157,6 @@ class IdSetServiceTest extends ServiceTestBase
         () -> target.handleCreate(mPost, mRequest)
       );
       verify(mOrgRepo).getById(orgId);
-      verify(mCollRepo).selectById(collId);
       verify(mDbMan).getConnection();
     }
 
@@ -221,7 +168,6 @@ class IdSetServiceTest extends ServiceTestBase
       prepBody();
 
       doReturn(Optional.of(mOrg)).when(mOrgRepo).getById(orgId);
-      doReturn(Optional.of(mColl)).when(mCollRepo).selectById(collId);
       doThrow(SQLException.class).when(mConn).setAutoCommit(false);
 
       assertThrows(
@@ -238,7 +184,6 @@ class IdSetServiceTest extends ServiceTestBase
       prepBody();
 
       doReturn(Optional.of(mOrg)).when(mOrgRepo).getById(orgId);
-      doReturn(Optional.of(mColl)).when(mCollRepo).selectById(collId);
       doThrow(Exception.class).when(mOrgRepo)
         .incrementGeneCounter(orgId, genCount, mConn);
 
@@ -259,11 +204,9 @@ class IdSetServiceTest extends ServiceTestBase
 
       prepBody();
 
-      //noinspection ResultOfMethodCallIgnored
       doReturn(template).when(mOrg).getTemplate();
 
       doReturn(Optional.of(mOrg)).when(mOrgRepo).getById(orgId);
-      doReturn(Optional.of(mColl)).when(mCollRepo).selectById(collId);
 
       doReturn(incStart).when(mOrgRepo)
         .incrementGeneCounter(orgId, genCount, mConn);
@@ -275,7 +218,6 @@ class IdSetServiceTest extends ServiceTestBase
         () -> target.handleCreate(mPost, mRequest)
       );
       assertSame(mOrg, newCapt.getValue().getOrganism());
-      assertSame(mColl, newCapt.getValue().getCollection());
       assertSame(template, newCapt.getValue().getTemplate());
       assertEquals(incStart, newCapt.getValue().getCounterStart());
       assertEquals(genCount, newCapt.getValue().getNumIssued());
@@ -295,11 +237,9 @@ class IdSetServiceTest extends ServiceTestBase
 
       prepBody();
 
-      //noinspection ResultOfMethodCallIgnored
       doReturn(template).when(mOrg).getTemplate();
 
       doReturn(Optional.of(mOrg)).when(mOrgRepo).getById(orgId);
-      doReturn(Optional.of(mColl)).when(mCollRepo).selectById(collId);
 
       doReturn(incStart).when(mOrgRepo)
         .incrementGeneCounter(orgId, genCount, mConn);
@@ -331,11 +271,9 @@ class IdSetServiceTest extends ServiceTestBase
 
       prepBody();
 
-      //noinspection ResultOfMethodCallIgnored
       doReturn(template).when(mOrg).getTemplate();
 
       doReturn(Optional.of(mOrg)).when(mOrgRepo).getById(orgId);
-      doReturn(Optional.of(mColl)).when(mCollRepo).selectById(collId);
 
       doReturn(incStart).when(mOrgRepo)
         .incrementGeneCounter(orgId, genCount, mConn);
@@ -344,7 +282,6 @@ class IdSetServiceTest extends ServiceTestBase
       doReturn(geneIds).when(mGeneUtil).expandGeneIds(mOrg, incStart, genCount);
       doReturn(mRes).when(mIdUtil).setToResponse(mSet);
 
-      //noinspection ResultOfMethodCallIgnored
       doReturn(setId).when(mSet).getId();
 
       doThrow(Exception.class).when(mGeneRepo).getBySetId(setId, mConn);
@@ -374,11 +311,9 @@ class IdSetServiceTest extends ServiceTestBase
 
       prepBody();
 
-      //noinspection ResultOfMethodCallIgnored
       doReturn(template).when(mOrg).getTemplate();
 
       doReturn(Optional.of(mOrg)).when(mOrgRepo).getById(orgId);
-      doReturn(Optional.of(mColl)).when(mCollRepo).selectById(collId);
 
       doReturn(incStart).when(mOrgRepo)
         .incrementGeneCounter(orgId, genCount, mConn);
@@ -387,7 +322,6 @@ class IdSetServiceTest extends ServiceTestBase
       doReturn(geneIds).when(mGeneUtil).expandGeneIds(mOrg, incStart, genCount);
       doReturn(mRes).when(mIdUtil).setToResponse(mSet);
 
-      //noinspection ResultOfMethodCallIgnored
       doReturn(setId).when(mSet).getId();
 
       doReturn(mGenes).when(mGeneRepo).getBySetId(setId, mConn);
@@ -416,16 +350,13 @@ class IdSetServiceTest extends ServiceTestBase
 
       prepBody();
 
-      //noinspection ResultOfMethodCallIgnored
       doReturn(template).when(mOrg).getTemplate();
       doReturn(Optional.of(mOrg)).when(mOrgRepo).getById(orgId);
-      doReturn(Optional.of(mColl)).when(mCollRepo).selectById(collId);
       doReturn(incStart).when(mOrgRepo)
         .incrementGeneCounter(orgId, genCount, mConn);
       doReturn(mSet).when(mIdRepo).insertRow(any(), any());
       doReturn(geneIds).when(mGeneUtil).expandGeneIds(mOrg, incStart, genCount);
       doReturn(mRes).when(mIdUtil).setToResponse(mSet);
-      //noinspection ResultOfMethodCallIgnored
       doReturn(setId).when(mSet).getId();
       doReturn(mGenes).when(mGeneRepo).getBySetId(setId, mConn);
 

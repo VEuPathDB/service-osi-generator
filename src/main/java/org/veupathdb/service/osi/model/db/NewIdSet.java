@@ -6,8 +6,6 @@ import org.veupathdb.service.osi.util.Validation;
 
 public class NewIdSet
 {
-  private final IdSetCollection collection;
-
   private final Organism organism;
 
   private final String template;
@@ -19,23 +17,17 @@ public class NewIdSet
   private final int numIssued;
 
   public NewIdSet(
-    final IdSetCollection collection,
     final Organism organism,
     final String template,
     final long counterStart,
     final int numIssued,
     final User createdBy
   ) {
-    this.collection   = Validation.nonNull(collection);
     this.organism     = Validation.nonNull(organism);
     this.template     = Validation.nonEmpty(template);
     this.counterStart = Validation.oneMinimum(counterStart);
     this.numIssued    = Validation.zeroMinimum(numIssued);
     this.createdBy    = Validation.nonNull(createdBy);
-  }
-
-  public IdSetCollection getCollection() {
-    return collection;
   }
 
   public Organism getOrganism() {

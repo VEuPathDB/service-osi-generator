@@ -51,115 +51,6 @@ public class CreateIdSetTest extends IdSetTestBase
       }
 
       @Nested
-      @DisplayName("has a collection id that")
-      class ColId
-      {
-        @Nested
-        @DisplayName("is null")
-        class T1
-        {
-          @Test
-          @DisplayName("returns a 422 error")
-          void test1() {
-            var input = new IdSetPostRequest()
-              .setCollectionId(null)
-              .setOrganismId(organismId)
-              .setGenerateGenes(5);
-
-            var res = given()
-              .header("Authorization", authHeader())
-              .contentType(ContentType.JSON)
-              .body(input)
-              .when()
-              .post(API_URL);
-
-            res.then()
-              .statusCode(422)
-              .contentType(ContentType.JSON);
-
-            var body = res.as(Error422Response.class);
-
-            assertNotNull(body);
-            assertNotNull(body.getErrors());
-
-            var errs = body.getErrors();
-
-            assertNotNull(errs.getByKey());
-            assertEquals(1, errs.getByKey().size());
-
-            var byKey = errs.getByKey();
-
-            assertNotNull(byKey.get(IdSetPostRequest.JSON_KEY_COLL_ID));
-            assertNotEquals(0, byKey.get(IdSetPostRequest.JSON_KEY_COLL_ID).length);
-          }
-        }
-
-        @Nested
-        @DisplayName("is missing")
-        class T2
-        {
-          @Test
-          @DisplayName("returns a 400 error")
-          void test1() {
-            var input = TestUtil.Json.convertValue(new IdSetPostRequest()
-              .setOrganismId(organismId)
-              .setGenerateGenes(0), ObjectNode.class)
-              .remove(IdSetPostRequest.JSON_KEY_COLL_ID);
-
-            given()
-              .header("Authorization", authHeader())
-              .contentType(ContentType.JSON)
-              .body(input)
-              .when()
-              .post(API_URL)
-              .then()
-              .statusCode(400)
-              .contentType(ContentType.JSON);
-          }
-        }
-
-        @Nested
-        @DisplayName("is invalid")
-        class T3
-        {
-          @Test
-          @DisplayName("returns a 422 error")
-          void test1() {
-            var input = TestUtil.Json.convertValue(new IdSetPostRequest()
-              .setOrganismId(organismId)
-              .setGenerateGenes(0), ObjectNode.class)
-              .put(IdSetPostRequest.JSON_KEY_COLL_ID, "hello");
-
-            var res = given()
-              .header("Authorization", authHeader())
-              .contentType(ContentType.JSON)
-              .body(input)
-              .when()
-              .post(API_URL);
-
-            res.then()
-              .statusCode(422)
-              .contentType(ContentType.JSON);
-
-            var body = res.as(Error422Response.class);
-
-            assertNotNull(body);
-            assertNotNull(body.getErrors());
-
-            var errs = body.getErrors();
-
-            assertNotNull(errs.getByKey());
-            assertEquals(1, errs.getByKey().size());
-
-            var byKey = errs.getByKey();
-
-            assertNotNull(byKey.get(IdSetPostRequest.JSON_KEY_COLL_ID));
-            assertNotEquals(0, byKey.get(IdSetPostRequest.JSON_KEY_COLL_ID).length);
-          }
-        }
-      }
-
-      @Nested
       @DisplayName("has an organism id that")
       class OrgId
       {
@@ -171,7 +62,6 @@ public class CreateIdSetTest extends IdSetTestBase
           @DisplayName("returns a 422 error")
           void test1() {
             var input = new IdSetPostRequest()
-              .setCollectionId(collectionId)
               .setOrganismId(null)
               .setGenerateGenes(5);
 
@@ -211,9 +101,7 @@ public class CreateIdSetTest extends IdSetTestBase
           @DisplayName("returns a 422 error")
           void test1() {
             var input = TestUtil.Json.convertValue(new IdSetPostRequest()
-              .setCollectionId(collectionId)
-              .setGenerateGenes(0), ObjectNode.class)
-              .remove(IdSetPostRequest.JSON_KEY_COLL_ID);
+              .setGenerateGenes(0), ObjectNode.class);
 
             var res = given()
               .header("Authorization", authHeader())
@@ -241,7 +129,6 @@ public class CreateIdSetTest extends IdSetTestBase
           @DisplayName("returns a 422 error")
           void test1() {
             var input = TestUtil.Json.convertValue(new IdSetPostRequest()
-              .setCollectionId(collectionId)
               .setGenerateGenes(0), ObjectNode.class)
               .put(IdSetPostRequest.JSON_KEY_ORG_ID, "hello");
 
@@ -288,7 +175,6 @@ public class CreateIdSetTest extends IdSetTestBase
           @DisplayName("returns a 422 error")
           void test1() {
             var input = new IdSetPostRequest()
-              .setCollectionId(collectionId)
               .setOrganismId(organismId)
               .setGenerateGenes(null);
 
@@ -328,7 +214,6 @@ public class CreateIdSetTest extends IdSetTestBase
           @DisplayName("returns a 400 error")
           void test1() {
             var input = TestUtil.Json.convertValue(new IdSetPostRequest()
-              .setCollectionId(collectionId)
               .setOrganismId(organismId), ObjectNode.class)
               .remove(IdSetPostRequest.JSON_KEY_GEN_GENES);
 
@@ -352,7 +237,6 @@ public class CreateIdSetTest extends IdSetTestBase
           @DisplayName("returns a 422 error")
           void test1() {
             var input = TestUtil.Json.convertValue(new IdSetPostRequest()
-              .setCollectionId(collectionId)
               .setOrganismId(organismId), ObjectNode.class)
               .put(IdSetPostRequest.JSON_KEY_GEN_GENES, "hello");
 
@@ -397,7 +281,6 @@ public class CreateIdSetTest extends IdSetTestBase
           @DisplayName("returns a 401 error")
           void test1() {
             var input = new IdSetPostRequest()
-              .setCollectionId(collectionId)
               .setOrganismId(organismId)
               .setGenerateGenes(0);
 
@@ -420,7 +303,6 @@ public class CreateIdSetTest extends IdSetTestBase
           @DisplayName("returns a 401 error")
           void test1() {
             var input = new IdSetPostRequest()
-              .setCollectionId(collectionId)
               .setOrganismId(organismId)
               .setGenerateGenes(0);
 
@@ -444,7 +326,6 @@ public class CreateIdSetTest extends IdSetTestBase
           @DisplayName("returns a 401 error")
           void test1() {
             var input = new IdSetPostRequest()
-              .setCollectionId(collectionId)
               .setOrganismId(organismId)
               .setGenerateGenes(0);
 
@@ -468,7 +349,6 @@ public class CreateIdSetTest extends IdSetTestBase
           @DisplayName("creates a new ID set record")
           void test1() {
             var input = new IdSetPostRequest()
-              .setCollectionId(collectionId)
               .setOrganismId(organismId)
               .setGenerateGenes(0);
 
@@ -487,7 +367,6 @@ public class CreateIdSetTest extends IdSetTestBase
             var now  = OffsetDateTime.now();
 
             assertTrue(0 < body.getIdSetId());
-            assertEquals(collectionId, body.getCollectionId());
             assertEquals(organismId, body.getOrganismId());
             assertEquals(template, body.getTemplate());
             assertEquals(user.getUserId(), body.getCreatedBy());
@@ -516,7 +395,6 @@ public class CreateIdSetTest extends IdSetTestBase
           generated = rand.nextInt(95 + 5);
 
           response = createIdSet(new IdSetPostRequest()
-            .setCollectionId(collectionId)
             .setOrganismId(organismId)
             .setGenerateGenes(generated));
 
@@ -528,7 +406,6 @@ public class CreateIdSetTest extends IdSetTestBase
         void test1() {
 
           assertTrue(0 < response.getIdSetId());
-          assertEquals(collectionId, response.getCollectionId());
           assertEquals(organismId, response.getOrganismId());
           assertEquals(user.getUserId(), response.getCreatedBy());
           assertEquals(template, response.getTemplate());

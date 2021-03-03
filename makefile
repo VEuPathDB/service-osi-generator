@@ -82,13 +82,14 @@ gen-jaxrs: api.raml merge-raml
 	@echo "$(C_BLUE)Monkeypatch workarounds for generator bugs$(C_NONE)"
 	# Fix Organism API interface
 	@sed -i 's/long/Long/g' "$(GEN_DIR)/resources/Organisms.java"
+	# Fix Organism POST request
+	@sed -i 's/long/Long/g' "$(GEN_DIR)/model/OrganismPostRequest.java"
+	@sed -i 's/long/Long/g' "$(GEN_DIR)/model/OrganismPostRequestImpl.java"
 	# Fix Organism PUT request
 	@sed -i 's/long/Long/g' "$(GEN_DIR)/model/OrganismPutRequest.java"
 	@sed -i 's/long/Long/g' "$(GEN_DIR)/model/OrganismPutRequestImpl.java"
 	# Fix IdSet API interface
 	@sed -i 's/long/Long/g' "$(GEN_DIR)/resources/IdSets.java"
-	# Fix Collections API interface
-	@sed -i 's/long/Long/g' "$(GEN_DIR)/resources/IdSetCollections.java"
 
 
 gen-docs: api.raml merge-raml

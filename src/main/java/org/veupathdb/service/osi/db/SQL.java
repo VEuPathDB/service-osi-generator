@@ -36,7 +36,6 @@ public interface SQL
     interface Osi
     {
       String
-        COLLECTION = insert(Table.ID_SET_COLLECTIONS, "new-collection"),
         GENE       = insert(Table.GENES, "new-gene"),
         ID_SET     = insert(Table.ID_SETS, "new-id-set"),
         ORGANISM   = insert(Table.ORGANISMS, "new-organism"),
@@ -58,25 +57,16 @@ public interface SQL
     {
       interface Users
       {
-        String BY_ID    = select(Table.USERS, "by-id");
-        String BY_NAME  = select(Table.USERS, "by-name");
+        String BY_ID   = select(Table.USERS, "by-id");
+        String BY_NAME = select(Table.USERS, "by-name");
       }
     }
 
     interface Osi
     {
-      interface Collections
-      {
-        String
-          BY_ID    = select(Table.ID_SET_COLLECTIONS, "by-id"),
-          BY_QUERY = select(Table.ID_SET_COLLECTIONS, "find-collections");
-      }
-
       interface Genes
       {
         String
-          BY_COLLECTION  = select(Table.GENES, "by-collection"),
-          BY_COLLECTIONS = select(Table.GENES, "by-collections"),
           BY_ID_SET      = select(Table.GENES, "by-id-set"),
           BY_ID_SETS     = select(Table.GENES, "by-id-sets"),
           BY_IDENTIFIERS = select(Table.GENES, "by-identifiers");
@@ -85,26 +75,21 @@ public interface SQL
       interface IdSets
       {
         String
-          BY_ID          = select(Table.ID_SETS, "by-id"),
-          BY_QUERY       = select(Table.ID_SETS, "by-query"),
-          BY_COLLECTION  = select(Table.ID_SETS, "by-collection"),
-          BY_COLLECTIONS = select(Table.ID_SETS, "by-collections");
+          BY_ID    = select(Table.ID_SETS, "by-id"),
+          BY_QUERY = select(Table.ID_SETS, "by-query");
       }
 
       interface Organisms
       {
         String
-          BY_ID          = select(Table.ORGANISMS, "by-id"),
-          BY_NAME        = select(Table.ORGANISMS, "by-name"),
-          BY_QUERY       = select(Table.ORGANISMS, "by-query");
+          BY_ID    = select(Table.ORGANISMS, "by-id"),
+          BY_NAME  = select(Table.ORGANISMS, "by-name"),
+          BY_QUERY = select(Table.ORGANISMS, "by-query");
       }
 
       interface Transcripts
       {
-        String
-          BY_GENES       = select(Table.TRANSCRIPTS, "by-genes"),
-          BY_COLLECTION  = select(Table.TRANSCRIPTS, "by-collection"),
-          BY_COLLECTIONS = select(Table.TRANSCRIPTS, "by-collections");
+        String BY_GENES = select(Table.TRANSCRIPTS, "by-genes");
       }
     }
   }
@@ -123,11 +108,6 @@ public interface SQL
       }
 
     }
-  }
-
-  private static String delete(final String table, final String file) {
-    log.trace("Loading delete query " + file + " for table " + table);
-    return load(Mode.DELETE, String.format(PATH_FORMAT, table, file));
   }
 
   private static String insert(final String table, final String file) {
@@ -155,7 +135,7 @@ public interface SQL
     };
   }
 
-  private static Supplier < RuntimeException > error(Mode mode, String path) {
+  private static Supplier<RuntimeException> error(Mode mode, String path) {
     return () -> new RuntimeException(String.format(ERR_NOT_FOUND,
       mode.name().toLowerCase(), path
     ));

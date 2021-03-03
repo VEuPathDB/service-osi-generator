@@ -8,7 +8,6 @@ WITH
   )
 SELECT
   s.id_set_id
-, s.id_set_coll_id
 , s.organism_id
 , s.template
 , s.counter_start
