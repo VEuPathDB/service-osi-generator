@@ -8,8 +8,8 @@ node('centos8') {
   def builder = new Builder(this)
 
   checkout scm
-  builder.buildContainers(
+  builder.buildContainers([
     [ name: 'osi-generator-database', dockerfile: 'docker/DB.Dockerfile'       ],
     [ name: 'osi-generator-service',  dockerfile: 'docker/SVC.prod.Dockerfile' ]
-  )
+  ])
 }
