@@ -1,11 +1,11 @@
 #!groovy
 
 @Library('pipelib')
-import org.veupathdb.lib.Builder;
+import org.veupathdb.lib.Builder
 
 node('centos8') {
 
-  def build = new Builder(this);
+  def build = new Builder(this)
 
   checkout scm
   builder.buildContainers(
