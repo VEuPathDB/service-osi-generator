@@ -5,7 +5,7 @@ import org.veupathdb.lib.Builder
 
 node('centos8') {
 
-  def build = new Builder(this)
+  def builder = new Builder(this)
 
   checkout scm
   builder.buildContainers(
