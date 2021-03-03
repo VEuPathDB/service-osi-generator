@@ -71,24 +71,6 @@ public class GeneRepo
   }
 
   /**
-   * @see #getByCollectionIds(long[])
-   */
-  public static Map < Long, Gene > selectByCollectionIds(
-    final long[] collectionIds
-  ) throws Exception {
-    return getInstance().getByCollectionIds(collectionIds);
-  }
-
-  /**
-   * @see #getByCollectionId(long)
-   */
-  public static Map < Long, Gene > selectByCollectionId(
-    final long collection
-  ) throws Exception {
-    return getInstance().getByCollectionId(collection);
-  }
-
-  /**
    * @see #insertGenes(IdSet, String[], Connection, User)
    */
   public static void insert(
@@ -152,33 +134,6 @@ public class GeneRepo
       con,
       GeneUtil.getInstance()::createGeneRow,
       QueryUtil.singleId(id)
-    ).execute().getValue();
-  }
-
-
-  public Map < Long, Gene > getByCollectionIds(
-    final long[] collectionIds
-  ) throws Exception {
-    log.trace("GeneRepo#getByCollectionIds(long[])");
-    return new BasicPreparedMapReadQuery<>(
-      Genes.BY_COLLECTIONS,
-      DbMan::connection,
-      GeneUtil.getInstance()::parseId,
-      GeneUtil::newGeneRow,
-      QueryUtil.idSet(collectionIds)
-    ).execute().getValue();
-  }
-
-  public Map < Long, Gene > getByCollectionId(
-    final long collection
-  ) throws Exception {
-    log.trace("GeneRepo#getByCollectionId(long)");
-    return new BasicPreparedMapReadQuery<>(
-      Genes.BY_COLLECTION,
-      DbMan::connection,
-      GeneUtil.getInstance()::parseId,
-      GeneUtil::newGeneRow,
-      QueryUtil.singleId(collection)
     ).execute().getValue();
   }
 

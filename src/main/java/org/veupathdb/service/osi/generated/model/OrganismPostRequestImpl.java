@@ -19,13 +19,13 @@ public class OrganismPostRequestImpl implements OrganismPostRequest {
   private String template;
 
   @JsonProperty("geneIntStart")
-  private long geneIntStart;
+  private Long geneIntStart;
 
   @JsonProperty(
       value = "transcriptIntStart",
       defaultValue = "1"
   )
-  private long transcriptIntStart;
+  private Long transcriptIntStart;
 
   @JsonProperty("organismName")
   public String getOrganismName() {
@@ -48,12 +48,12 @@ public class OrganismPostRequestImpl implements OrganismPostRequest {
   }
 
   @JsonProperty("geneIntStart")
-  public long getGeneIntStart() {
+  public Long getGeneIntStart() {
     return this.geneIntStart;
   }
 
   @JsonProperty("geneIntStart")
-  public void setGeneIntStart(long geneIntStart) {
+  public void setGeneIntStart(Long geneIntStart) {
     this.geneIntStart = geneIntStart;
   }
 

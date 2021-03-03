@@ -12,7 +12,6 @@ public interface Schema
 
     String
       ORGANISMS          = Schema.OSI + ".organisms",
-      ID_SET_COLLECTIONS = Schema.OSI + ".id_set_collections",
       ID_SETS            = Schema.OSI + ".id_sets",
       GENES              = Schema.OSI + ".genes",
       TRANSCRIPTS        = Schema.OSI + ".transcripts";
@@ -42,20 +41,10 @@ public interface Schema
         CREATED_BY = "created_by";
     }
 
-    interface Collections
-    {
-      String
-        COLLECTION_ID = "id_set_coll_id",
-        NAME          = "name",
-        CREATED_BY    = "created_by",
-        CREATED_ON    = "created";
-    }
-
     interface IdSets
     {
       String
         ID_SET_ID     = "id_set_id",
-        COLLECTION_ID = Collections.COLLECTION_ID,
         ORGANISM_ID   = Organisms.ORGANISM_ID,
         TEMPLATE      = "template",
         COUNTER_START = "counter_start",
@@ -89,21 +78,5 @@ public interface Schema
         CREATED_BY    = "created_by",
         TRANSCRIPT_ID = "transcript_id";
     }
-  }
-
-  interface JoinPrefixes
-  {
-    String
-      TRANSCRIPTS       = "t_",
-      GENES             = "g_",
-      ORGANISMS         = "o_",
-      ID_SET            = "s_",
-      ID_SET_COLLECTION = "c_",
-
-    GENE_USER                = "gu_",
-      ORGANISM_USER          = "ou_",
-      TRANSCRIPT_USER        = "tu_",
-      ID_SET_USER            = "su_",
-      ID_SET_COLLECTION_USER = "cu_";
   }
 }

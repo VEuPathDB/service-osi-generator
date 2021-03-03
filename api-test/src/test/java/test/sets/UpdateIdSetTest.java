@@ -13,7 +13,6 @@ import test.GeneratedTranscriptEntry;
 import test.IdSetPatchRequest;
 import test.IdSetResponse;
 import test.TestUtil;
-import test.collections.CollectionUtil;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -309,37 +308,6 @@ public class UpdateIdSetTest extends IdSetTestBase
           var body = res.as(IdSetResponse.class);
 
           var actual = body.getGeneratedIds();
-
-          Arrays.sort(actual, UpdateIdSetTest.this::geneIdComparator);
-
-          verifyEntries(sizes, response.getGeneratedIds(), actual);
-        }
-
-        @Test
-        @DisplayName("new transcripts appear in parent type responses")
-        void test2() {
-          var input = new IdSetPatchRequest();
-          var sizes = new int[]{5, 10};
-
-          for (var i = 0; i < sizes.length; i++) {
-            input.add(new IdSetPatchRequest.Entry()
-              .setGeneId(response.getGeneratedIds()[i].getGeneId())
-              .setTranscripts(sizes[i]));
-          }
-
-          given()
-            .contentType(ContentType.JSON)
-            .header("Authorization", authHeader())
-            .body(input)
-            .when()
-            .patch(ID_URL, response.getIdSetId())
-            .then()
-            .statusCode(200)
-            .contentType(ContentType.JSON);
-
-          var body = CollectionUtil.getCollection(user, collectionId);
-
-          var actual = body.getIdSets()[0].getGeneratedIds();
 
           Arrays.sort(actual, UpdateIdSetTest.this::geneIdComparator);
 

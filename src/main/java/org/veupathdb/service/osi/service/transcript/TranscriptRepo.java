@@ -38,25 +38,4 @@ public class TranscriptRepo
       QueryUtil.idSet(ids)
     ).execute().getValue();
   }
-
-  public static List < Transcript > selectByCollectionIds(
-    final long[] collectionIds
-  ) throws Exception {
-    return new BasicPreparedListReadQuery<>(
-      Transcripts.BY_COLLECTIONS,
-      DbMan::connection,
-      TranscriptUtils::newTranscriptRow,
-      QueryUtil.idSet(collectionIds)
-    ).execute().getValue();
-  }
-
-  public static List < Transcript > selectByCollectionId(long collectionId)
-  throws Exception {
-    return new BasicPreparedListReadQuery<>(
-      Transcripts.BY_COLLECTION,
-      DbMan::connection,
-      TranscriptUtils::newTranscriptRow,
-      QueryUtil.singleId(collectionId)
-    ).execute().getValue();
-  }
 }

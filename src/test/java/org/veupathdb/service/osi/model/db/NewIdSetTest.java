@@ -12,8 +12,6 @@ import static org.mockito.Mockito.*;
 @DisplayName("NewIdSet")
 class NewIdSetTest extends TestBase
 {
-  private IdSetCollection mCollection;
-
   private Organism mOrganism;
 
   private User mUser;
@@ -34,11 +32,9 @@ class NewIdSetTest extends TestBase
     counterStart = random.nextLong();
     numIssued    = random.nextInt();
     json         = randomString();
-    mCollection  = mock(IdSetCollection.class);
     mOrganism    = mock(Organism.class);
     mUser        = mock(User.class);
 
-    doReturn(mCollection).when(mValidation).enforceNonNull(mCollection);
     doReturn(mOrganism).when(mValidation).enforceNonNull(mOrganism);
     doReturn(template).when(mValidation).enforceNonEmpty(template);
     doReturn(counterStart).when(mValidation).enforceOneMinimum(counterStart);
@@ -46,7 +42,6 @@ class NewIdSetTest extends TestBase
     doReturn(mUser).when(mValidation).enforceNonNull(mUser);
 
     target = new NewIdSet(
-      mCollection,
       mOrganism,
       template,
       counterStart,
@@ -60,18 +55,11 @@ class NewIdSetTest extends TestBase
   @Test
   @DisplayName("Constructor validates inputs")
   void constructor() {
-    verify(mValidation).enforceNonNull(mCollection);
     verify(mValidation).enforceNonNull(mOrganism);
     verify(mValidation).enforceNonEmpty(template);
     verify(mValidation).enforceOneMinimum(counterStart);
     verify(mValidation).enforceZeroMinimum(numIssued);
     verify(mValidation).enforceNonNull(mUser);
-  }
-
-  @Test
-  @DisplayName("Collection getter returns expected value")
-  void getCollection() {
-    assertSame(mCollection, target.getCollection());
   }
 
   @Test

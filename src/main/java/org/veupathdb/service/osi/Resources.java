@@ -2,7 +2,6 @@ package org.veupathdb.service.osi;
 
 import org.veupathdb.lib.container.jaxrs.server.ContainerResources;
 import org.veupathdb.service.osi.controller.AuthController;
-import org.veupathdb.service.osi.controller.CollectionController;
 import org.veupathdb.service.osi.controller.IdSetController;
 import org.veupathdb.service.osi.controller.OrganismController;
 import org.veupathdb.service.osi.filter.BasicAuthFilter;
@@ -31,7 +30,6 @@ public class Resources extends ContainerResources {
         Main.config.getAdminUser(),
         Main.config.getAdminPass()),
       AuthController.class,
-      CollectionController.class,
       OrganismController.class,
       IdSetController.class
     };

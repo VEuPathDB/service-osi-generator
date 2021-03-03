@@ -12,11 +12,10 @@ public class IdSetUtil
 
   private static final String
     INSERT_SQL = "INSERT INTO osi.id_sets "
-    + "(id_set_coll_id, organism_id, template, counter_start, num_issued, created_by) "
-    + "VALUES (?, ?, ?, ?, ?, ?) RETURNING id_set_id;";
+    + "(organism_id, template, counter_start, num_issued, created_by) "
+    + "VALUES (?, ?, ?, ?, ?) RETURNING id_set_id;";
 
   public static final long insertIdSet(
-    final long collection,
     final long organism,
     final String template,
     final long countStart,
@@ -27,12 +26,11 @@ public class IdSetUtil
       var con = DbUtil.getServiceDataSource().getConnection();
       var ps  = con.prepareStatement(INSERT_SQL)
     ) {
-      ps.setLong(1, collection);
-      ps.setLong(2, organism);
-      ps.setString(3, template);
-      ps.setLong(4, countStart);
-      ps.setInt(5, numIssued);
-      ps.setLong(6, user);
+      ps.setLong(1, organism);
+      ps.setString(2, template);
+      ps.setLong(3, countStart);
+      ps.setInt(4, numIssued);
+      ps.setLong(5, user);
 
       try (var rs = ps.executeQuery()) {
         rs.next();

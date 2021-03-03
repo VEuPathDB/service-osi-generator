@@ -1,6 +1,5 @@
 SELECT
   id_set_id
-, id_set_coll_id
 , organism_id
 , template
 , counter_start

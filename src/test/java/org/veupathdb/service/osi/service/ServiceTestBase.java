@@ -7,7 +7,6 @@ import java.util.UUID;
 import org.glassfish.jersey.server.ContainerRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.veupathdb.service.osi.model.db.User;
-import org.veupathdb.service.osi.service.collections.CollectionRepo;
 import org.veupathdb.service.osi.service.genes.GeneRepo;
 import org.veupathdb.service.osi.service.genes.GeneUtil;
 import org.veupathdb.service.osi.service.idset.IdSetRepo;
@@ -30,8 +29,6 @@ public class ServiceTestBase
   protected GeneRepo mGeneRepo;
 
   protected GeneUtil mGeneUtil;
-
-  protected CollectionRepo mCollRepo;
 
   protected UserService mUserService;
 
@@ -60,7 +57,6 @@ public class ServiceTestBase
     mOrgRepo     = mockSingleton(OrganismRepo.class);
     mOrgUtil     = mockSingleton(OrganismUtil.class);
     mUserService = mockSingleton(UserService.class);
-    mCollRepo    = mockSingleton(CollectionRepo.class);
     mDbMan       = mockSingleton(DbMan.class);
     mIdRepo      = mockSingleton(IdSetRepo.class);
     mIdUtil      = mockSingleton(IdSetUtil.class);

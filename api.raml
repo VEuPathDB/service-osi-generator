@@ -140,70 +140,6 @@ securedBy: basic
         500:
           body: error.ServerError
 
-/idSetCollections:
-  get:
-    queryParameters:
-      createdAfter?:
-        type: ZeroBasedLong
-        description: |
-         Unix timestamp.
-
-         Filter results to records created after this date.
-      createdBefore?:
-        type: ZeroBasedLong
-        description: |
-          Unix timestamp.
-
-          Filter results to records created before this date.
-      createdBy?:
-        type: string
-        description: |
-          Filter results by the user who created the records.  The value may be
-          either a user name or user id value.
-      name?:
-        type: string
-        description: |
-          Filter results by name.  This field supports wildcards using the
-          asterisk (`*`) character.
-    responses:
-      200:
-        body: CollectionResponse[]
-      401:
-        body: error.UnauthorizedError
-      403:
-        body: error.ForbiddenError
-      500:
-        body: error.ServerError
-  post:
-    body: IdSetCollectionPostRequest
-    responses:
-      200:
-        body: CollectionResponse
-      400:
-        body: error.BadRequestError
-      401:
-        body: error.UnauthorizedError
-      403:
-        body: error.ForbiddenError
-      422:
-        body: error.UnprocessableEntityError
-      500:
-        body: error.ServerError
-
-  /{collection-id}:
-    uriParameters:
-      collection-id: OneBasedLong
-    get:
-      responses:
-        200:
-          body: CollectionResponse
-        401:
-          body: error.UnauthorizedError
-        404:
-          body: error.NotFoundError
-        500:
-          body: error.ServerError
-
 /idSets:
   get:
     queryParameters:
@@ -216,7 +152,6 @@ securedBy: basic
           type: IdSetResponse[]
           example:
             - idSetId: 48
-              collectionId: 12
               organismId: 1
               template: PF3D7_%07d
               geneIntStart: 150000
@@ -258,7 +193,6 @@ securedBy: basic
           type: IdSetResponse
           example:
             idSetId: 48
-            collectionId: 12
             organismId: 1
             template: PF3D7_%07d
             geneIntStart: 150000
@@ -292,7 +226,6 @@ securedBy: basic
             type: IdSetResponse
             example:
               idSetId: 48
-              collectionId: 12
               organismId: 1
               template: PF3D7_%07d
               geneIntStart: 150000
@@ -451,8 +384,6 @@ types:
   IdSetPostRequest:
     type: object
     properties:
-      collectionId:
-        type: OneBasedLong
       organismId:
         description: |
           Internal storage primary key for an organism registered with the OSID
@@ -473,7 +404,6 @@ types:
           Internal storage primary key for an ID set.  Used to make requests
           that operate on or retrieve one specific ID set.
         type: OneBasedLong
-      collectionId: OneBasedLong
       organismId: OneBasedLong
       template: TemplatePattern
       geneIntStart: OneBasedLong
@@ -620,22 +550,6 @@ types:
       username: "some user name"
       apiKey: "d831d10e47de4154912ea7a8f1c633c3"
       issued: "2020-05-25T13:18:26Z"
-
-  CollectionResponse:
-    type: object
-    properties:
-      collectionId: OneBasedLong
-      name:
-      createdBy: OneBasedLong
-      createdOn: datetime
-      idSets: IdSetResponse[]
-    additionalProperties: false
-
-  IdSetCollectionPostRequest:
-    type: object
-    properties:
-      name:
-    additionalProperties: false
 
   UserPostRequest:
     type: object

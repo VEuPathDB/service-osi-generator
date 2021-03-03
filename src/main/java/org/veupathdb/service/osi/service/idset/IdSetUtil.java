@@ -5,7 +5,6 @@ import java.time.OffsetDateTime;
 import java.util.*;
 
 import org.veupathdb.service.osi.db.Schema.Osi.IdSets;
-import org.veupathdb.service.osi.generated.model.CollectionResponse;
 import org.veupathdb.service.osi.generated.model.IdSetResponse;
 import org.veupathdb.service.osi.generated.model.IdSetResponseImpl;
 import org.veupathdb.service.osi.model.db.IdSet;
@@ -39,13 +38,6 @@ public class IdSetUtil
     return getInstance().parseIdSet(rs, ids);
   }
 
-  public static Map < Long, IdSetResponse > setsToRes(
-    final Collection < IdSet > rows,
-    final Map < Long, CollectionResponse > colls
-  ) {
-    return getInstance().setsToResponses(rows, colls);
-  }
-
   public static IdSetResponse setToRes(final IdSet set) {
     return getInstance().setToResponse(set);
   }
@@ -63,7 +55,6 @@ public class IdSetUtil
   public IdSet parseIdSet(final ResultSet rs) throws Exception {
     return new IdSet(
       rs.getLong(IdSets.ID_SET_ID),
-      rs.getLong(IdSets.COLLECTION_ID),
       rs.getLong(IdSets.ORGANISM_ID),
       rs.getString(IdSets.TEMPLATE),
       rs.getLong(IdSets.COUNTER_START),
@@ -78,7 +69,6 @@ public class IdSetUtil
   ) throws Exception {
     return new IdSet(
       rs.getInt(IdSets.ID_SET_ID),
-      ids.getCollection().getId(),
       ids.getOrganism().getId(),
       ids.getOrganism().getTemplate(),
       ids.getCounterStart(),
@@ -88,26 +78,10 @@ public class IdSetUtil
     );
   }
 
-  public Map < Long, IdSetResponse > setsToResponses(
-    final Collection < IdSet > rows,
-    final Map < Long, CollectionResponse > colls
-  ) {
-    var out = new HashMap< Long, IdSetResponse >(rows.size());
-
-    for (var s : rows) {
-      var tmp = setToRes(s);
-      out.put(s.getId(), tmp);
-      colls.get(s.getCollectionId()).getIdSets().add(tmp);
-    }
-
-    return out;
-  }
-
   public IdSetResponse setToResponse(final IdSet set) {
     var out = new IdSetResponseImpl();
 
     out.setIdSetId(set.getId());
-    out.setCollectionId(set.getCollectionId());
     out.setOrganismId(set.getOrganismId());
     out.setTemplate(set.getTemplate());
     out.setGeneIntStart(set.getCounterStart());

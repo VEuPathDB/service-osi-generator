@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import io.vulpine.lib.query.util.basic.BasicPreparedListReadQuery;
 import io.vulpine.lib.query.util.basic.BasicPreparedReadQuery;
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;
@@ -38,16 +37,6 @@ public class IdSetRepo
   public static List < IdSet > select(final RecordQuery query)
   throws Exception {
     return getInstance().selectByQuery(query);
-  }
-
-  public static List < IdSet > selectByCollection(final long collectionId)
-  throws Exception {
-    return getInstance().selectByCollectionId(collectionId);
-  }
-
-  public static List < IdSet > selectByCollections(final long[] collectionIds)
-  throws Exception {
-    return getInstance().selectByCollectionIds(collectionIds);
   }
 
   public static Optional < IdSet > select(final long id) throws Exception {
@@ -105,28 +94,6 @@ public class IdSetRepo
     return out;
   }
 
-  public List < IdSet > selectByCollectionId(final long collectionId) throws Exception {
-    log.trace("IdSetRepo#selectByCollectionId(long)");
-
-    return new BasicPreparedListReadQuery<>(
-      SQL.Select.Osi.IdSets.BY_COLLECTION,
-      DbMan::connection,
-      IdSetUtil::newIdSet,
-      QueryUtil.singleId(collectionId)
-    ).execute().getValue();
-  }
-
-  public List < IdSet > selectByCollectionIds(final long[] collectionIds) throws Exception {
-    log.trace("IdSetRepo#selectByCollectionIds(long[])");
-
-    return new BasicPreparedListReadQuery<>(
-      SQL.Select.Osi.IdSets.BY_COLLECTIONS,
-      DbMan::connection,
-      IdSetUtil::newIdSet,
-      QueryUtil.idSet(collectionIds)
-    ).execute().getValue();
-  }
-
   public Optional < IdSet > selectById(final long id) throws Exception {
     log.trace("IdSetRepo#selectById(long)");
 
@@ -146,12 +113,11 @@ public class IdSetRepo
       con,
       QueryUtil.must(rs -> IdSetUtil.newIdSet(rs, set)),
       ps -> {
-        ps.setLong(1, set.getCollection().getId());
-        ps.setLong(2, set.getOrganism().getId());
-        ps.setString(3, set.getTemplate());
-        ps.setLong(4, set.getCounterStart());
-        ps.setInt(5, set.getNumIssued());
-        ps.setLong(6, set.getCreatedBy().getUserId());
+        ps.setLong(1, set.getOrganism().getId());
+        ps.setString(2, set.getTemplate());
+        ps.setLong(3, set.getCounterStart());
+        ps.setInt(4, set.getNumIssued());
+        ps.setLong(5, set.getCreatedBy().getUserId());
       }
     ).execute().getValue();
   }

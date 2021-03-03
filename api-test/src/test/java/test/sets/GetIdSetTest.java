@@ -121,7 +121,6 @@ public class GetIdSetTest extends IdSetTestBase
           var body = res.as(IdSetResponse.class);
 
           assertEquals(response.getIdSetId(), body.getIdSetId());
-          assertEquals(collectionId, body.getCollectionId());
           assertEquals(organismId, body.getOrganismId());
           assertEquals(user.getUserId(), body.getCreatedBy());
           assertEquals(response.getCreatedOn(), body.getCreatedOn());

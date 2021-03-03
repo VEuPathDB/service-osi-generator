@@ -20,10 +20,10 @@ public interface OrganismPostRequest {
   void setTemplate(String template);
 
   @JsonProperty("geneIntStart")
-  long getGeneIntStart();
+  Long getGeneIntStart();
 
   @JsonProperty("geneIntStart")
-  void setGeneIntStart(long geneIntStart);
+  void setGeneIntStart(Long geneIntStart);
 
   @JsonProperty(
       value = "transcriptIntStart",

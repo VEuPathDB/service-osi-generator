@@ -88,31 +88,12 @@ CREATE TABLE osi.organisms
 CREATE UNIQUE INDEX org_name_uniq_ind ON osi.organisms (LOWER(name));
 
 -- ╔════════════════════════════════════════════════════════════════════════╗ --
--- ║    Collections Table                                                   ║ --
--- ╚════════════════════════════════════════════════════════════════════════╝ --
-
-CREATE TABLE osi.id_set_collections
-(
-  id_set_coll_id BIGSERIAL PRIMARY KEY,
-  name           VARCHAR     NOT NULL
-    CHECK (length(name) >= 3),
-  created_by     BIGINT      NOT NULL
-    REFERENCES auth.users (user_id),
-  created        TIMESTAMPTZ NOT NULL
-    DEFAULT now()
-);
-
-CREATE UNIQUE INDEX coll_name_uniq_ind ON osi.id_set_collections (LOWER(name));
-
--- ╔════════════════════════════════════════════════════════════════════════╗ --
 -- ║    ID Sets Table                                                       ║ --
 -- ╚════════════════════════════════════════════════════════════════════════╝ --
 
 CREATE TABLE osi.id_sets
 (
   id_set_id      BIGSERIAL PRIMARY KEY,
-  id_set_coll_id BIGINT      NOT NULL
-    REFERENCES osi.id_set_collections (id_set_coll_id),
   organism_id    BIGINT      NOT NULL
     REFERENCES osi.organisms (organism_id),
   template       VARCHAR(32) NOT NULL
@@ -252,10 +233,8 @@ GRANT USAGE ON SCHEMA "osi" TO osi_service;
 -- INSERT and SELECT are universally allowed in the osi schema
 GRANT INSERT, SELECT ON ALL TABLES IN SCHEMA osi TO osi_service;
 
--- Updates are only allowed on the organisms table and the "name" column of the
--- collections table.
+-- Updates are only allowed on the organisms table
 GRANT UPDATE ON osi.organisms TO osi_service;
-GRANT UPDATE (name) ON osi.id_set_collections TO osi_service;
 
 -- Permissions needed for the validation triggers
 GRANT EXECUTE ON FUNCTION organism_validate_start_update() TO osi_service;
@@ -264,7 +243,6 @@ GRANT EXECUTE ON FUNCTION organism_validate_curr_update() TO osi_service;
 -- Permissions needed for the primary key sequences.
 GRANT USAGE, SELECT ON
   osi.genes_gene_id_seq
-  , osi.id_set_collections_id_set_coll_id_seq
   , osi.id_sets_id_set_id_seq
   , osi.organisms_organism_id_seq
   , osi.transcripts_transcript_id_seq

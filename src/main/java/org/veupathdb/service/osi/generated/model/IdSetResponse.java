@@ -15,12 +15,6 @@ public interface IdSetResponse {
   @JsonProperty("idSetId")
   void setIdSetId(long idSetId);
 
-  @JsonProperty("collectionId")
-  long getCollectionId();
-
-  @JsonProperty("collectionId")
-  void setCollectionId(long collectionId);
-
   @JsonProperty("organismId")
   long getOrganismId();
 

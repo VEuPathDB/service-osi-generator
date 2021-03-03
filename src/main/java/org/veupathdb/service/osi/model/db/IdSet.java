@@ -16,8 +16,6 @@ public class IdSet
 {
   private final long idSetId;
 
-  private final long collectionId;
-
   private final long organismId;
 
   private final String template;
@@ -34,8 +32,6 @@ public class IdSet
    * Creates a new instance of the {@code IdSetRow} class.
    *
    * @param idSetId      Primary key value for this {@code IdSet} record.
-   * @param collectionId Primary key value for this {@code IdSet}'s parent
-   *                     {@link IdSetCollection} record.
    * @param organismId   Primary key value for this {@code IdSet}'s parent
    *                     {@link Organism} record.
    * @param template     Template string as it existed on the parent
@@ -53,7 +49,6 @@ public class IdSet
    * @throws InputValidationException if any of the following are true:
    * <ul>
    *   <li>{@code idSetId} is less than {@code 1}</li>
-   *   <li>{@code collectionId} is less than {@code 1}</li>
    *   <li>{@code organismId} is less than {@code 1}</li>
    *   <li>{@code template} is {@code null} or blank/empty</li>
    *   <li>{@code counterStart} is less than {@code 1}</li>
@@ -64,7 +59,6 @@ public class IdSet
    */
   public IdSet(
     final long idSetId,
-    final long collectionId,
     final long organismId,
     final String template,
     final long counterStart,
@@ -73,7 +67,6 @@ public class IdSet
     final long createdBy
   ) {
     this.idSetId      = Validation.oneMinimum(idSetId);
-    this.collectionId = Validation.oneMinimum(collectionId);
     this.organismId   = Validation.oneMinimum(organismId);
     this.template     = OrganismUtil.validateTemplate(template);
     this.counterStart = Validation.oneMinimum(counterStart);
@@ -90,17 +83,6 @@ public class IdSet
    */
   public long getId() {
     return idSetId;
-  }
-
-  /**
-   * Returns the primary key of the {@link IdSetCollection} record to which
-   * this {@code IdSet} belongs.
-   *
-   * @return the primary key for this {@code IdSet}'s parent
-   * {@code IdSetCollection} record.
-   */
-  public long getCollectionId() {
-    return collectionId;
   }
 
   /**
