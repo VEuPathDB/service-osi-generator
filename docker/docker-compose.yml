@@ -42,7 +42,7 @@ services:
     networks:
     - internal
     - traefik
-    - monitoring_ext
+    - monitoring-ext
     labels:
     - "com.centurylinklabs.watchtower.enable=${SERVICE_WATCHTOWER:-false}"
     - "traefik.http.routers.${TRAEFIK_ROUTER:-osigen-dev}.rule=Host(`${TRAEFIK_HOST:-osigen-dev.local.apidb.org}`)"
@@ -57,7 +57,7 @@ networks:
     internal: true
   traefik:
     external: true
-  monitoring_ext:
+  monitoring-ext:
     external: true
 
 volumes:
