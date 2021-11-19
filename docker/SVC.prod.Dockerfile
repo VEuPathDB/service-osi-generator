@@ -7,6 +7,9 @@ FROM veupathdb/alpine-dev-base:jdk-15 AS prep
 
 LABEL service="osi-service-build"
 
+ARG GITHUB_USERNAME
+ARG GITHUB_TOKEN
+
 WORKDIR /workspace
 RUN jlink --compress=2 --module-path $JAVA_HOME/jmods \
        --add-modules java.base,java.logging,java.xml,java.desktop,java.management,java.sql,java.naming \
