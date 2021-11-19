@@ -3,15 +3,15 @@
 #   Build Service & Dependencies
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-FROM veupathdb/alpine-dev-base:latest AS prep
+FROM veupathdb/alpine-dev-base:jdk-15 AS prep
 
-LABEL service="osi-service"
+LABEL service="osi-service-build"
 
 WORKDIR /workspace
 RUN jlink --compress=2 --module-path $JAVA_HOME/jmods \
        --add-modules java.base,java.logging,java.xml,java.desktop,java.management,java.sql,java.naming \
        --output /jlinked \
-    && apk add --no-cache git sed findutils coreutils make npm curl \
+    && apk add --no-cache git sed findutils coreutils make npm curl gawk \
     && git config --global advice.detachedHead false
 
 ENV DOCKER=build
