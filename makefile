@@ -4,10 +4,7 @@ MAIN_DIR     := src/main/java/$(shell echo $(APP_PACKAGE) | sed 's/\./\//g')
 TEST_DIR     := $(shell echo $(MAIN_DIR) | sed 's/main/test/')
 GEN_DIR      := $(MAIN_DIR)/generated
 ALL_PACKABLE := $(shell find src/main -type f)
-BIN_DIR := .tools/bin
-
-EXAMPLE_DIR      := src/main/java/org/veupathdb/service/demo
-EXAMPLE_TEST_DIR := src/test/java/org/veupathdb/service/demo
+BIN_DIR      := .tools/bin
 
 C_BLUE := "\\033[94m"
 C_NONE := "\\033[0m"
@@ -55,10 +52,6 @@ jar: install-dev-env build/libs/service.jar
 docker:
 	@docker build -t $(shell ./gradlew -q print-container-name) .
 
-.PHONY: cleanup-example
-cleanup-example:
-	@$(BIN_DIR)/demo-cleanup.sh $(MAIN_DIR)
-
 .PHONY: install-dev-env
 install-dev-env:
 	@if [ ! -d .tools ]; then \
@@ -74,8 +67,8 @@ install-dev-env:
 	@$(BIN_DIR)/install-npm.sh
 
 fix-path:
-	@$(BIN_DIR)/fix-path.sh $(EXAMPLE_DIR) $(MAIN_DIR)
-	@$(BIN_DIR)/fix-path.sh $(EXAMPLE_TEST_DIR) $(TEST_DIR)
+	@$(BIN_DIR)/fix-path.sh $(MAIN_DIR)
+	@$(BIN_DIR)/fix-path.sh $(TEST_DIR)
 
 gen-jaxrs: api.raml merge-raml
 	@$(BIN_DIR)/generate-jaxrs.sh $(APP_PACKAGE)
@@ -109,6 +102,23 @@ api-test:
 # File based targets
 #
 
-build/libs/service.jar: vendor/fgputil-accountdb-1.0.0.jar  vendor/fgputil-core-1.0.0.jar vendor/fgputil-db-1.0.0.jar vendor/fgputil-web-1.0.0.jar build.gradle.kts service.properties
+build/libs/service.jar: \
+      gen-jaxrs \
+      gen-docs \
+      vendor/fgputil-accountdb-1.0.0.jar \
+      vendor/fgputil-cache-1.0.0.jar \
+      vendor/fgputil-cli-1.0.0.jar \
+      vendor/fgputil-core-1.0.0.jar \
+      vendor/fgputil-db-1.0.0.jar \
+      vendor/fgputil-events-1.0.0.jar \
+      vendor/fgputil-json-1.0.0.jar \
+      vendor/fgputil-server-1.0.0.jar \
+      vendor/fgputil-servlet-1.0.0.jar \
+      vendor/fgputil-solr-1.0.0.jar \
+      vendor/fgputil-test-1.0.0.jar \
+      vendor/fgputil-web-1.0.0.jar \
+      vendor/fgputil-xml-1.0.0.jar \
+      build.gradle.kts \
+      service.properties
 	@echo "$(C_BLUE)Building application jar$(C_NONE)"
-	@./gradlew clean test --fail-fast jar
+	@./gradlew clean test jar
