@@ -8,14 +8,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 )
 public interface IdSetPostRequest {
   @JsonProperty("organismId")
-  long getOrganismId();
+  Long getOrganismId();
 
   @JsonProperty("organismId")
-  void setOrganismId(long organismId);
+  void setOrganismId(Long organismId);
 
   @JsonProperty("generateGenes")
-  int getGenerateGenes();
+  Integer getGenerateGenes();
 
   @JsonProperty("generateGenes")
-  void setGenerateGenes(int generateGenes);
+  void setGenerateGenes(Integer generateGenes);
 }

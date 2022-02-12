@@ -13,6 +13,7 @@ apply(from = "dependencies.gradle.kts")
 val buildProps = Properties()
 buildProps.load(FileInputStream(File(rootDir, "service.properties")))
 val fullPack = "${buildProps["app.package.root"]}.${buildProps["app.package.service"]}"
+val genPack = fullPack
 
 java {
   targetCompatibility = JavaVersion.VERSION_15
@@ -36,6 +37,8 @@ repositories {
 }
 
 tasks.jar {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
   manifest {
     attributes["Main-Class"] = "${fullPack}.${buildProps["app.main-class"]}"
     attributes["Implementation-Title"] = buildProps["project.name"]
@@ -56,6 +59,7 @@ tasks.jar {
   archiveFileName.set("service.jar")
 }
 
+tasks.register("print-gen-package") { print(genPack) }
 tasks.register("print-package") { print(fullPack) }
 tasks.register("print-container-name") { print(buildProps["container.name"]) }
 
@@ -74,17 +78,10 @@ tasks.withType<Test> {
       showStandardStreams = true
       enableAssertions = true
   }
+  ignoreFailures = true // Always try to run all tests for all modules
 }
 
 val test by tasks.getting(Test::class) {
   // Use junit platform for unit tests
   useJUnitPlatform()
-}
-
-tasks.register("getDeps") {
-  doLast {
-    configurations
-      .filter { it.isCanBeResolved }
-      .forEach { it.resolve() }
-  }
 }

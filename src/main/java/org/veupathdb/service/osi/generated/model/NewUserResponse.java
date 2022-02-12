@@ -9,10 +9,10 @@ import java.util.Date;
 )
 public interface NewUserResponse {
   @JsonProperty("userId")
-  long getUserId();
+  Long getUserId();
 
   @JsonProperty("userId")
-  void setUserId(long userId);
+  void setUserId(Long userId);
 
   @JsonProperty("username")
   String getUsername();

@@ -19,7 +19,7 @@ import java.util.Map;
 })
 public class UnprocessableEntityErrorImpl implements UnprocessableEntityError {
   @JsonProperty("status")
-  private final String status = _DISCRIMINATOR_TYPE_NAME;
+  private final ErrorType status = _DISCRIMINATOR_TYPE_NAME;
 
   @JsonProperty("message")
   private String message;
@@ -28,7 +28,7 @@ public class UnprocessableEntityErrorImpl implements UnprocessableEntityError {
   private UnprocessableEntityError.ErrorsType errors;
 
   @JsonProperty("status")
-  public String getStatus() {
+  public ErrorType getStatus() {
     return this.status;
   }
 

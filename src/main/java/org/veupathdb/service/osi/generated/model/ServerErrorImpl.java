@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 })
 public class ServerErrorImpl implements ServerError {
   @JsonProperty("status")
-  private final String status = _DISCRIMINATOR_TYPE_NAME;
+  private final ErrorType status = _DISCRIMINATOR_TYPE_NAME;
 
   @JsonProperty("message")
   private String message;
@@ -23,7 +23,7 @@ public class ServerErrorImpl implements ServerError {
   private String requestId;
 
   @JsonProperty("status")
-  public String getStatus() {
+  public ErrorType getStatus() {
     return this.status;
   }
 
