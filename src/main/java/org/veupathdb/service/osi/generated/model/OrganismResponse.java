@@ -9,10 +9,10 @@ import java.util.Date;
 )
 public interface OrganismResponse {
   @JsonProperty("organismId")
-  long getOrganismId();
+  Long getOrganismId();
 
   @JsonProperty("organismId")
-  void setOrganismId(long organismId);
+  void setOrganismId(Long organismId);
 
   @JsonProperty("organismName")
   String getOrganismName();
@@ -27,28 +27,28 @@ public interface OrganismResponse {
   void setTemplate(String template);
 
   @JsonProperty("geneIntStart")
-  long getGeneIntStart();
+  Long getGeneIntStart();
 
   @JsonProperty("geneIntStart")
-  void setGeneIntStart(long geneIntStart);
+  void setGeneIntStart(Long geneIntStart);
 
   @JsonProperty("transcriptIntStart")
-  long getTranscriptIntStart();
+  Long getTranscriptIntStart();
 
   @JsonProperty("transcriptIntStart")
-  void setTranscriptIntStart(long transcriptIntStart);
+  void setTranscriptIntStart(Long transcriptIntStart);
 
   @JsonProperty("geneIntCurrent")
-  long getGeneIntCurrent();
+  Long getGeneIntCurrent();
 
   @JsonProperty("geneIntCurrent")
-  void setGeneIntCurrent(long geneIntCurrent);
+  void setGeneIntCurrent(Long geneIntCurrent);
 
   @JsonProperty("transcriptIntCurrent")
-  long getTranscriptIntCurrent();
+  Long getTranscriptIntCurrent();
 
   @JsonProperty("transcriptIntCurrent")
-  void setTranscriptIntCurrent(long transcriptIntCurrent);
+  void setTranscriptIntCurrent(Long transcriptIntCurrent);
 
   @JsonProperty("createdOn")
   Date getCreatedOn();
@@ -57,8 +57,8 @@ public interface OrganismResponse {
   void setCreatedOn(Date createdOn);
 
   @JsonProperty("createdBy")
-  long getCreatedBy();
+  Long getCreatedBy();
 
   @JsonProperty("createdBy")
-  void setCreatedBy(long createdBy);
+  void setCreatedBy(Long createdBy);
 }

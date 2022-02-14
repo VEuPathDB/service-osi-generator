@@ -21,19 +21,19 @@ import java.util.List;
 })
 public class IdSetResponseImpl implements IdSetResponse {
   @JsonProperty("idSetId")
-  private long idSetId;
+  private Long idSetId;
 
   @JsonProperty("organismId")
-  private long organismId;
+  private Long organismId;
 
   @JsonProperty("template")
   private String template;
 
   @JsonProperty("geneIntStart")
-  private long geneIntStart;
+  private Long geneIntStart;
 
   @JsonProperty("generatedGeneCount")
-  private int generatedGeneCount;
+  private Integer generatedGeneCount;
 
   @JsonProperty("generatedIds")
   private List<GeneratedTranscriptEntry> generatedIds;
@@ -49,25 +49,25 @@ public class IdSetResponseImpl implements IdSetResponse {
   private Date createdOn;
 
   @JsonProperty("createdBy")
-  private long createdBy;
+  private Long createdBy;
 
   @JsonProperty("idSetId")
-  public long getIdSetId() {
+  public Long getIdSetId() {
     return this.idSetId;
   }
 
   @JsonProperty("idSetId")
-  public void setIdSetId(long idSetId) {
+  public void setIdSetId(Long idSetId) {
     this.idSetId = idSetId;
   }
 
   @JsonProperty("organismId")
-  public long getOrganismId() {
+  public Long getOrganismId() {
     return this.organismId;
   }
 
   @JsonProperty("organismId")
-  public void setOrganismId(long organismId) {
+  public void setOrganismId(Long organismId) {
     this.organismId = organismId;
   }
 
@@ -82,22 +82,22 @@ public class IdSetResponseImpl implements IdSetResponse {
   }
 
   @JsonProperty("geneIntStart")
-  public long getGeneIntStart() {
+  public Long getGeneIntStart() {
     return this.geneIntStart;
   }
 
   @JsonProperty("geneIntStart")
-  public void setGeneIntStart(long geneIntStart) {
+  public void setGeneIntStart(Long geneIntStart) {
     this.geneIntStart = geneIntStart;
   }
 
   @JsonProperty("generatedGeneCount")
-  public int getGeneratedGeneCount() {
+  public Integer getGeneratedGeneCount() {
     return this.generatedGeneCount;
   }
 
   @JsonProperty("generatedGeneCount")
-  public void setGeneratedGeneCount(int generatedGeneCount) {
+  public void setGeneratedGeneCount(Integer generatedGeneCount) {
     this.generatedGeneCount = generatedGeneCount;
   }
 
@@ -122,12 +122,12 @@ public class IdSetResponseImpl implements IdSetResponse {
   }
 
   @JsonProperty("createdBy")
-  public long getCreatedBy() {
+  public Long getCreatedBy() {
     return this.createdBy;
   }
 
   @JsonProperty("createdBy")
-  public void setCreatedBy(long createdBy) {
+  public void setCreatedBy(Long createdBy) {
     this.createdBy = createdBy;
   }
 }

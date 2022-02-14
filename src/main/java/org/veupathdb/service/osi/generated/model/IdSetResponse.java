@@ -10,16 +10,16 @@ import java.util.List;
 )
 public interface IdSetResponse {
   @JsonProperty("idSetId")
-  long getIdSetId();
+  Long getIdSetId();
 
   @JsonProperty("idSetId")
-  void setIdSetId(long idSetId);
+  void setIdSetId(Long idSetId);
 
   @JsonProperty("organismId")
-  long getOrganismId();
+  Long getOrganismId();
 
   @JsonProperty("organismId")
-  void setOrganismId(long organismId);
+  void setOrganismId(Long organismId);
 
   @JsonProperty("template")
   String getTemplate();
@@ -28,16 +28,16 @@ public interface IdSetResponse {
   void setTemplate(String template);
 
   @JsonProperty("geneIntStart")
-  long getGeneIntStart();
+  Long getGeneIntStart();
 
   @JsonProperty("geneIntStart")
-  void setGeneIntStart(long geneIntStart);
+  void setGeneIntStart(Long geneIntStart);
 
   @JsonProperty("generatedGeneCount")
-  int getGeneratedGeneCount();
+  Integer getGeneratedGeneCount();
 
   @JsonProperty("generatedGeneCount")
-  void setGeneratedGeneCount(int generatedGeneCount);
+  void setGeneratedGeneCount(Integer generatedGeneCount);
 
   @JsonProperty("generatedIds")
   List<GeneratedTranscriptEntry> getGeneratedIds();
@@ -52,8 +52,8 @@ public interface IdSetResponse {
   void setCreatedOn(Date createdOn);
 
   @JsonProperty("createdBy")
-  long getCreatedBy();
+  Long getCreatedBy();
 
   @JsonProperty("createdBy")
-  void setCreatedBy(long createdBy);
+  void setCreatedBy(Long createdBy);
 }

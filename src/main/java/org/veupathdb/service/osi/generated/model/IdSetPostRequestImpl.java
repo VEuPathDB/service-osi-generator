@@ -11,28 +11,28 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class IdSetPostRequestImpl implements IdSetPostRequest {
   @JsonProperty("organismId")
-  private long organismId;
+  private Long organismId;
 
   @JsonProperty("generateGenes")
-  private int generateGenes;
+  private Integer generateGenes;
 
   @JsonProperty("organismId")
-  public long getOrganismId() {
+  public Long getOrganismId() {
     return this.organismId;
   }
 
   @JsonProperty("organismId")
-  public void setOrganismId(long organismId) {
+  public void setOrganismId(Long organismId) {
     this.organismId = organismId;
   }
 
   @JsonProperty("generateGenes")
-  public int getGenerateGenes() {
+  public Integer getGenerateGenes() {
     return this.generateGenes;
   }
 
   @JsonProperty("generateGenes")
-  public void setGenerateGenes(int generateGenes) {
+  public void setGenerateGenes(Integer generateGenes) {
     this.generateGenes = generateGenes;
   }
 }

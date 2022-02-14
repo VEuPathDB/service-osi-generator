@@ -16,7 +16,7 @@ import java.util.Date;
 })
 public class NewUserResponseImpl implements NewUserResponse {
   @JsonProperty("userId")
-  private long userId;
+  private Long userId;
 
   @JsonProperty("username")
   private String username;
@@ -35,12 +35,12 @@ public class NewUserResponseImpl implements NewUserResponse {
   private Date issued;
 
   @JsonProperty("userId")
-  public long getUserId() {
+  public Long getUserId() {
     return this.userId;
   }
 
   @JsonProperty("userId")
-  public void setUserId(long userId) {
+  public void setUserId(Long userId) {
     this.userId = userId;
   }
 

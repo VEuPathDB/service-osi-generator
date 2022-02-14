@@ -21,7 +21,7 @@ import java.util.Date;
 })
 public class OrganismResponseImpl implements OrganismResponse {
   @JsonProperty("organismId")
-  private long organismId;
+  private Long organismId;
 
   @JsonProperty("organismName")
   private String organismName;
@@ -30,18 +30,17 @@ public class OrganismResponseImpl implements OrganismResponse {
   private String template;
 
   @JsonProperty("geneIntStart")
-  private long geneIntStart;
+  private Long geneIntStart;
 
   @JsonProperty("transcriptIntStart")
-  private long transcriptIntStart;
+  private Long transcriptIntStart;
 
   @JsonProperty("geneIntCurrent")
-  private long geneIntCurrent;
+  private Long geneIntCurrent;
 
   @JsonProperty("transcriptIntCurrent")
-  private long transcriptIntCurrent;
+  private Long transcriptIntCurrent;
 
-  @JsonProperty("createdOn")
   @JsonFormat(
       shape = JsonFormat.Shape.STRING,
       pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
@@ -49,18 +48,19 @@ public class OrganismResponseImpl implements OrganismResponse {
   @JsonDeserialize(
       using = TimestampDeserializer.class
   )
+  @JsonProperty("createdOn")
   private Date createdOn;
 
   @JsonProperty("createdBy")
-  private long createdBy;
+  private Long createdBy;
 
   @JsonProperty("organismId")
-  public long getOrganismId() {
+  public Long getOrganismId() {
     return this.organismId;
   }
 
   @JsonProperty("organismId")
-  public void setOrganismId(long organismId) {
+  public void setOrganismId(Long organismId) {
     this.organismId = organismId;
   }
 
@@ -85,42 +85,42 @@ public class OrganismResponseImpl implements OrganismResponse {
   }
 
   @JsonProperty("geneIntStart")
-  public long getGeneIntStart() {
+  public Long getGeneIntStart() {
     return this.geneIntStart;
   }
 
   @JsonProperty("geneIntStart")
-  public void setGeneIntStart(long geneIntStart) {
+  public void setGeneIntStart(Long geneIntStart) {
     this.geneIntStart = geneIntStart;
   }
 
   @JsonProperty("transcriptIntStart")
-  public long getTranscriptIntStart() {
+  public Long getTranscriptIntStart() {
     return this.transcriptIntStart;
   }
 
   @JsonProperty("transcriptIntStart")
-  public void setTranscriptIntStart(long transcriptIntStart) {
+  public void setTranscriptIntStart(Long transcriptIntStart) {
     this.transcriptIntStart = transcriptIntStart;
   }
 
   @JsonProperty("geneIntCurrent")
-  public long getGeneIntCurrent() {
+  public Long getGeneIntCurrent() {
     return this.geneIntCurrent;
   }
 
   @JsonProperty("geneIntCurrent")
-  public void setGeneIntCurrent(long geneIntCurrent) {
+  public void setGeneIntCurrent(Long geneIntCurrent) {
     this.geneIntCurrent = geneIntCurrent;
   }
 
   @JsonProperty("transcriptIntCurrent")
-  public long getTranscriptIntCurrent() {
+  public Long getTranscriptIntCurrent() {
     return this.transcriptIntCurrent;
   }
 
   @JsonProperty("transcriptIntCurrent")
-  public void setTranscriptIntCurrent(long transcriptIntCurrent) {
+  public void setTranscriptIntCurrent(Long transcriptIntCurrent) {
     this.transcriptIntCurrent = transcriptIntCurrent;
   }
 
@@ -135,12 +135,12 @@ public class OrganismResponseImpl implements OrganismResponse {
   }
 
   @JsonProperty("createdBy")
-  public long getCreatedBy() {
+  public Long getCreatedBy() {
     return this.createdBy;
   }
 
   @JsonProperty("createdBy")
-  public void setCreatedBy(long createdBy) {
+  public void setCreatedBy(Long createdBy) {
     this.createdBy = createdBy;
   }
 }
