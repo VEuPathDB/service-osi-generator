@@ -1,7 +1,7 @@
 package org.veupathdb.service.osi.controller;
 
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Request;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.Request;
 
 import org.apache.logging.log4j.Logger;
 import org.veupathdb.lib.container.jaxrs.providers.LogProvider;

@@ -79,10 +79,13 @@ fix-path:
 	@$(BIN_DIR)/fix-path.sh $(MAIN_DIR)
 	@$(BIN_DIR)/fix-path.sh $(TEST_DIR)
 
+# raml-for-jax-rs uses a jersey/jaxrs version prior to the package rename from javax to jakarta.
+# This is why we find/replace "javax.ws" in the generated code with "jakarta.ws"
 gen-jaxrs: api.raml merge-raml
 	@$(BIN_DIR)/generate-jaxrs.sh $(APP_PACKAGE)
 	@$(BIN_DIR)/generate-jaxrs-streams.sh $(GEN_PACKAGE)
 	@$(BIN_DIR)/generate-jaxrs-postgen-mods.sh $(GEN_PACKAGE)
+	@grep -Rl javax src | xargs -I{} sed -i 's/javax.ws/jakarta.ws/g' {}
 
 gen-docs: api.raml merge-raml
 	@$(BIN_DIR)/generate-docs.sh

@@ -1,7 +1,7 @@
 package org.veupathdb.service.osi.controller;
 
 import java.util.UUID;
-import javax.ws.rs.core.Request;
+import jakarta.ws.rs.core.Request;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
