@@ -1,7 +1,7 @@
 package org.veupathdb.service.osi.util;
 
-import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.WebApplicationException;
+import jakarta.ws.rs.InternalServerErrorException;
+import jakarta.ws.rs.WebApplicationException;
 
 import io.vulpine.lib.jcfi.CheckedFunction;
 

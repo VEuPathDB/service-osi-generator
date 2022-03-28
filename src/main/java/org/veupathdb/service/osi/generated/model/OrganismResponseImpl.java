@@ -41,6 +41,7 @@ public class OrganismResponseImpl implements OrganismResponse {
   @JsonProperty("transcriptIntCurrent")
   private Long transcriptIntCurrent;
 
+  @JsonProperty("createdOn")
   @JsonFormat(
       shape = JsonFormat.Shape.STRING,
       pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
@@ -48,7 +49,6 @@ public class OrganismResponseImpl implements OrganismResponse {
   @JsonDeserialize(
       using = TimestampDeserializer.class
   )
-  @JsonProperty("createdOn")
   private Date createdOn;
 
   @JsonProperty("createdBy")
