@@ -52,7 +52,7 @@ dependencies {
   ))
 
   // Core lib, prefers local checkout if available
-  implementation(findProject(":core") ?: "org.veupathdb.lib:jaxrs-container-core:${coreLib}")
+  implementation(/*findProject(":core") ?: */"org.veupathdb.lib:jaxrs-container-core:${coreLib}")
 
   // Jersey
   implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:${jersey}")
