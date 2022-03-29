@@ -33,7 +33,7 @@ COPY [ \
 
 COPY gradle gradle
 
-RUN ./gradlew getDeps
+RUN ./gradlew dependencies
 
 COPY . .
 

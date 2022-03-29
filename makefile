@@ -56,7 +56,8 @@ jar: install-dev-env build/libs/service.jar
 docker:
 	@docker build --no-cache -t $(shell ./gradlew -q print-container-name) \
 		--build-arg=GITHUB_USERNAME=$(GITHUB_USERNAME) \
-		--build-arg=GITHUB_TOKEN=$(GITHUB_TOKEN) .
+		--build-arg=GITHUB_TOKEN=$(GITHUB_TOKEN) \
+		--file ./docker/SVC.dev.Dockerfile .
 
 .PHONY: install-dev-env
 install-dev-env:
