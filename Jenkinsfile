@@ -9,7 +9,7 @@ node('centos8') {
 
   builder.gitClone()
   builder.buildContainers([
-    [ name: 'osi-generator-database', dockerfile: 'docker/DB.Dockerfile'       ],
-    [ name: 'osi-generator-service',  dockerfile: 'docker/SVC.prod.Dockerfile' ]
+    [ name: 'osi-generator-database', dockerfile: 'docker/DB.Dockerfile' ],
+    [ name: 'osi-generator-service',  dockerfile: 'docker/SVC.Dockerfile' ]
   ])
 }

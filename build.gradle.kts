@@ -1,87 +1,124 @@
-import java.util.Properties
-import java.io.FileInputStream
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.veupathdb.lib.gradle.container.util.Logger.Level
 
 plugins {
   java
+  id("org.veupathdb.lib.gradle.container.container-utils") version "3.4.1"
+  id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-apply(from = "dependencies.gradle.kts")
+// configure VEupathDB container plugin
+containerBuild {
 
-// Load Props
-val buildProps = Properties()
-buildProps.load(FileInputStream(File(rootDir, "service.properties")))
-val fullPack = "${buildProps["app.package.root"]}.${buildProps["app.package.service"]}"
-val genPack = fullPack
+  // Change if debugging the build process is necessary.
+  logLevel = Level.Trace
+
+  // General project level configuration.
+  project {
+
+    // Project Name
+    name = "osi-generator"
+
+    // Project Group
+    group = "org.veupathdb.service"
+
+    // Project Version
+    version = "1.0.0"
+
+    // Project Root Package
+    projectPackage = "org.veupathdb.service.osi"
+
+    // Main Class Name
+    mainClassName = "Main"
+  }
+
+  // Docker build configuration.
+  docker {
+
+    // Docker build context
+    context = "."
+
+    // Name of the target docker file
+    dockerFile = "Dockerfile"
+
+    // Resulting image tag
+    imageName = "osi-generator-service"
+  }
+
+  generateJaxRS {
+    // List of custom arguments to use in the jax-rs code generation command
+    // execution.
+    arguments = listOf(/*arg1, arg2, arg3*/)
+
+    // Map of custom environment variables to set for the jax-rs code generation
+    // command execution.
+    environment = mapOf(/*Pair("env-key", "env-val"), Pair("env-key", "env-val")*/)
+  }
+
+}
 
 java {
-  targetCompatibility = JavaVersion.VERSION_15
-  sourceCompatibility = JavaVersion.VERSION_15
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(17))
+  }
 }
 
-// Project settings
-group = buildProps["project.group"] ?: error("empty 1")
-version = buildProps["project.version"] ?: error("empty 2")
+tasks.shadowJar {
+  exclude("**/Log4j2Plugins.dat")
+  archiveFileName.set("service.jar")
+}
 
 repositories {
   mavenCentral()
+  mavenLocal()
   maven {
     name = "GitHubPackages"
     url  = uri("https://maven.pkg.github.com/veupathdb/maven-packages")
     credentials {
-      username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
-      password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+      username = if (extra.has("gpr.user")) extra["gpr.user"] as String? else System.getenv("GITHUB_USERNAME")
+      password = if (extra.has("gpr.key")) extra["gpr.key"] as String? else System.getenv("GITHUB_TOKEN")
     }
   }
 }
 
-tasks.jar {
-  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//
+// Project Dependencies
+//
 
-  manifest {
-    attributes["Main-Class"] = "${fullPack}.${buildProps["app.main-class"]}"
-    attributes["Implementation-Title"] = buildProps["project.name"]
-    attributes["Implementation-Version"] = buildProps["project.version"]
-  }
-  println("Packaging Components")
-  from(configurations.runtimeClasspath.get().map {
-    println("  " + it.name)
+dependencies {
 
-    if (it.isDirectory) it else zipTree(it).matching {
-      exclude { f ->
-        val name = f.name.toLowerCase()
-        (name.contains("log4j") && name.contains(".dat")) ||
-          name.endsWith(".sf") ||
-          name.endsWith(".dsa") ||
-          name.endsWith(".rsa")
-      } } })
-  archiveFileName.set("service.jar")
-}
+  // Core lib
+  implementation("org.veupathdb.lib:jaxrs-container-core:6.7.3")
 
-tasks.register("print-gen-package") { print(genPack) }
-tasks.register("print-package") { print(fullPack) }
-tasks.register("print-container-name") { print(buildProps["container.name"]) }
+  // Jersey
+  implementation("org.glassfish.jersey.core:jersey-server:3.0.4")
+  implementation("org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.0.4")
 
-tasks.withType<Test> {
-    testLogging {
-      events.addAll(listOf(TestLogEvent.FAILED,
-        TestLogEvent.SKIPPED,
-        TestLogEvent.STANDARD_OUT,
-        TestLogEvent.STANDARD_ERROR,
-        TestLogEvent.PASSED))
+  // Jackson
+  implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
+  implementation("com.fasterxml.jackson.core:jackson-annotations:2.13.3")
 
-      exceptionFormat = TestExceptionFormat.FULL
-      showExceptions = true
-      showCauses = true
-      showStackTraces = true
-      showStandardStreams = true
-      enableAssertions = true
-  }
-  ignoreFailures = true // Always try to run all tests for all modules
-}
+  // Utils
+  implementation("org.gusdb:fgputil-core:2.7.1-jakarta")
+  implementation("io.vulpine.lib:Jackfish:1.1.0")
+  implementation("io.vulpine.lib:java-sql-import:0.2.0")
+  implementation("io.vulpine.lib:lib-query-util:2.1.0")
+  implementation("com.devskiller.friendly-id:friendly-id:1.1.0")
+  implementation("com.zaxxer:HikariCP:3.4.5")
+  implementation("org.postgresql:postgresql:42.3.6")
+  implementation("info.picocli:picocli:4.6.3")
 
-val test by tasks.getting(Test::class) {
-  // Use junit platform for unit tests
-  useJUnitPlatform()
+  // Log4J
+  implementation("org.apache.logging.log4j:log4j-api:2.17.2")
+  implementation("org.apache.logging.log4j:log4j-core:2.17.2")
+
+  // Metrics (can remove if not adding custom service metrics over those provided by container core)
+  implementation("io.prometheus:simpleclient:0.15.0")
+  implementation("io.prometheus:simpleclient_common:0.15.0")
+
+  // Unit Testing
+  testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
+  testImplementation("org.mockito:mockito-core:2.28.2")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
+
 }
