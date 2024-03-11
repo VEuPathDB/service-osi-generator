@@ -125,7 +125,7 @@ class QueryUtilTest
         var op = fn.parse(mResult);
 
         assertTrue(op.isEmpty());
-        verifyZeroInteractions(mParser);
+        verifyNoInteractions(mParser);
         verify(mResult).next();
         verifyNoMoreInteractions(mResult);
       }
@@ -193,7 +193,7 @@ class QueryUtilTest
         var fn = target.requiredResult(mParser);
 
         assertThrows(IllegalStateException.class, () -> fn.parse(mResult));
-        verifyZeroInteractions(mParser);
+        verifyNoInteractions(mParser);
         verify(mResult).next();
         verifyNoMoreInteractions(mResult);
       }

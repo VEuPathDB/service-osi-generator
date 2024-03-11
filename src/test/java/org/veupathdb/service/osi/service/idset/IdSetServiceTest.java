@@ -77,7 +77,7 @@ class IdSetServiceTest extends ServiceTestBase
         () -> target.handleCreate(null, mRequest)
       );
 
-      verifyZeroInteractions(mUserService);
+      verifyNoInteractions(mUserService);
     }
 
     @Test

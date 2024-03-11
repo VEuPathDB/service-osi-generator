@@ -76,7 +76,7 @@ class UserManagerTest
         assertSame(mUser, out.get());
 
         verify(target).getLocalUser(name);
-        verifyZeroInteractions(mUserRepo);
+        verifyNoInteractions(mUserRepo);
       }
     }
 
@@ -204,7 +204,7 @@ class UserManagerTest
         assertSame(mUser, out.get());
 
         verify(target).getLocalUser(name);
-        verifyZeroInteractions(mUserRepo);
+        verifyNoInteractions(mUserRepo);
       }
 
       @Test
@@ -223,7 +223,7 @@ class UserManagerTest
         assertTrue(target.lookupUser(name, pass1).isEmpty());
 
         verify(target).getLocalUser(name);
-        verifyZeroInteractions(mUserRepo);
+        verifyNoInteractions(mUserRepo);
       }
 
       @Test
@@ -241,7 +241,7 @@ class UserManagerTest
         assertSame(mUser, out.get());
 
         verify(target).getLocalUser(name);
-        verifyZeroInteractions(mUserRepo);
+        verifyNoInteractions(mUserRepo);
       }
     }
 
