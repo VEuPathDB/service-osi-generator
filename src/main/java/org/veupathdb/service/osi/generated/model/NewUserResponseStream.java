@@ -20,6 +20,4 @@ public class NewUserResponseStream extends NewUserResponseImpl implements Stream
   public void write(OutputStream output) throws IOException, WebApplicationException {
     _streamer.accept(output);
   }
-
 }
-

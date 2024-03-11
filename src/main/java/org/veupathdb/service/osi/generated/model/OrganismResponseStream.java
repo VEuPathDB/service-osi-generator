@@ -20,6 +20,4 @@ public class OrganismResponseStream extends OrganismResponseImpl implements Stre
   public void write(OutputStream output) throws IOException, WebApplicationException {
     _streamer.accept(output);
   }
-
 }
-

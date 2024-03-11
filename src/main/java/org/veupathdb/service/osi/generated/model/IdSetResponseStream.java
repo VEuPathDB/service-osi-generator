@@ -20,6 +20,4 @@ public class IdSetResponseStream extends IdSetResponseImpl implements StreamingO
   public void write(OutputStream output) throws IOException, WebApplicationException {
     _streamer.accept(output);
   }
-
 }
-
